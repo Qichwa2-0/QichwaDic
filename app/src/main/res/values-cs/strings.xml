@@ -1,0 +1,90 @@
+<resources>
+    <!-- Toolbar -->
+    <!-- menu items -->
+    <string name="nav_dictionaries">Slovníky</string>
+    <string name="nav_about">O aplikaci</string>
+    <string name="nav_favorites">Oblíbené</string>
+
+    <!-- search criteria -->
+
+    <string-array name="searchTypes">
+        <item>Obsahuje</item>
+        <item>Přesně</item>
+        <item>Začíná na</item>
+        <item>Končí na</item>
+    </string-array>
+    <string name="search_lang_qu">QU</string>
+
+    <!-- search messages -->
+    <string name="no_results">
+        Nenalezeny žádné výsledky.\nZkontrolujte, že hledané slovo je správně napsané nebo stáhněte více slovníků.
+    </string>
+    <string name="get_dictionaries">Získat slovníky</string>
+
+    <plurals name="total_results">
+        <item quantity="one">Počet výsledků: %d</item>
+        <item quantity="few">Počet výsledků: %d</item>
+        <item quantity="other">Počet výsledků: %d</item>
+    </plurals>
+    <string name="error_no_dictionaries">Nenalezeny žádné slovníky. Zkontrolujte, zda není problém s připojením na síť.</string>
+    <string name="dictionary_totalEntries">Počet slov: %1$s</string>
+
+    <!-- dictionary messages -->
+    <string name="dictionary_delete_error">Chyba při mazání slovníku %s</string>
+    <string name="dictionary_save_error">Chyba při ukládání slovníku %s</string>
+    <string name="dictionary_delete_success">Slovník %s smazán</string>
+    <string name="dictionary_save_success">Slovník %s uložen</string>
+
+    <string-array name="dictLangs">
+        <item>qu;Kečuánština</item>
+        <item>es;Španělština</item>
+        <item>en;Angličtina</item>
+        <item>fr;Francouzština</item>
+        <item>de;Němčina</item>
+        <item>it;Italština</item>
+        <item>ru;Ruština</item>
+    </string-array>
+
+    <!--Actions-->
+    <string name="share_definition_from_dictionary">Slovník %s &lt;br&gt;&lt;br&gt; %s &lt;br&gt; %s</string>
+    <string name="share_with">Sdílet</string>
+
+    <!-- Pref -->
+
+    <!--About-->
+
+    <string name="contact_subject">O aplikaci QichwaDic</string>
+    <string name="chooser_title">Poslat zprávu</string>
+    <string name="about_project_collaboration">
+        This app uses dictionaries digitalized by &lt;a href="mailto:sankaypillo@gmail.com"&gt;Asociación ILLA&lt;/a&gt;,
+        &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; and
+        &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/&gt;.
+        &lt;br&gt;&lt;br&gt; &lt;strong&gt;We acknowledge them for their work.&lt;/strong&gt;
+    </string>
+    <string name="about_open_web_version">Go to web version</string>
+    <string name="about_rate_app">Rate app in Google Play</string>
+
+    <!-- intro -->
+    <string name="intro_skip">Přeskočit</string>
+    <string name="intro_done">Hotovo</string>
+    <string name="intro_multisearch_title">Hledání ve více slovnících zároveň</string>
+    <string name="intro_multisearch_description">Současné hledání až v 17 slovnících zároveň, jak z kečuánštiny, tak ze španělštiny</string>
+    <string name="intro_searchcriteria_title">Kritéria vyhledávání</string>
+    <string name="intro_searchcriteria_description">Lze hledat přesný výraz nebo podle těchto kritérií: Začíná na / Končí na / Obsahuje</string>
+    <string name="intro_offline_title">Hledání bez připojení</string>
+    <string name="intro_offline_description">Po stažení slovníků lze vyhledávat bez připojení na internet</string>
+
+    <!-- Favoritos -->
+    <string name="favorite_deleted_success">Smazáno z oblíbených</string>
+    <string name="favorite_deleted_error">Chyba při mazání z oblíbených</string>
+    <string name="favorite_added_success">Přidáno do oblíbených</string>
+    <string name="favorite_added_error">Chyba při přidávání do oblíbených</string>
+    <string name="favorite_cleared_success">Všechny položky smazány</string>
+    <string name="favorite_cleared_error">Chyba při mazání oblíbených</string>
+    <string name="favorite_empty">Nemáte žádné oblíbené</string>
+    <string name="favorite_clear_all">Smazat vše z oblíbených</string>
+    <string name="favorite_dialog_clear_confirm">Ano</string>
+    <string name="favorite_dialog_clear_cancel">Ne</string>
+    <string name="favorite_dialog_title">Smazat oblíbené</string>
+    <string name="favorite_dialog_content">Určitě chcete smazat všechny položky z oblíbených?</string>
+</resources>

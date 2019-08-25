@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_color">#673AB7</color>
+    <color name="primary_dark_color">#512DA8</color>
+    <color name="primary_light_color">#e6dff4</color>
+    <color name="accent_color">#4CAF50</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#727272</color>
+    <color name="divider_color">#B6B6B6</color>
+    <color name="text_icons_color">#FFFFFF</color>
+    <color name="list_item_header">#1d6580</color>
+    <color name="qichwa_showcase_title">#00BDE9</color>
+    <color name="spinner_color">#FFFFFF</color>
+    <color name="custom_text_color">#1c2a47</color>
+</resources>

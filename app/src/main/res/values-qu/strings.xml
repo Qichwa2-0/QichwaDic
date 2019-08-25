@@ -1,0 +1,87 @@
+<resources>
+    <!-- Toolbar -->
+    <!-- menu items -->
+    <string name="nav_dictionaries">Simitaqi</string>
+    <string name="nav_about">Kay Appmanta</string>
+    <string name="nav_favorites">Munasqay simikuna</string>
+
+    <!-- search criteria -->
+
+    <string-array name="searchTypes">
+        <item>Maskana simiyuq</item>
+        <item>Kaqlla</item>
+        <item>Qallariq</item>
+        <item>Tukuq</item>
+    </string-array>
+    <string name="search_lang_qu">QU</string>
+
+    <!-- search messages -->
+    <string name="no_results">
+        Manam imapas tarisqachu. \nQillqasqaykita qawapaykunki utaq musuq simitaqikunata instalaykuy.
+    </string>
+    <string name="get_dictionaries">Simitaqikuna</string>
+
+    <plurals name="total_results">
+        <item quantity="one">%d rimaylla tarisqa</item>
+        <item quantity="other">%d tarisqa rimaykuna</item>
+    </plurals>
+    <string name="error_no_dictionaries">Manam huklla simitaqitapas tarinichu.  Internetniykita qawapaykullay.</string>
+    <string name="dictionary_totalEntries">Haykap simintaq: %1$s </string>
+
+    <!-- dictionary messages -->
+    <string name="dictionary_delete_error">%sta pichachkaptin sasachakuyqa rikurirqamun</string>
+    <string name="dictionary_save_error">%sta waqaychaptin sasachakuyqa rikurirqamun</string>
+    <string name="dictionary_delete_success">%s pichasqañam</string>
+    <string name="dictionary_save_success">%s waqaychasqañam</string>
+
+    <string-array name="dictLangs">
+        <item>qu;Qichwa</item>
+        <item>es;Kastillanu</item>
+        <item>en;Inlis</item>
+        <item>fr;Ransis</item>
+        <item>de;Aliman</item>
+        <item>it;Italiyanu</item>
+        <item>ru;Rusu</item>
+    </string-array>
+
+    <!--Actions-->
+    <string name="share_definition_from_dictionary">Simitaqi: %s &lt;br&gt;&lt;br&gt; %s &lt;br&gt; %s</string>
+    <string name="share_with">Pitapas yachaykachiy</string>
+
+    <!-- Pref -->
+
+    <!--About-->
+    <string name="contact_subject">QichwaDic nisqamanta</string>
+    <string name="chooser_title">Qillqaykamuy</string>
+    <string name="about_project_collaboration">
+        Kay app nisqa Asociacion ILLAp digitalyachisqanwan rurasqanmi
+    </string>
+    <string name="about_open_web_version">Webpi rikuy</string>
+    <string name="about_rate_app">Google Playpi chaninchaykuy</string>
+    <!-- intro -->
+    <string name="intro_skip">Maskamusun</string>
+    <string name="intro_done">Allinmi</string>
+    <string name="intro_multisearch_title">Achkapi maskay</string>
+    <string name="intro_multisearch_description">Kuskalla maskaykuy qichwapiwan achka simikunapi ima.</string>
+    <string name="intro_searchcriteria_title">Imaynam maskana</string>
+    <string name="intro_searchcriteria_description">
+        Munasqayki simiwan chaymanta munasqaykikama maskaykuy: Qallariqnin / Tukuqnin / Maskana simiyuq
+    </string>
+    <string name="intro_offline_title">Mana internetwan maskay</string>
+    <string name="intro_offline_description">Simitaqita instalaykuy maskayta atinaykipaq</string>
+
+    <!-- favoritos -->
+
+    <string name="favorite_deleted_success">Huk simiykita chinkarqachinki</string>
+    <string name="favorite_deleted_error">Sasachakuy rikurirqamun simiykita pichaptiyki</string>
+    <string name="favorite_added_success">Huk simiykita yapaykunki</string>
+    <string name="favorite_added_error">Sasachakuy rikurirqamun simiykita yapaptiyki</string>
+    <string name="favorite_cleared_success">Llapan simiykikunata picharqunki</string>
+    <string name="favorite_cleared_error">Sasachakuy rikurirqamun llapan simiykita picharquptiyki</string>
+    <string name="favorite_empty">Manam simiyki kanchu</string>
+    <string name="favorite_clear_all">Llapan simiykikunata pichay</string>
+    <string name="favorite_dialog_clear_confirm">Arí</string>
+    <string name="favorite_dialog_clear_cancel">Manam</string>
+    <string name="favorite_dialog_title">Simiykikunata pichay</string>
+    <string name="favorite_dialog_content">Allinchu llapan simiykikunata pichaptiyki?</string>
+</resources>

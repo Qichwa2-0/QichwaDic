@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">QichwaDic</string>
+    <string name="version" translatable="false">v2.3.0</string>
+    <string name="website" translatable="false">https://www.qichwa.net</string>
+    <!-- Toolbar -->
+    <!-- menu items -->
+    <string name="nav_dictionaries">Dictionaries</string>
+    <string name="nav_about">About</string>
+    <string name="nav_favorites">Favorites</string>
+
+    <!-- search criteria -->
+    <string name="search_quechua_placeholder" translatable="false">Yawar</string>
+    <string name="search_spanish_placeholder" translatable="false">Amanecer</string>
+    <string name="search_english_placeholder" translatable="false">House</string>
+    <string name="search_french_placeholder" translatable="false">Pierre</string>
+    <string name="search_german_placeholder" translatable="false">Stuhl</string>
+    <string name="search_italian_placeholder" translatable="false">Giocare</string>
+
+    <string-array name="searchTypes">
+        <item>Contains</item>
+        <item>Exact</item>
+        <item>Starts with</item>
+        <item>Ends with</item>
+    </string-array>
+    <string name="search_lang_qu">QU</string>
+
+    <!-- search messages -->
+    <string name="no_results">No results found. \nTry checking the word\'s spelling or downloading more dictionaries.</string>
+    <string name="get_dictionaries">Get dictionaries</string>
+
+    <plurals name="total_results">
+        <item quantity="one">%d result</item>
+        <item quantity="other">%d results</item>
+    </plurals>
+    <string name="error_no_dictionaries">No dictionaries found.  Please check your internet connection.</string>
+    <string name="dictionary_totalEntries">Total entries: %1$s </string>
+
+    <!-- dictionary messages -->
+    <string name="dictionary_delete_error">Error deleting %s</string>
+    <string name="dictionary_save_error">Error saving %s</string>
+    <string name="dictionary_delete_success">%s deleted</string>
+    <string name="dictionary_save_success">%s saved</string>
+
+    <string-array name="dictLangs">
+        <item>qu;Quechua</item>
+        <item>es;Spanish</item>
+        <item>en;English</item>
+        <item>fr;French</item>
+        <item>de;German</item>
+        <item>it;Italian</item>
+        <item>ru;Russian</item>
+    </string-array>
+
+    <!--Actions-->
+    <string name="share_definition_from_dictionary">Dictionary %s &lt;br&gt;&lt;br&gt; %s &lt;br&gt; %s</string>
+    <string name="share_with">Share with</string>
+
+    <!-- Pref -->
+
+    <!--About-->
+    <string name="contact_subject">About QichwaDic</string>
+    <string name="chooser_title">Send message</string>
+    <string name="about_project_collaboration">
+        This app integrates dictionaries recopilated by &lt;a href="mailto:sankaypillo@gmail.com"&gt;Asociación ILLA&lt;/a&gt;,
+        &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; and
+        &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/&gt;.
+        &lt;br&gt;&lt;br&gt; &lt;strong&gt;We acknowledge them for their work.&lt;/strong&gt;
+    </string>
+
+    <string name="about_open_web_version">Go to web version</string>
+    <string name="about_rate_app">Rate app in Google Play</string>
+    <string translatable="false" name="about_copyright">Copyright \u00A9 Qichwa 2.0 2019</string>
+
+
+    <!-- intro -->
+    <string name="intro_skip">Skip</string>
+    <string name="intro_done">Done</string>
+    <string name="intro_multisearch_title">Multiple search</string>
+    <string name="intro_multisearch_description">Perform your searches in multiple dictionaries at the same time. Available in Quechua, Spanish, English, French, German and Italian.</string>
+    <string name="intro_searchcriteria_title">Search options</string>
+    <string name="intro_searchcriteria_description">Your searches can match different criteria: Exact search/Starts with/Ends with/Contains</string>
+    <string name="intro_offline_title">Offline search</string>
+    <string name="intro_offline_description">Download dictionaries in order to run searches</string>
+
+    <!-- Favorites-->
+    <string name="favorite_deleted_success">Favorite deleted</string>
+    <string name="favorite_deleted_error">Error deleting favorite</string>
+    <string name="favorite_added_success">Favorite added</string>
+    <string name="favorite_added_error">Error adding favorite</string>
+    <string name="favorite_cleared_success">All favorites were deleted</string>
+    <string name="favorite_cleared_error">Error deleting favorites </string>
+    <string name="favorite_empty">No favorites found</string>
+    <string name="favorite_clear_all">Clear all favorites</string>
+    <string name="favorite_dialog_clear_confirm">Yes</string>
+    <string name="favorite_dialog_clear_cancel">No</string>
+    <string name="favorite_dialog_title">Clear favorites</string>
+    <string name="favorite_dialog_content">Are you sure you want to remove all your favorites?</string>
+</resources>

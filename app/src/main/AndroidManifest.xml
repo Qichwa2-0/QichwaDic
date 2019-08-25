@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ocram.qichwadic">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <application
+        android:name=".QichwaDicApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_app"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo_q_scaled"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".presentation.ui.activity.SplashActivity"
+            android:configChanges="locale">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".presentation.ui.activity.DictionaryActivity" />
+        <activity android:name=".presentation.ui.activity.SearchActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:configChanges="locale">
+        </activity>
+        <activity
+            android:name=".presentation.ui.activity.IntroActivity"
+            android:configChanges="locale"/>
+        <activity
+            android:name=".presentation.ui.activity.AboutActivity"
+            android:configChanges="locale"/>
+
+        <activity android:name=".presentation.ui.activity.FavoriteActivity"
+            android:configChanges="locale"/>
+    </application>
+</manifest>

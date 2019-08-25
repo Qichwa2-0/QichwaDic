@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/mToolbar"
+            layout="@layout/toolbar_basic" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/glLeftLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.10" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/glRightLogo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.90" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/glTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.05" />
+
+            <ImageView
+                android:id="@+id/ivQichwa20Logo"
+                android:layout_width="0dp"
+                android:layout_height="124dp"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/logo_q_scaled"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/glTop" />
+
+            <TextView
+                android:id="@+id/tvQichwaSite"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="@string/website"
+                android:autoLink="web"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivQichwa20Logo" />
+
+            <LinearLayout
+                android:id="@+id/llQichwa20Btns"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvQichwaSite">
+
+                <ImageView
+                    android:id="@+id/ivQichwa20Fb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_action_facebook" />
+
+                <ImageView
+                    android:id="@+id/ivQichwa20Yt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_action_youtube" />
+
+                <ImageView
+                    android:id="@+id/ivQichwa20Mail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:srcCompat="@drawable/ic_mail" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/vDivider"
+                android:layout_width="0dp"
+                android:layout_height="2dip"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:background="@color/primary_light_color"
+                app:layout_constraintLeft_toLeftOf="@id/glLeftLogo"
+                app:layout_constraintRight_toRightOf="@id/glRightLogo"
+                app:layout_constraintTop_toBottomOf="@id/llQichwa20Btns" />
+
+            <TextView
+                android:id="@+id/tvProjectCollab"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:paddingStart="@dimen/padding_medium"
+                android:paddingEnd="@dimen/padding_medium"
+                android:gravity="center"
+                app:layout_constraintLeft_toLeftOf="@id/glLeftLogo"
+                app:layout_constraintRight_toRightOf="@id/glRightLogo"
+                app:layout_constraintTop_toBottomOf="@id/vDivider"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvWebsite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:background="@drawable/border_top_bottom"
+                android:drawableStart="@drawable/ic_action_globe"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/about_open_web_version"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvProjectCollab" />
+
+            <TextView
+                android:id="@+id/tvRateApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_top_bottom"
+                android:drawableStart="@drawable/ic_star_border"
+                android:drawablePadding="@dimen/padding_small"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/about_rate_app"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvWebsite" />
+
+            <TextView
+                android:id="@+id/tvAppVersion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_top_bottom"
+                android:gravity="center"
+                android:padding="@dimen/padding_medium"
+                android:text="@string/version"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvRateApp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border_top_bottom"
+                android:gravity="center"
+                android:padding="@dimen/padding_big"
+                android:text="@string/about_copyright"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAppVersion"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+
+</ScrollView>
+
+

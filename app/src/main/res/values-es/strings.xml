@@ -1,0 +1,89 @@
+<resources>
+    <!-- Toolbar -->
+    <!-- menu items -->
+    <string name="nav_dictionaries">Diccionarios</string>
+    <string name="nav_about">Acerca de</string>
+    <string name="nav_favorites">Favoritos</string>
+
+    <!-- search criteria -->
+
+    <string-array name="searchTypes">
+        <item>Contiene</item>
+        <item>Exacto</item>
+        <item>Comienza</item>
+        <item>Termina</item>
+    </string-array>
+    <string name="search_lang_qu">QU</string>
+
+    <!-- search messages -->
+    <string name="no_results">
+        No se encontraron resultados. \nVerifique que la palabra a buscar esté bien escrita o descargue más diccionarios.
+    </string>
+    <string name="get_dictionaries">Ver diccionarios</string>
+
+    <plurals name="total_results">
+        <item quantity="one">%d resultado</item>
+        <item quantity="other">%d resultados</item>
+    </plurals>
+    <string name="error_no_dictionaries">No se encontraron diccionarios.  Verifique que no haya un problema de red.</string>
+    <string name="dictionary_totalEntries">Total de Palabras: %1$s </string>
+
+    <!-- dictionary messages -->
+    <string name="dictionary_delete_error">Error al borrar %s</string>
+    <string name="dictionary_save_error">Error al guardar %s</string>
+    <string name="dictionary_delete_success">%s borrado</string>
+    <string name="dictionary_save_success">%s guardado</string>
+
+    <string-array name="dictLangs">
+        <item>qu;Quechua</item>
+        <item>es;Español</item>
+        <item>en;Inglés</item>
+        <item>fr;Francés</item>
+        <item>de;Alemán</item>
+        <item>it;Italiano</item>
+        <item>ru;Ruso</item>
+    </string-array>
+
+    <!--Actions-->
+    <string name="share_definition_from_dictionary">Diccionario %s &lt;br&gt;&lt;br&gt; %s &lt;br&gt; %s</string>
+    <string name="share_with">Compartir con</string>
+
+    <!-- Pref -->
+
+    <!--About-->
+    <string name="contact_subject">Acerca de QichwaDic</string>
+    <string name="chooser_title">Enviar mensaje</string>
+    <string name="about_project_collaboration">
+        Esta aplicación usa diccionarios recopilados por &lt;a href="mailto:sankaypillo@gmail.com"&gt;Asociación ILLA&lt;/a&gt;,
+        &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; y
+        &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/&gt;.
+        &lt;br&gt;&lt;br&gt; &lt;strong&gt;Les agradecemos por su trabajo.&lt;/strong&gt;
+    </string>
+    <string name="about_open_web_version">Abrir versión web</string>
+    <string name="about_rate_app">Valorar en Google Play</string>
+
+    <!-- intro -->
+    <string name="intro_skip">Saltar</string>
+    <string name="intro_done">Listo</string>
+    <string name="intro_multisearch_title">Búsqueda múltiple</string>
+    <string name="intro_multisearch_description">Busque en diccionarios de forma simultánea en quechua, castellano, inglés, francés, alemán e italiano.</string>
+    <string name="intro_searchcriteria_title">Criterios de búsqueda</string>
+    <string name="intro_searchcriteria_description">Busque por palabra exacta o por criterios: Comienza por / Termina en / Contiene</string>
+    <string name="intro_offline_title">Búsqueda sin conexión</string>
+    <string name="intro_offline_description">Descargue los diccionarios para empezar a realizar búsquedas.</string>
+
+    <!-- Favoritos -->
+
+    <string name="favorite_deleted_success">Se eliminó 1 favorito</string>
+    <string name="favorite_deleted_error">Error el eliminar favorito</string>
+    <string name="favorite_added_success">Se agregó 1 favorito</string>
+    <string name="favorite_added_error">Error al agregar favorito</string>
+    <string name="favorite_cleared_success">Se eliminaron todos los favoritos</string>
+    <string name="favorite_cleared_error">Error al eliminar favoritos</string>
+    <string name="favorite_empty">No cuenta con favoritos</string>
+    <string name="favorite_clear_all">Eliminar todos los favoritos</string>
+    <string name="favorite_dialog_clear_confirm">Sí</string>
+    <string name="favorite_dialog_clear_cancel">No</string>
+    <string name="favorite_dialog_title">Eliminar favoritos</string>
+    <string name="favorite_dialog_content">¿Está seguro de eliminar sus favoritos?</string>
+</resources>
