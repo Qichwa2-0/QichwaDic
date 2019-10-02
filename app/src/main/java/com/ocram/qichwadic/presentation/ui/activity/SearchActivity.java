@@ -17,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.text.HtmlCompat;
 import androidx.lifecycle.ViewModelProviders;
@@ -50,6 +51,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import io.reactivex.disposables.CompositeDisposable;
@@ -62,7 +64,8 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
     @BindView(R.id.rvResults) RecyclerView rvResults;
     @BindView(R.id.searchProgressBar) ProgressBar searchProgressBar;
     @BindView(R.id.fetchMoreProgressBar) ProgressBar fetchMoreProgressBar;
-    @BindView(R.id.llNoResults) LinearLayout llNoResults;
+    @BindView(R.id.llNoResultsForOffline) LinearLayout llNoResultsForOffline;
+    @BindView(R.id.llNoResultsForOnline) LinearLayout llNoResultsForOnline;
     @BindView(R.id.llSearchOptions) LinearLayout llSearchOptions;
     @BindView(R.id.spSearchTypes) Spinner spSearchTypes;
     @BindView(R.id.llResultsArea) RelativeLayout llResultsArea;
@@ -73,6 +76,10 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
     @BindView(R.id.spDictLangs) Spinner spDictLangs;
     @BindView(R.id.vSeparator) View vSeparator;
     @BindView(R.id.btnNoResultsGetDictionaries) Button btnNoResultsGetDictionaries;
+    @BindView(R.id.tvError) TextView tvError;
+    @BindView(R.id.swOfflineSearch) SwitchCompat swOfflineSearch;
+    @BindView(R.id.ivSubmitSearch) ImageView ivSubmitSearch;
+
     private SpinnerResultAdapter spinnerResultAdapter;
     private ResultListAdapter resultListAdapter;
     private EndlessRecyclerViewScrollListener scrollListener;
@@ -81,9 +88,11 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
     private String quechuaPlaceholder;
     private boolean isFromQuechua;
     private SearchParams searchParams;
+
     private CompositeDisposable compositeDisposable;
 
     private SearchViewModel viewModel;
+    private boolean offlineSearch;
 
     @Inject
     PreferencesHelper preferencesHelper;
@@ -95,14 +104,58 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
         this.compositeDisposable = new CompositeDisposable();
         loadPlaceholders();
         setAdapters();
-        setSearchView();
+        initSearchView();
         viewModel = ViewModelProviders.of(this).get(SearchViewModel.class);
         viewModel.getResultLiveData().observe(this, this::onResultsChanged);
         viewModel.getSearchViewState().observe(this, this::onSearchViewStateChanged);
         viewModel.getExtraDefinitions().observe(this, this::onFetchExtraDefinitions);
         viewModel.getLoadFetchMore().observe(this, this::onFetchMoreLoadingChanged);
         viewModel.getSaveFavoriteResult().observe(this, this::onSaveWordResult);
+        viewModel.getOfflineSearch().observe(this, this::onSearchModeChanged);
         this.initSavedSearchPrefs();
+    }
+
+    private void loadPlaceholders(){
+        this.placeholders = new HashMap<>();
+        this.quechuaPlaceholder = getString(R.string.search_quechua_placeholder);
+        this.placeholders.put("qu", quechuaPlaceholder);
+        this.placeholders.put("es", getString(R.string.search_spanish_placeholder));
+        this.placeholders.put("en", getString(R.string.search_english_placeholder));
+        this.placeholders.put("fr", getString(R.string.search_french_placeholder));
+        this.placeholders.put("de", getString(R.string.search_german_placeholder));
+        this.placeholders.put("it", getString(R.string.search_italian_placeholder));
+        this.placeholders.put("ru", getString(R.string.search_russian_placeholder));
+    }
+
+    private void setAdapters(){
+        ArrayAdapter<CharSequence> searchTypesAdapter = ArrayAdapter.createFromResource(this, R.array.searchTypes, R.layout.item_spinner_search_type);
+        searchTypesAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown_search_type);
+        spSearchTypes.setAdapter(searchTypesAdapter);
+        spSearchTypes.setSelection(2);
+
+        spDictLangs.setAdapter(new DictLangAdapter(this));
+        spinnerResultAdapter = new SpinnerResultAdapter(this, R.layout.item_spinner_result, new ArrayList<>());
+        resultListAdapter = new ResultListAdapter(new ArrayList<>(), this);
+        rvResults.setAdapter(resultListAdapter);
+        spResults.setAdapter(spinnerResultAdapter);
+    }
+
+    private void initSearchView(){
+        svSearch.setQuery(svSearch.getQueryHint(), false);
+        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d(getClass().getName(), "onquerysubmit " + query);
+                viewModel.searchWord(isFromQuechua ? 1 : 0, getCurrentLang(), spSearchTypes.getSelectedItemPosition(), query);
+                svSearch.clearFocus();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
     }
 
     private void initSavedSearchPrefs() {
@@ -147,12 +200,18 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
             Intent intent = new Intent(SearchActivity.this, FavoriteActivity.class);
             startActivity(intent);
             return true;
-        }else if(id == R.id.nav_about){
+        } else if(id == R.id.nav_about){
             Intent intent = new Intent(SearchActivity.this, AboutActivity.class);
             startActivity(intent);
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.btnNoResultsGetDictionaries)
+    public void openDictionariesGallery(){
+        Intent intent = new Intent(SearchActivity.this, DictionaryActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -200,17 +259,11 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
         viewModel.saveFavorite(definition);
     }
 
-    @OnClick(R.id.fabSearch)
+    @OnClick({ R.id.fabSearch, R.id.ivSubmitSearch })
     public void openFavorites(View v){
         if(svSearch.getQuery().length() > 0){
             svSearch.setQuery(svSearch.getQuery(), true);
         }
-    }
-
-    @OnClick(R.id.btnNoResultsGetDictionaries)
-    public void openDictionariesGallery(){
-        Intent intent = new Intent(SearchActivity.this, DictionaryActivity.class);
-        startActivity(intent);
     }
 
     @OnItemSelected(R.id.spResults)
@@ -231,6 +284,11 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
     void onDictLangSelected() {
         updateQueryHint();
         preferencesHelper.saveNonQuechuaLangPos(((DictLang)spDictLangs.getSelectedItem()).getCode());
+    }
+
+    @OnCheckedChanged(R.id.swOfflineSearch)
+    void onSearchOfflineModeChanged(boolean checked) {
+        viewModel.changeSearchModeConfig(checked);
     }
 
     private void setSearchParams(SearchParams searchParams) {
@@ -270,15 +328,21 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
 
     private void onResultsChanged(List<SearchResult> searchResults){
         llResultsArea.setVisibility(View.VISIBLE);
+        tvError.setVisibility(View.GONE);
         if(searchResults == null  || searchResults.isEmpty()){
-            llNoResults.setVisibility(View.VISIBLE);
+            spinnerResultAdapter.setSearchResults(Collections.emptyList());
+            resultListAdapter.setDefinitions(Collections.emptyList());
             spResults.setVisibility(View.GONE);
             tvResultsTotal.setVisibility(View.GONE);
             rvResults.setVisibility(View.GONE);
-            spinnerResultAdapter.setSearchResults(new ArrayList<>());
-            resultListAdapter.setDefinitions(new ArrayList<>());
+            if(offlineSearch) {
+                llNoResultsForOffline.setVisibility(View.VISIBLE);
+            } else {
+                llNoResultsForOnline.setVisibility(View.VISIBLE);
+            }
         }else{
-            llNoResults.setVisibility(View.GONE);
+            llNoResultsForOffline.setVisibility(View.GONE);
+            llNoResultsForOnline.setVisibility(View.GONE);
             spResults.setVisibility(View.VISIBLE);
             tvResultsTotal.setVisibility(View.VISIBLE);
             renderResults(searchResults);
@@ -290,8 +354,23 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
             if(searchViewState.isLoading()){
                 searchProgressBar.setVisibility(View.VISIBLE);
                 llResultsArea.setVisibility(View.GONE);
+                llNoResultsForOffline.setVisibility(View.GONE);
+                llNoResultsForOnline.setVisibility(View.GONE);
+                tvError.setVisibility(View.GONE);
             }else{
                 searchProgressBar.setVisibility(View.GONE);
+                if(searchViewState.isHasError()) {
+
+                    int errorMsgId = offlineSearch ? R.string.error_offline : R.string.error_online;
+                    tvError.setText(getString(errorMsgId));
+
+                    llResultsArea.setVisibility(View.GONE);
+                    llNoResultsForOffline.setVisibility(View.GONE);
+                    llNoResultsForOnline.setVisibility(View.GONE);
+                    tvError.setVisibility(View.VISIBLE);
+                } else {
+                    tvError.setVisibility(View.GONE);
+                }
             }
         }
     }
@@ -313,6 +392,12 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
     private void onSaveWordResult(Boolean isSuccess){
         int stringId = (isSuccess != null && isSuccess) ? R.string.favorite_added_success : R.string.favorite_added_error;
         Snackbar.make(clSearch, getString(stringId), Snackbar.LENGTH_SHORT).show();
+    }
+
+    private void onSearchModeChanged(Boolean isOffline) {
+        this.offlineSearch = isOffline != null && isOffline;
+        swOfflineSearch.setChecked(this.offlineSearch);
+        this.invalidateOptionsMenu();
     }
 
     private void renderResults(List<SearchResult> searchResults) {
@@ -338,53 +423,8 @@ public class SearchActivity extends BaseActivity implements ResultListAdapter.De
         resultListAdapter.notifyDataSetChanged();
     }
 
-    private void loadPlaceholders(){
-        this.placeholders = new HashMap<>();
-        this.quechuaPlaceholder = getString(R.string.search_quechua_placeholder);
-        this.placeholders.put("qu", quechuaPlaceholder);
-        this.placeholders.put("es", getString(R.string.search_spanish_placeholder));
-        this.placeholders.put("en", getString(R.string.search_english_placeholder));
-        this.placeholders.put("fr", getString(R.string.search_french_placeholder));
-        this.placeholders.put("de", getString(R.string.search_german_placeholder));
-        this.placeholders.put("it", getString(R.string.search_italian_placeholder));
-    }
-
-    private void setAdapters(){
-        ArrayAdapter<CharSequence> searchTypesAdapter = ArrayAdapter.createFromResource(this, R.array.searchTypes, R.layout.item_spinner_search_type);
-        searchTypesAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown_search_type);
-        spSearchTypes.setAdapter(searchTypesAdapter);
-        spSearchTypes.setSelection(2);
-
-        spDictLangs.setAdapter(new DictLangAdapter(this));
-        spinnerResultAdapter = new SpinnerResultAdapter(this, R.layout.item_spinner_result, new ArrayList<>());
-        resultListAdapter = new ResultListAdapter(new ArrayList<>(), this);
-        rvResults.setAdapter(resultListAdapter);
-        spResults.setAdapter(spinnerResultAdapter);
-    }
-
     private String getCurrentLang(){
         return ((DictLang)spDictLangs.getSelectedItem()).getCode();
     }
-
-
-
-    private void setSearchView(){
-        svSearch.setQuery(svSearch.getQueryHint(), false);
-        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.d(getClass().getName(), "onquerysubmit " + query);
-                viewModel.searchWord(isFromQuechua ? 1 : 0, getCurrentLang(), spSearchTypes.getSelectedItemPosition(), query);
-                svSearch.clearFocus();
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });
-    }
-
 
 }

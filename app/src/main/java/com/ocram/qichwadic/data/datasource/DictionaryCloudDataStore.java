@@ -26,7 +26,7 @@ public class DictionaryCloudDataStore implements DictionaryRepositoryImpl.CloudD
     }
 
     @Override
-    public Flowable<List<Definition>> getDefinitionsByDictionary(String entriesUrl) {
-        return retrofitClient.getAllDefinitionsByDictionary(entriesUrl);
+    public Flowable<List<Definition>> getDefinitionsByDictionary(int dictionaryId) {
+        return retrofitClient.getAllDefinitionsByDictionary(dictionaryId);
     }
 }

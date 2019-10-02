@@ -27,9 +27,9 @@ public class DictionaryInteractorImpl implements DictionaryInteractor {
     }
 
     @Override
-    public Flowable<List<Definition>> getAllDefinitionsByDictionary(String entriesUrl) {
+    public Flowable<List<Definition>> getAllDefinitionsByDictionary(int dictionaryId) {
         return dictionaryRepository
-                .getDefinitionsByDictionary(entriesUrl)
+                .getDefinitionsByDictionary(dictionaryId)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 

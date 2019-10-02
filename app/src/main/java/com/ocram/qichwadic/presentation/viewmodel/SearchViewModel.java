@@ -1,9 +1,11 @@
 package com.ocram.qichwadic.presentation.viewmodel;
 
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import android.app.Application;
+import android.util.Log;
 
 import com.ocram.qichwadic.QichwaDicApplication;
 import com.ocram.qichwadic.domain.interactor.DictionaryInteractor;
@@ -39,6 +41,7 @@ public class SearchViewModel extends AndroidViewModel {
     private MutableLiveData<SearchViewState> searchViewState = new MutableLiveData<>();
     private MutableLiveData<Boolean> loadFetchMore = new MutableLiveData<>();
     private MutableLiveData<Boolean> saveFavoriteResult = new MutableLiveData<>();
+    private MutableLiveData<Boolean> offlineSearch = new MutableLiveData<>();
 
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -50,7 +53,15 @@ public class SearchViewModel extends AndroidViewModel {
                 .build()
                 .inject(this);
         preferencesHelper = ((QichwaDicApplication)application).getAppComponent().getPreferencesHelper();
+        loadSearchModeConfig();
         searchViewState.setValue(new SearchViewState());
+    }
+
+    private void loadSearchModeConfig() {
+        compositeDisposable.add(
+                preferencesHelper.getSearchMode().subscribe(isOffline -> offlineSearch.postValue(isOffline))
+        );
+
     }
 
     @Override
@@ -81,14 +92,20 @@ public class SearchViewModel extends AndroidViewModel {
         return saveFavoriteResult;
     }
 
+    public LiveData<Boolean> getOfflineSearch() {
+        return offlineSearch;
+    }
+
     public void searchWord(int fromQuechua, String target, int searchType, String word){
         if(searchViewState.getValue() != null) {
             searchViewState.getValue().setLoading(true);
+            searchViewState.setValue(searchViewState.getValue());
         }
         preferencesHelper.saveSearchParams(target, fromQuechua == 1, searchType);
+
         compositeDisposable.add(
                 searchInteractor
-                        .queryWord(fromQuechua, target, searchType, word)
+                        .queryWord(fromQuechua, target, searchType, word, isOfflineSearch())
                         .subscribe(this::onSearchSuccess, this::onSearchError)
         );
     }
@@ -97,15 +114,17 @@ public class SearchViewModel extends AndroidViewModel {
         if(searchViewState.getValue() != null) {
             searchViewState.getValue().setLoading(false);
             searchViewState.getValue().setHasError(false);
+            searchViewState.setValue(searchViewState.getValue());
         }
         resultLiveData.postValue(searchResults);
     }
 
     private void onSearchError(Throwable throwable){
-
+        Log.e("ERROR", "error searching", throwable);
         if(searchViewState.getValue() != null) {
             searchViewState.getValue().setHasError(true);
             searchViewState.getValue().setLoading(false);
+            searchViewState.setValue(searchViewState.getValue());
         }
     }
 
@@ -113,9 +132,13 @@ public class SearchViewModel extends AndroidViewModel {
         loadFetchMore.setValue(true);
         compositeDisposable.add(
                 searchInteractor
-                        .fetchMoreResults(dictionaryId, searchType, word, page)
+                        .fetchMoreResults(dictionaryId, searchType, word, page, isOfflineSearch())
                         .subscribe(this::onFetchMoreSuccess)
         );
+    }
+
+    private boolean isOfflineSearch() {
+        return getOfflineSearch().getValue() != null && getOfflineSearch().getValue();
     }
 
     private void onFetchMoreSuccess(List<Definition> definitions){
@@ -129,5 +152,11 @@ public class SearchViewModel extends AndroidViewModel {
                         .addFavorite(definition)
                         .subscribe(result -> saveFavoriteResult.postValue(result))
         );
+    }
+
+    public void changeSearchModeConfig(boolean isOffline) {
+        preferencesHelper.saveOfflineSearchMode(isOffline)
+                .doOnComplete(() -> offlineSearch.postValue(isOffline))
+                .subscribe();
     }
 }

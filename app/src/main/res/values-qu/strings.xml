@@ -4,6 +4,8 @@
     <string name="nav_dictionaries">Simitaqi</string>
     <string name="nav_about">Kay Appmanta</string>
     <string name="nav_favorites">Munasqay simikuna</string>
+    <string name="local_search">Mana internetwan maskay</string>
+
 
     <!-- search criteria -->
 
@@ -15,10 +17,19 @@
     </string-array>
     <string name="search_lang_qu">QU</string>
 
+    <string name="search_mode_local">Internetwan maskay</string>
+    <string name="search_mode_online">Mana internetwan maskay</string>
+
     <!-- search messages -->
-    <string name="no_results">
+    <string name="no_results_offline">
         Manam imapas tarisqachu. \nQillqasqaykita qawapaykunki utaq musuq simitaqikunata instalaykuy.
     </string>
+    <string name="no_results_online">
+        Manam imapas tarisqachu.
+    </string>
+    <string name="error_offline">Achacháw! Sasachakuy kachkan.</string>
+    <string name="error_online">Achacháw! Sasachakuy kachkan. Internetniykita qawapaykullay.</string>
+
     <string name="get_dictionaries">Simitaqikuna</string>
 
     <plurals name="total_results">

@@ -9,9 +9,11 @@ import io.reactivex.Flowable;
 
 public interface SearchRepository {
 
-    Flowable<List<SearchResult>> getDictionariesContainingWord(String langBegin, String landEnd, String wordQuery);
+    Flowable<List<SearchResult>> searchOnline(int fromQuechua, String target, String word, int searchType);
 
-    Flowable<List<Definition>> findDefinitionsInDictionary(List<Integer> dictionaryIds, String wordQuery);
+    Flowable<List<SearchResult>> searchOffline(int fromQuechua, String target, String word, int searchType);
 
-    Flowable<List<Definition>> fetchMoreResults(int dictionaryId, String searchCriteria, int page);
+    Flowable<List<Definition>> fetchMoreResultsOffline(int dictionaryId, int searchType, String word, int page);
+
+    Flowable<List<Definition>> fetchMoreResultsOnline(int dictionaryId, int searchType, String word, int page);
 }

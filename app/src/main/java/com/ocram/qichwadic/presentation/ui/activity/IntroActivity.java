@@ -21,7 +21,7 @@ public class IntroActivity extends AppIntro {
         SliderPage sliderPage1 = new SliderPage();
         sliderPage1.setTitle(getString(R.string.intro_multisearch_title));
         sliderPage1.setDescription(getString(R.string.intro_multisearch_description));
-        sliderPage1.setImageDrawable(R.drawable.search3);
+        sliderPage1.setImageDrawable(R.drawable.search);
         sliderPage1.setBgColor(ContextCompat.getColor(this, R.color.qichwa_showcase_title));
         addSlide(AppIntroFragment.newInstance(sliderPage1));
 

@@ -7,8 +7,8 @@ android {
         applicationId "com.ocram.qichwadic"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 16
-        versionName "2.3.0"
+        versionCode 17
+        versionName "3.0.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         javaCompileOptions {
             annotationProcessorOptions {
@@ -17,13 +17,13 @@ android {
             }
         }
         buildConfigField "boolean", "DEBUGGABLE", 'false'
-        buildConfigField "String", "SERVER_URL", '"https://qichwadic.netlify.com/"'
+        buildConfigField "String", "SERVER_URL", '"https://www.api.qichwa.net/simitaqi/"'
         buildConfigField "String", "DEV_EMAIL", '"qichwa2.0@gmail.com"'
     }
     buildTypes {
         debug{
             buildConfigField "boolean", "DEBUGGABLE", 'true'
-            buildConfigField "String", "SERVER_URL", '"https://qichwadic.netlify.com/"'
+            buildConfigField "String", "SERVER_URL", '"https://www.api.qichwa.net/simitaqi/"'
             minifyEnabled false
         }
         release {

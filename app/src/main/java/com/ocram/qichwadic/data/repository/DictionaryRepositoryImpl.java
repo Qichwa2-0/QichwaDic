@@ -37,8 +37,8 @@ public class DictionaryRepositoryImpl implements DictionaryRepository {
     }
 
     @Override
-    public Flowable<List<Definition>> getDefinitionsByDictionary(String entriesUrl) {
-        return cloudDataStore.getDefinitionsByDictionary(entriesUrl);
+    public Flowable<List<Definition>> getDefinitionsByDictionary(int dictionaryId) {
+        return cloudDataStore.getDefinitionsByDictionary(dictionaryId);
     }
 
     public void saveDictionaryAndDefinitions(Dictionary dictionary, List<Definition> definitions) {
@@ -64,7 +64,7 @@ public class DictionaryRepositoryImpl implements DictionaryRepository {
 
         Flowable<List<Dictionary>> getDictionaries();
 
-        Flowable<List<Definition>> getDefinitionsByDictionary(String entriesUrl);
+        Flowable<List<Definition>> getDefinitionsByDictionary(int dictionaryId);
     }
 }
 

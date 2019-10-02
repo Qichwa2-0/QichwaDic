@@ -13,7 +13,7 @@ public interface DictionaryInteractor {
 
     Flowable<List<Dictionary>> getSavedDictionaries();
 
-    Flowable<List<Definition>> getAllDefinitionsByDictionary(String entriesUrl);
+    Flowable<List<Definition>> getAllDefinitionsByDictionary(int dictionaryId);
 
     Flowable<Boolean> hasSavedDictionaries();
 

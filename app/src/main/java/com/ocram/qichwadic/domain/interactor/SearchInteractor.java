@@ -9,7 +9,7 @@ import io.reactivex.Flowable;
 
 public interface SearchInteractor {
 
-    Flowable<List<SearchResult>> queryWord(int fromQuechua, String target, int searchType, String word);
+    Flowable<List<SearchResult>> queryWord(int fromQuechua, String target, int searchType, String word, boolean offline);
 
-    Flowable<List<Definition>> fetchMoreResults(int dictionaryId, int searchType, String word, int page);
+    Flowable<List<Definition>> fetchMoreResults(int dictionaryId, int searchType, String word, int page, boolean offline);
 }

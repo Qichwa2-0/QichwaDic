@@ -1,11 +1,13 @@
-package com.ocram.qichwadic.data.repository;
+package com.ocram.qichwadic.data.datasource;
 
 import androidx.sqlite.db.SimpleSQLiteQuery;
 
+import com.ocram.qichwadic.data.repository.SearchRepositoryImpl;
+import com.ocram.qichwadic.domain.interactor.SearchType;
 import com.ocram.qichwadic.domain.model.Definition;
 import com.ocram.qichwadic.domain.model.SearchResult;
-import com.ocram.qichwadic.domain.repository.SearchRepository;
 import com.ocram.qichwadic.framework.dao.SearchDao;
+import com.ocram.qichwadic.presentation.viewmodel.viewstate.SearchParams;
 
 import java.util.List;
 
@@ -13,12 +15,12 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
-public class SearchDataRepository implements SearchRepository {
+public class SearchLocalDataStore implements SearchRepositoryImpl.SearchLocalDataStore {
 
-    private SearchDao searchDao;
+    private final SearchDao searchDao;
 
     @Inject
-    public SearchDataRepository(SearchDao searchDao) {
+    public SearchLocalDataStore(SearchDao searchDao) {
         this.searchDao = searchDao;
     }
 
@@ -50,7 +52,11 @@ public class SearchDataRepository implements SearchRepository {
     }
 
     @Override
-    public Flowable<List<Definition>> fetchMoreResults(int dictionaryId, String searchCriteria, int offset) {
-        return searchDao.findDefinitionsLike(dictionaryId, searchCriteria, offset);
+    public Flowable<List<Definition>> fetchMoreResults(int dictionaryId, String word, int searchType, int page) {
+        return searchDao.findDefinitionsLike(dictionaryId, SearchType.buildSearchCriteria(searchType, word), computeOffset(page));
+    }
+
+    private int computeOffset(int page){
+        return SearchParams.MAX_SEARCH_RESULTS * (page - 1 );
     }
 }

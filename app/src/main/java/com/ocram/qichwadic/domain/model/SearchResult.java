@@ -3,10 +3,12 @@ package com.ocram.qichwadic.domain.model;
 import androidx.room.ColumnInfo;
 import androidx.room.Ignore;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchResult {
+public class SearchResult implements Comparable<SearchResult> {
 
     @ColumnInfo(name = "dictionary_id")
     private int dictionaryId;
@@ -67,4 +69,8 @@ public class SearchResult {
         this.total = total;
     }
 
+    @Override
+    public int compareTo(@NotNull SearchResult searchResult) {
+        return this.dictionaryId - searchResult.dictionaryId;
+    }
 }

@@ -1,21 +1,21 @@
 package com.ocram.qichwadic.domain.interactor;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.ocram.qichwadic.data.datasource.DictionaryCloudDataStore;
-import com.ocram.qichwadic.data.datasource.DictionaryLocalDataStore;
-import com.ocram.qichwadic.data.repository.DictionaryRepositoryImpl;
-import com.ocram.qichwadic.data.repository.SearchDataRepository;
+import com.ocram.qichwadic.data.datasource.SearchLocalDataStore;
+import com.ocram.qichwadic.data.repository.SearchRepositoryImpl;
 import com.ocram.qichwadic.domain.model.Definition;
 import com.ocram.qichwadic.domain.model.Dictionary;
 import com.ocram.qichwadic.domain.model.SearchResult;
-import com.ocram.qichwadic.domain.repository.DictionaryRepository;
 import com.ocram.qichwadic.domain.repository.SearchRepository;
 import com.ocram.qichwadic.framework.dao.AppDatabase;
-import com.ocram.qichwadic.framework.net.client.RetrofitClient;
+import com.ocram.qichwadic.framework.preferences.PreferencesHelper;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -42,12 +42,15 @@ public class SearchInteractorTest {
                 .allowMainThreadQueries()
                 .build();
 
-        DictionaryRepository dictionaryRepository = new DictionaryRepositoryImpl(
-                new DictionaryLocalDataStore(appDatabase.getDictionaryDao()),
-                new DictionaryCloudDataStore(new RetrofitClient(null))
-        );
-        SearchRepository searchRepository = new SearchDataRepository(appDatabase.getDefinitionDao());
-        searchInteractor = new SearchInteractorImpl(searchRepository, dictionaryRepository);
+        SharedPreferences sharedPreferences =
+                ApplicationProvider.getApplicationContext().getSharedPreferences("QICHWADIC", Context.MODE_PRIVATE);
+
+
+        PreferencesHelper preferencesHelper = new PreferencesHelper(sharedPreferences);
+        preferencesHelper.saveOfflineSearchMode(true).subscribe();
+
+        SearchRepository searchRepository = new SearchRepositoryImpl(new SearchLocalDataStore(appDatabase.getDefinitionDao()), null);
+        searchInteractor = new SearchInteractorImpl(searchRepository);
     }
 
     @Test
@@ -81,7 +84,7 @@ public class SearchInteractorTest {
 
         appDatabase.getDictionaryDao().insertDictionaryAndDefinitions(dictionary, Arrays.asList(definition, definition2, definition3));
 
-        List<SearchResult> searchResults = searchInteractor.queryWord(1, "es", SearchType.STARTS_WITH.getType(), wordToSearch).blockingFirst();
+        List<SearchResult> searchResults = searchInteractor.queryWord(1, "es", SearchType.STARTS_WITH.getType(), wordToSearch, true).blockingFirst();
         Assert.assertFalse(searchResults.isEmpty());
         SearchResult searchResult = searchResults.get(0);
         Assert.assertEquals(searchResult.getDictionaryId(), dictionary.getId());
@@ -108,7 +111,7 @@ public class SearchInteractorTest {
         }
         appDatabase.getDictionaryDao().insertDictionaryAndDefinitions(dictionary, fakeDefs);
 
-        List<SearchResult> searchResults = searchInteractor.queryWord(1, "es", SearchType.STARTS_WITH.getType(), "a").blockingFirst();
+        List<SearchResult> searchResults = searchInteractor.queryWord(1, "es", SearchType.STARTS_WITH.getType(), "a", true).blockingFirst();
         Assert.assertFalse(searchResults.isEmpty());
 
         SearchResult searchResult = searchResults.get(0);
@@ -136,7 +139,7 @@ public class SearchInteractorTest {
         }
         appDatabase.getDictionaryDao().insertDictionaryAndDefinitions(dictionary, fakeDefs);
 
-        List<Definition> searchResults = searchInteractor.fetchMoreResults(dictionary.getId(), SearchType.STARTS_WITH.getType(), "a", 2).blockingFirst();
+        List<Definition> searchResults = searchInteractor.fetchMoreResults(dictionary.getId(), SearchType.STARTS_WITH.getType(), "a", 2, true).blockingFirst();
         Assert.assertFalse(searchResults.isEmpty());
 
         Assert.assertEquals(20, searchResults.size());

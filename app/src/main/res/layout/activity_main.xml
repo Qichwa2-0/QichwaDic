@@ -22,6 +22,7 @@
             android:orientation="horizontal"
             android:layout_below="@+id/mToolbar"
             android:weightSum="10">
+
             <Spinner
                 android:id="@+id/spSearchTypes"
                 android:layout_width="0dp"
@@ -30,8 +31,10 @@
                 android:entries="@array/searchTypes"
                 android:textAlignment="center"
                 android:background="@drawable/spinner_gradient_dicts"
+                android:spinnerMode="dialog"
                 android:layout_weight="5">
             </Spinner>
+
             <View
                 android:id="@+id/vSeparator"
                 android:layout_width="1dp"
@@ -39,6 +42,7 @@
                 android:layout_marginBottom="@dimen/margin_small"
                 android:layout_height="match_parent"
                 android:background="@color/divider_color" />
+
             <TextView
                 android:id="@+id/tvQichwaLang"
                 android:layout_width="0dp"
@@ -48,6 +52,7 @@
                 android:textColor="@color/accent_color"
                 android:layout_weight="2"
                 android:text="@string/search_lang_qu"/>
+
             <ImageView
                 android:id="@+id/ivSwapLanguages"
                 android:layout_width="0dp"
@@ -57,6 +62,7 @@
                 android:padding="@dimen/padding_small"
                 android:layout_marginStart="@dimen/margin_small"
                 android:layout_marginEnd="@dimen/margin_small"/>
+
             <Spinner
                 android:id="@+id/spDictLangs"
                 android:layout_width="0dp"
@@ -64,14 +70,62 @@
                 android:entries="@array/dictLangs"
                 android:textAlignment="center"
                 android:background="@drawable/spinner_gradient_dicts"
+                android:spinnerMode="dialog"
                 android:layout_weight="2"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/llNoResults"
+            android:id="@+id/llSearchMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:orientation="horizontal"
+            android:layout_below="@+id/llSearchOptions"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_mode_online"
+                android:textSize="@dimen/text_size_small"/>
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/swOfflineSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="@string/local_search"
+                android:textSize="@dimen/text_size_small"
+                android:textColor="@color/custom_text_color"
+                app:thumbTint="@color/list_item_header"
+                app:switchPadding="@dimen/padding_small"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginEnd="@dimen/margin_small"
+                android:checked="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search_mode_local"
+                android:textSize="@dimen/text_size_small"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llSearchMode"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/margin_huge"
+            android:visibility="gone"
+            android:drawableTop="@drawable/ic_sentiment_dissatisfied"
+            android:drawablePadding="@dimen/padding_tiny"
+            android:textSize="@dimen/text_size_normal"/>
+
+        <LinearLayout
+            android:id="@+id/llNoResultsForOffline"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/llSearchOptions"
+            android:layout_below="@+id/llSearchMode"
             android:visibility="gone"
             android:orientation="vertical">
             <TextView
@@ -85,7 +139,7 @@
                 android:paddingLeft="@dimen/padding_medium"
                 android:paddingRight="@dimen/padding_medium"
                 android:textColor="@color/custom_text_color"
-                android:text="@string/no_results"/>
+                android:text="@string/no_results_offline"/>
 
             <Button
                 android:id="@+id/btnNoResultsGetDictionaries"
@@ -100,11 +154,35 @@
                 android:text="@string/get_dictionaries"/>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/llNoResultsForOnline"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/llSearchMode"
+            android:visibility="gone"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_huge"
+                android:layout_marginBottom="@dimen/margin_medium"
+                android:textSize="16sp"
+                android:textAlignment="center"
+                android:visibility="visible"
+                android:paddingLeft="@dimen/padding_medium"
+                android:paddingRight="@dimen/padding_medium"
+                android:textColor="@color/custom_text_color"
+                android:text="@string/no_results_online"
+                android:drawableStart="@drawable/ic_sentiment_dissatisfied"
+                android:drawablePadding="@dimen/padding_tiny"/>
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/llResultsArea"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/llSearchOptions"
+            android:layout_below="@id/llSearchMode"
             android:visibility="gone">
 
             <Spinner
@@ -141,8 +219,8 @@
                 android:layout_height="match_parent"
                 android:paddingLeft="@dimen/padding_medium"
                 android:paddingRight="@dimen/padding_medium"
-                android:paddingBottom="@dimen/padding_medium"
                 android:visibility="gone"/>
+
             <ProgressBar
                 android:id="@+id/fetchMoreProgressBar"
                 android:layout_width="30dp"

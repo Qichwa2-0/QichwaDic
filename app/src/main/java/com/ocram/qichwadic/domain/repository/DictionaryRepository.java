@@ -15,7 +15,7 @@ public interface DictionaryRepository {
 
     Flowable<Integer> getSavedDictionariesTotal();
 
-    Flowable<List<Definition>> getDefinitionsByDictionary(String entriesUrl);
+    Flowable<List<Definition>> getDefinitionsByDictionary(int dictionaryId);
 
     void saveDictionaryAndDefinitions(Dictionary dictionary, List<Definition> definitions);
 

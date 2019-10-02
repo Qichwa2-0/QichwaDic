@@ -19,7 +19,7 @@ public class PreferencesHelper {
     private static final String SEARCH_PARAM_NON_QUECHUA_CODE_KEY = "pref_searchParamNonQuechuaLang";
     private static final String SEARCH_PARAM_IS_QUECHUA_KEY= "pref_searchParamFromQuechua";
     private static final String SEARCH_PARAM_TYPE_POS_KEY= "pref_searchParamType";
-    static final String APP_PREF = "QICHWADIC";
+    private static final String SEARCH_MODE_KEY= "pref_searchMode";
 
     private SharedPreferences sharedPreferences;
 
@@ -69,6 +69,18 @@ public class PreferencesHelper {
             e.onNext(searchParams);
             e.onComplete();
         }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Completable saveOfflineSearchMode(boolean offline) {
+        return Completable.fromAction(() ->
+                this.putBoolean(SEARCH_MODE_KEY, offline)
+        ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Flowable<Boolean> getSearchMode() {
+        return Flowable.<Boolean>fromPublisher(
+                e -> e.onNext(sharedPreferences.getBoolean(SEARCH_MODE_KEY, false)
+        )).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 
     private int getSearchTypePos() {

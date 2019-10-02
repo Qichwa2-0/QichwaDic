@@ -76,29 +76,23 @@ public class DictionaryViewModel extends AndroidViewModel {
     }
 
     public void downloadDictionary(int pos, final Dictionary dictionary){
-        Disposable disposable =
-                interactor
-                        .getAllDefinitionsByDictionary(dictionary.getEntriesFile())
+        compositeDisposable.add(
+                interactor.getAllDefinitionsByDictionary(dictionary.getId())
                         .doOnError(throwable -> onActionError(throwable, pos, dictionary, R.string.dictionary_save_error))
-                        .subscribe(definitions -> saveDefinitions(pos, dictionary, definitions));
-        compositeDisposable.add(disposable);
+                        .subscribe(definitions -> saveDefinitions(pos, dictionary, definitions)));
     }
 
     private void saveDefinitions(int pos, final Dictionary dictionary, final List<Definition> definitions){
-        compositeDisposable.add(
-                interactor
-                        .saveDictionaryAndDefinitions(dictionary, definitions)
-                        .doOnError(throwable -> onActionError(throwable, pos, dictionary, R.string.dictionary_save_error))
-                        .subscribe(result -> onActionFinished(dictionary, R.string.dictionary_save_success))
-        );
+        compositeDisposable.add(interactor.saveDictionaryAndDefinitions(dictionary, definitions)
+                .doOnError(throwable -> onActionError(throwable, pos, dictionary, R.string.dictionary_save_error))
+                .subscribe(result -> onActionFinished(dictionary, R.string.dictionary_save_success)));
     }
 
     public void removeDictionary(int pos, Dictionary dictionary){
         compositeDisposable.add(
-          interactor
-                  .removeDictionary(dictionary.getId())
-                  .doOnError(throwable -> onActionError(throwable, pos, dictionary, R.string.dictionary_delete_error))
-                  .subscribe(result -> onActionFinished(dictionary, R.string.dictionary_delete_success))
+                interactor.removeDictionary(dictionary.getId())
+                        .doOnError(throwable -> onActionError(throwable, pos, dictionary, R.string.dictionary_delete_error))
+                        .subscribe(result -> onActionFinished(dictionary, R.string.dictionary_delete_success))
         );
     }
 

@@ -10,12 +10,12 @@ import javax.inject.Inject;
 
 import io.reactivex.Flowable;
 
-public class FavoriteDataRepository implements FavoriteRepository {
+public class FavoriteRepositoryImpl implements FavoriteRepository {
 
     private FavoriteDao favoriteDao;
 
     @Inject
-    public FavoriteDataRepository(FavoriteDao favoriteDao) {
+    public FavoriteRepositoryImpl(FavoriteDao favoriteDao) {
         this.favoriteDao = favoriteDao;
     }
 

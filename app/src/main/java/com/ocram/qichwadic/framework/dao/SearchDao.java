@@ -23,7 +23,7 @@ public interface SearchDao {
             "FROM dictionary di JOIN definition de ON di.id = de.dictionary_id " +
             "WHERE di.language_begin = :langBegin " +
             "AND di.language_end = :langEnd " +
-            "AND de.word LIKE :word GROUP BY di.id")
+            "AND de.word LIKE :word GROUP BY di.id ORDER BY di.id")
     Flowable<List<SearchResult>> getDictionariesContainingWord(String langBegin, String langEnd, String word);
 
     @RawQuery(observedEntities = Definition.class)

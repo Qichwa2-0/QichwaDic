@@ -2,17 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/nav_favorites"
-        android:title="@string/nav_favorites"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_favorite_border_white_24dp"/>
     <item android:id="@+id/nav_dictionaries"
         android:title="@string/nav_dictionaries"
         app:showAsAction="never"
         android:icon="@drawable/ic_action_book"/>
+
+    <item android:id="@+id/nav_favorites"
+        android:title="@string/nav_favorites"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_favorite_border_white_24dp"/>
+
     <item android:id="@+id/nav_about"
         android:title="@string/nav_about"
         android:icon="@drawable/ic_info"
         app:showAsAction="never">
     </item>
+
 </menu>

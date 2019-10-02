@@ -13,6 +13,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import com.ocram.qichwadic.domain.model.Definition;
 import com.ocram.qichwadic.domain.model.Dictionary;
+import com.ocram.qichwadic.domain.model.SearchResult;
 import com.ocram.qichwadic.framework.dao.AppDatabase;
 import com.ocram.qichwadic.framework.dao.DictionaryDao;
 import com.ocram.qichwadic.framework.dao.FavoriteDao;
@@ -106,6 +107,7 @@ public class AppModule {
         return new GsonBuilder()
                 .registerTypeAdapter(new TypeToken<List<Dictionary>>() {}.getType(), BaseDeserializer.<Dictionary>getDeserializer())
                 .registerTypeAdapter(new TypeToken<List<Definition>>(){}.getType(), BaseDeserializer.<Definition>getDefinitionsDeserializer())
+                .registerTypeAdapter(new TypeToken<List<SearchResult>>(){}.getType(), BaseDeserializer.<SearchResult>getDefinitionsDeserializer())
                 .excludeFieldsWithoutExposeAnnotation()
                 .create();
     }

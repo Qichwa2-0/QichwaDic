@@ -4,6 +4,8 @@
     <string name="nav_dictionaries">Dictionnaires</string>
     <string name="nav_about">À propos</string>
     <string name="nav_favorites">Favoris</string>
+    <string name="local_search">Recherche hors-ligne</string>
+
 
     <!-- search criteria -->
 
@@ -15,10 +17,20 @@
     </string-array>
     <string name="search_lang_qu">QU</string>
 
+    <string name="search_mode_local">Recherche hors-ligne</string>
+    <string name="search_mode_online">Recherche en ligne</string>
+
     <!-- search messages -->
-    <string name="no_results">
+    <string name="no_results_offline">
         Aucun résultat trouvé. \nVeuillez vérifier l\'ortographe du mot à chercher ou télécharchez d\'autres dictionnaires.
     </string>
+    <string name="no_results_online">
+        Aucun résultat trouvé.
+    </string>
+
+    <string name="error_offline">Une erreur est survenue.</string>
+    <string name="error_online">Une erreur est survenue. Veuillez vérifier votre connexion internet.</string>
+
     <string name="get_dictionaries">Dictionaires</string>
 
     <plurals name="total_results">

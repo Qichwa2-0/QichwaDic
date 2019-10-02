@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">QichwaDic</string>
-    <string name="version" translatable="false">v2.3.0</string>
+    <string name="version" translatable="false">v3.0.0</string>
     <string name="website" translatable="false">https://www.qichwa.net</string>
     <!-- Toolbar -->
     <!-- menu items -->
     <string name="nav_dictionaries">Dictionaries</string>
     <string name="nav_about">About</string>
     <string name="nav_favorites">Favorites</string>
+    <string name="local_search">Local search</string>
 
     <!-- search criteria -->
     <string name="search_quechua_placeholder" translatable="false">Yawar</string>
@@ -16,6 +17,7 @@
     <string name="search_french_placeholder" translatable="false">Pierre</string>
     <string name="search_german_placeholder" translatable="false">Stuhl</string>
     <string name="search_italian_placeholder" translatable="false">Giocare</string>
+    <string name="search_russian_placeholder" translatable="false">играть</string>
 
     <string-array name="searchTypes">
         <item>Contains</item>
@@ -25,8 +27,16 @@
     </string-array>
     <string name="search_lang_qu">QU</string>
 
+    <string name="search_mode_local">Local search</string>
+    <string name="search_mode_online">Online search</string>
+
     <!-- search messages -->
-    <string name="no_results">No results found. \nTry checking the word\'s spelling or downloading more dictionaries.</string>
+    <string name="no_results_offline">No results found. \nTry checking the word\'s spelling or downloading more dictionaries.</string>
+    <string name="no_results_online">No results found.</string>
+
+    <string name="error_offline">An error occurred.</string>
+    <string name="error_online">An error occurred. Please, verify your internet connection.</string>
+
     <string name="get_dictionaries">Get dictionaries</string>
 
     <plurals name="total_results">
