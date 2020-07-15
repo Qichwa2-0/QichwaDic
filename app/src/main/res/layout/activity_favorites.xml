@@ -25,7 +25,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/margin_big"
-                android:visibility="gone"
                 />
 
             <TextView

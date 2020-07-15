@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 29
     buildToolsVersion '28.0.3'
@@ -36,65 +42,72 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
     sourceSets {
         androidTest.assets.srcDirs += files("$projectDir/schemas".toString())
+    }
+
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin_module'
     }
 }
 
 dependencies {
 
+    // Kotlin components
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+    implementation "androidx.core:core-ktx:$corektx"
+
     // Support
-    implementation deps.support.appcompat
-    implementation deps.support.constraint
-    implementation deps.support.cardview
-    implementation deps.support.supportv4
-    implementation deps.support.core
-    implementation deps.support.design
-    implementation deps.support.preferencev7
-    implementation deps.support.preferencev14
+    implementation "androidx.appcompat:appcompat:$appcompat"
+    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
+    implementation "androidx.cardview:cardview:$cardview"
+    implementation "com.google.android.material:material:$material"
+    implementation "androidx.legacy:legacy-preference-v14:$preferencev14"
 
     // Architecture components
-    implementation deps.arch.room
-    implementation deps.arch.roomTesting
-    implementation deps.arch.roomRx
-    implementation deps.arch.liveDataViewModel
-    implementation deps.arch.reactiveStreams
+    // room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
 
-    annotationProcessor deps.arch.roomAnnotation
-    annotationProcessor deps.arch.lifecycleAnnotation
+    // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$archLifecycleVersion"
 
     // Square related deps
-    implementation deps.square.retrofit
-    implementation deps.square.adapter_rx_java
-    implementation deps.square.converter_gson
-    implementation deps.square.butterknife
-    debugImplementation deps.square.leakCanaryDebug
-    releaseImplementation deps.square.leakCanaryRelease
+    implementation "com.squareup.retrofit2:retrofit:$retrofit2"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit2gson"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanary"
 
-    annotationProcessor deps.square.butterknifeProcessor
 
-    // rx
-    implementation deps.rx.rxjava
-    implementation deps.rx.rxandroid
-
-    // testing
-    androidTestImplementation deps.testing.coretesting
-    androidTestImplementation deps.testing.androidxtestcore
-    androidTestImplementation deps.testing.androidxjunit
-    androidTestImplementation deps.testing.rules
+    // Testing
+    testImplementation "junit:junit:$junit"
+    androidTestImplementation "androidx.test.ext:junit:$extjunit"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
+    androidTestImplementation "androidx.test:runner:$testrunner"
 
     // other deps
-    implementation deps.appintro.appintro
-    implementation deps.pagersliding.pagersliding
+    implementation "com.github.AppIntro:AppIntro:$appIntro"
 
     // Resolve conflicts between main and test APK:
-    androidTestImplementation deps.support.annotations
-    androidTestImplementation deps.support.supportv4
-    androidTestImplementation deps.support.appcompat
-    androidTestImplementation deps.support.design
+    androidTestImplementation  "androidx.annotation:annotation:$annotation"
+    androidTestImplementation "androidx.appcompat:appcompat:$appcompat"
+    androidTestImplementation "com.google.android.material:material:$material"
 
-    implementation deps.dagger.dagger
-    implementation deps.dagger.dagger_support // if you use the support libraries
-    annotationProcessor deps.dagger.dagger_compiler
-    annotationProcessor deps.dagger.dagger_android_processor
+    // Koin AndroidX Scope feature
+    implementation "org.koin:koin-androidx-scope:$koin_version"
+    // Koin AndroidX ViewModel feature
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+
+    // android debug database
+    debugImplementation "com.amitshekhar.android:debug-db:$debugdb"
+
 }

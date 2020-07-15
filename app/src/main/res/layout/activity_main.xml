@@ -119,6 +119,7 @@
             android:visibility="gone"
             android:drawableTop="@drawable/ic_sentiment_dissatisfied"
             android:drawablePadding="@dimen/padding_tiny"
+            android:padding="@dimen/padding_medium"
             android:textSize="@dimen/text_size_normal"/>
 
         <LinearLayout
@@ -246,7 +247,7 @@
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         app:backgroundTint="@color/list_item_header"
-        app:layout_behavior=".presentation.ui.custom.ScrollAwareFABBehavior"
+        app:layout_behavior=".features.search.ui.custom.ScrollAwareFABBehavior"
         />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
