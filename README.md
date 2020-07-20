@@ -9,3 +9,5 @@ This tool might help native speakers who want to recover forgotten words and mea
 from other Quechua dialects.
 
 This app was inspired by other tools like SimiDic and Aulex.
+
+[Web version](https://www.dic.qichwa.net)
