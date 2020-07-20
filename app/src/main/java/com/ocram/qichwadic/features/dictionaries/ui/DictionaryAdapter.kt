@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.features.common.domain.DictionaryModel
+import com.ocram.qichwadic.core.domain.model.DictionaryModel
 
 import kotlinx.android.synthetic.main.item_dictionary.view.*
 
@@ -51,6 +51,7 @@ class DictionaryAdapter(var dictionaries: List<DictionaryModel>?, private val li
             itemView.tvDictionaryAuthor.text = dictionary.author
             itemView.tvDictionaryDescription.text = dictionary.description
             itemView.tvDictionaryTotalEntries.text = String.format(totalEntries, dictionary.totalEntries)
+            itemView.ivDicAction.setImageResource(if (dictionary.existsInLocal) R.drawable.ic_delete else R.drawable.ic_action_download)
             if (dictionary.downloading) {
                 itemView.ivDicAction.visibility = View.GONE
                 itemView.progress_bar.visibility = View.VISIBLE
@@ -58,7 +59,6 @@ class DictionaryAdapter(var dictionaries: List<DictionaryModel>?, private val li
                 itemView.ivDicAction.visibility = View.VISIBLE
                 itemView.progress_bar.visibility = View.GONE
             }
-            itemView.ivDicAction.setImageResource(if (dictionary.existsInLocal) R.drawable.ic_delete else R.drawable.ic_action_download)
         }
     }
 

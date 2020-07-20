@@ -2,11 +2,9 @@ package com.ocram.qichwadic.features.search.data.datastore
 
 import androidx.sqlite.db.SimpleSQLiteQuery
 
-import com.ocram.qichwadic.features.common.data.model.DefinitionEntity
-import com.ocram.qichwadic.features.common.data.local.dao.SearchDao
-import com.ocram.qichwadic.features.common.SearchParams
-import com.ocram.qichwadic.features.common.data.model.DictionaryEntity
-import com.ocram.qichwadic.features.common.data.model.SearchResultEntity
+import com.ocram.qichwadic.core.data.model.DefinitionEntity
+import com.ocram.qichwadic.core.data.local.dao.SearchDao
+import com.ocram.qichwadic.core.data.model.SearchResultEntity
 import com.ocram.qichwadic.features.search.data.SearchType
 
 interface SearchLocalDataStore {
@@ -19,6 +17,8 @@ interface SearchLocalDataStore {
 }
 
 class SearchLocalDataStoreImpl(private val searchDao: SearchDao): SearchLocalDataStore {
+
+    private val MAX_SEARCH_RESULTS = 20
 
     override suspend fun getDictionariesContainingWord(langBegin: String, landEnd: String, wordQuery: String): List<SearchResultEntity> {
         return searchDao.getDictionariesContainingWord(langBegin, landEnd, wordQuery)
@@ -49,6 +49,6 @@ class SearchLocalDataStoreImpl(private val searchDao: SearchDao): SearchLocalDat
     }
 
     private fun computeOffset(page: Int): Int {
-        return SearchParams.MAX_SEARCH_RESULTS * (page - 1)
+        return MAX_SEARCH_RESULTS * (page - 1)
     }
 }

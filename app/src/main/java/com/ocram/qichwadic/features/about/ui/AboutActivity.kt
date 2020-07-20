@@ -13,6 +13,8 @@ import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.ui.activity.BaseActivity
 
 import kotlinx.android.synthetic.main.activity_about.*
+import java.time.LocalDate
+import java.util.*
 
 class AboutActivity : BaseActivity() {
 
@@ -27,6 +29,7 @@ class AboutActivity : BaseActivity() {
         bindEvents()
         tvProjectCollab.text = HtmlCompat.fromHtml(getString(R.string.about_project_collaboration), HtmlCompat.FROM_HTML_MODE_LEGACY)
         tvProjectCollab.movementMethod = LinkMovementMethod.getInstance()
+        tvCopyright.text = getString(R.string.about_copyright, Calendar.getInstance().get(Calendar.YEAR))
     }
 
     private fun bindEvents() {

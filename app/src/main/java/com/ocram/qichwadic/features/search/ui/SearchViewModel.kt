@@ -3,12 +3,12 @@ package com.ocram.qichwadic.features.search.ui
 import android.util.Log
 import androidx.lifecycle.*
 
-import com.ocram.qichwadic.features.common.domain.SearchResultModel
+import com.ocram.qichwadic.core.domain.model.SearchResultModel
 import com.ocram.qichwadic.features.favorites.domain.FavoriteInteractor
 import com.ocram.qichwadic.core.preferences.PreferencesHelper
 import com.ocram.qichwadic.features.search.domain.SearchInteractor
-import com.ocram.qichwadic.features.common.SearchParams
-import com.ocram.qichwadic.features.common.domain.DefinitionModel
+import com.ocram.qichwadic.core.ui.SearchParams
+import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

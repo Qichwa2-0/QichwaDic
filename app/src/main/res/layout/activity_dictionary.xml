@@ -86,18 +86,6 @@
                 android:paddingLeft="@dimen/padding_medium"
                 android:paddingRight="@dimen/padding_medium"
                 />
-            <TextView
-                android:id="@+id/tvNoDictionaries"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_huge"
-                android:layout_marginLeft="@dimen/margin_big"
-                android:layout_marginRight="@dimen/margin_big"
-                android:textAlignment="center"
-                android:visibility="gone"
-                android:textSize="16sp"
-                android:text="@string/error_no_dictionaries"/>
 
         </LinearLayout>
 

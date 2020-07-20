@@ -1,12 +1,12 @@
 package com.ocram.qichwadic.features.dictionaries.domain
 
-import com.ocram.qichwadic.features.common.data.model.DictionaryEntity
-import com.ocram.qichwadic.features.common.domain.DefinitionModel
-import com.ocram.qichwadic.features.common.domain.DictionaryModel
+import com.ocram.qichwadic.core.data.model.DictionaryEntity
+import com.ocram.qichwadic.core.domain.model.DefinitionModel
+import com.ocram.qichwadic.core.domain.model.DictionaryModel
 
 interface DictionaryRepository {
 
-    suspend fun getDictionaries(): List<DictionaryModel>
+    suspend fun getCloudDictionaries(): List<DictionaryModel>
 
     fun getSavedDictionaries(): List<DictionaryEntity>
 

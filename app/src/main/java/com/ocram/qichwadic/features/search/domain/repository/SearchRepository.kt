@@ -1,8 +1,7 @@
 package com.ocram.qichwadic.features.search.domain.repository
 
-import com.ocram.qichwadic.features.common.data.model.DefinitionEntity
-import com.ocram.qichwadic.features.common.domain.SearchResultModel
-import retrofit2.Response
+import com.ocram.qichwadic.core.data.model.DefinitionEntity
+import com.ocram.qichwadic.core.domain.model.SearchResultModel
 
 interface SearchRepository {
 

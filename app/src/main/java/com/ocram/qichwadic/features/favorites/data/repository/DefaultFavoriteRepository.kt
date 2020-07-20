@@ -2,9 +2,9 @@ package com.ocram.qichwadic.features.favorites.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
-import com.ocram.qichwadic.features.common.data.model.FavoriteEntity
-import com.ocram.qichwadic.features.common.data.local.dao.FavoriteDao
-import com.ocram.qichwadic.features.common.domain.DefinitionModel
+import com.ocram.qichwadic.core.data.model.FavoriteEntity
+import com.ocram.qichwadic.core.data.local.dao.FavoriteDao
+import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.features.favorites.domain.FavoriteRepository
 
 class DefaultFavoriteRepository

@@ -7,7 +7,7 @@ import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
 
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.features.common.domain.DefinitionModel
+import com.ocram.qichwadic.core.domain.model.DefinitionModel
 
 import kotlinx.android.synthetic.main.item_favorite.view.*
 

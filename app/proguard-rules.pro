@@ -24,16 +24,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-#ButterKnife
-# Retain generated class which implement Unbinder.
--keep public class * implements butterknife.Unbinder { public <init>(**, android.view.View); }
-
-# Prevent obfuscation of types which use ButterKnife annotations since the simple name
-# is used to reflectively look up the generated ViewBinding.
--keep class butterknife.*
--keepclasseswithmembernames class * { @butterknife.* <methods>; }
--keepclasseswithmembernames class * { @butterknife.* <fields>; }
-
 #Retrofit
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
@@ -48,7 +38,7 @@
     @retrofit2.http.* <methods>;
 }
 
--keep public class com.ocram.qichwadic.domain.model.** {*;}
+-keep public class com.ocram.qichwadic.core.data.model.** {*;}
 
 #Okio
 -dontwarn okio.**

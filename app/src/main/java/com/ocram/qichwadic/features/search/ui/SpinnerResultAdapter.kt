@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.features.common.domain.SearchResultModel
+import com.ocram.qichwadic.core.domain.model.SearchResultModel
 
 class SpinnerResultAdapter(context: Context, @LayoutRes resource: Int, private var searchResults: List<SearchResultModel>?) : ArrayAdapter<SearchResultModel>(context, resource) {
 

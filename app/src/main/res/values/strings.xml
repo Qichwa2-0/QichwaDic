@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">QichwaDic</string>
-    <string name="version" translatable="false">v3.0.0</string>
+    <string name="version" translatable="false">v3.1.0</string>
     <string name="website" translatable="false">https://www.qichwa.net</string>
     <!-- Toolbar -->
     <!-- menu items -->
@@ -43,7 +43,9 @@
         <item quantity="one">%d result</item>
         <item quantity="other">%d results</item>
     </plurals>
-    <string name="error_no_dictionaries">No dictionaries found.  Please check your internet connection.</string>
+    <string name="error_no_cloud_dictionaries">
+        An error occurred. Please check your internet connection.
+    </string>
     <string name="dictionary_totalEntries">Total entries: %1$s </string>
 
     <!-- dictionary messages -->
@@ -80,7 +82,7 @@
 
     <string name="about_open_web_version">Go to web version</string>
     <string name="about_rate_app">Rate app in Google Play</string>
-    <string translatable="false" name="about_copyright">Copyright \u00A9 Qichwa 2.0 2019</string>
+    <string translatable="false" name="about_copyright">\u00A9 2017 - %d Qichwa 2.0 </string>
 
 
     <!-- intro -->

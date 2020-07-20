@@ -16,8 +16,8 @@
     </string-array>
     <string name="search_lang_qu">QU</string>
 
-    <string name="search_mode_local">Local search</string>
-    <string name="search_mode_online">Online search</string>
+    <string name="search_mode_local">Offline hledání</string>
+    <string name="search_mode_online">Online hledání</string>
 
     <!-- search messages -->
     <string name="no_results_offline">
@@ -37,7 +37,7 @@
         <item quantity="few">Počet výsledků: %d</item>
         <item quantity="other">Počet výsledků: %d</item>
     </plurals>
-    <string name="error_no_dictionaries">Nenalezeny žádné slovníky. Zkontrolujte, zda není problém s připojením na síť.</string>
+    <string name="error_no_cloud_dictionaries">Chyba spojení. Zkontrolujte své připojení k síti.</string>
     <string name="dictionary_totalEntries">Počet slov: %1$s</string>
 
     <!-- dictionary messages -->
@@ -67,13 +67,12 @@
     <string name="contact_subject">O aplikaci QichwaDic</string>
     <string name="chooser_title">Poslat zprávu</string>
     <string name="about_project_collaboration">
-        This app uses dictionaries digitalized by &lt;a href="mailto:sankaypillo@gmail.com"&gt;Asociación ILLA&lt;/a&gt;,
-        &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; and
-        &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/&gt;.
-        &lt;br&gt;&lt;br&gt; &lt;strong&gt;We acknowledge them for their work.&lt;/strong&gt;
+        QichwaDic slučuje slovníky shromážděné a/nebo digitalizované sdružením &lt;a href="mailto:sankaypillo@gmail.com"&gt;Asociación ILLA&lt;/a&gt;,
+        &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; a &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/a&gt;.
+        &lt;br&gt;&lt;br&gt;&lt;strong&gt;Děkujeme jim za jejich práci.&lt;/strong&gt;
     </string>
-    <string name="about_open_web_version">Go to web version</string>
-    <string name="about_rate_app">Rate app in Google Play</string>
+    <string name="about_open_web_version">Jít na webovou verzi</string>
+    <string name="about_rate_app">Ohodnotit aplikaci na Google Play</string>
 
     <!-- intro -->
     <string name="intro_skip">Přeskočit</string>

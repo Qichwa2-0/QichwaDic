@@ -1,8 +1,8 @@
 package com.ocram.qichwadic.features.dictionaries.data.datastore
 
-import com.ocram.qichwadic.features.common.data.model.DefinitionEntity
-import com.ocram.qichwadic.features.common.data.model.DictionaryEntity
-import com.ocram.qichwadic.features.common.data.local.dao.DictionaryDao
+import com.ocram.qichwadic.core.data.model.DefinitionEntity
+import com.ocram.qichwadic.core.data.model.DictionaryEntity
+import com.ocram.qichwadic.core.data.local.dao.DictionaryDao
 
 interface DictionaryLocalDataStore {
 

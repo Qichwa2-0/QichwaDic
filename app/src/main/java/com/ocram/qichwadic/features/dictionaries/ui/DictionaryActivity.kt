@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.google.android.material.snackbar.Snackbar
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.features.common.DictLang
-import com.ocram.qichwadic.features.common.domain.DictionaryModel
+import com.ocram.qichwadic.core.ui.DictLang
+import com.ocram.qichwadic.core.domain.model.DictionaryModel
 import com.ocram.qichwadic.core.ui.activity.BaseActivity
 
 import java.util.ArrayList
@@ -39,9 +39,10 @@ class DictionaryActivity : BaseActivity(), AdapterView.OnItemSelectedListener, D
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        dictionaryViewModel.dictionariesByLang.observe(this, Observer<Map<String, List<DictionaryModel>>> { this.onDictionaryListChanged(it) })
-        dictionaryViewModel.localLoading.observe(this, Observer<Boolean> { this.onLocalDictionariesLoadingChanged(it) })
-        dictionaryViewModel.dictionaryActionStatus.observe(this, Observer<DictionaryActionState> { this.onDictionaryAction(it) })
+        dictionaryViewModel.dictionariesByLang.observe(this, Observer { this.onDictionaryListChanged(it) })
+        dictionaryViewModel.localLoading.observe(this, Observer { this.onLocalDictionariesLoadingChanged(it) })
+        dictionaryViewModel.dictionaryActionStatus.observe(this, Observer { this.onDictionaryAction(it) })
+        dictionaryViewModel.cloudError.observe(this, Observer {  this.onCloudError(it) })
     }
 
     override fun initViews() {
@@ -101,17 +102,9 @@ class DictionaryActivity : BaseActivity(), AdapterView.OnItemSelectedListener, D
 
     private fun onDictionaryListChanged(dictionariesMap: Map<String, List<DictionaryModel>>) {
         this.dictLangMap = dictionariesMap
-        if (dictionariesMap.isEmpty()) {
-            showNoDictionariesMessage()
-        } else {
+        if (dictionariesMap.isNotEmpty()) {
             showDictionaries(dictionariesMap[this.currentLangCode])
         }
-    }
-
-    private fun showNoDictionariesMessage() {
-        spTargetLanguages.visibility = View.GONE
-        rvDictionaries.visibility = View.GONE
-        tvNoDictionaries.visibility = View.VISIBLE
     }
 
     private fun showDictionaries(dictionaries: List<DictionaryModel>?) {
@@ -119,14 +112,6 @@ class DictionaryActivity : BaseActivity(), AdapterView.OnItemSelectedListener, D
         dictionaryAdapter.notifyDataSetChanged()
         spTargetLanguages.visibility = View.VISIBLE
         rvDictionaries.visibility = View.VISIBLE
-        tvNoDictionaries.visibility = View.GONE
-    }
-
-    private fun onToastMessageChanged(message: String?) {
-        if (!message.isNullOrEmpty()) {
-            Snackbar.make(clDictionaries, message, Snackbar.LENGTH_SHORT).show()
-        }
-
     }
 
     private fun onLocalDictionariesLoadingChanged(isLoading: Boolean?) {
@@ -136,18 +121,34 @@ class DictionaryActivity : BaseActivity(), AdapterView.OnItemSelectedListener, D
     }
 
     private fun onDictionaryAction(dictionaryActionState: DictionaryActionState) {
-        dictionaryActionState.dictionary.downloading = false
-        dictionaryAdapter.notifyItemChanged(dictionaryActionState.pos)
 
         val messageTemplate: Int?
 
-        val isSaveAction = dictionaryActionState.dictionary.existsInLocal
-        messageTemplate = if(dictionaryActionState.error) {
-            if (isSaveAction) R.string.dictionary_save_error else R.string.dictionary_delete_error
+        if(dictionaryActionState.error) {
+            messageTemplate =
+                    if(dictionaryActionState.dictionary.existsInLocal)
+                        R.string.dictionary_delete_error
+                    else
+                        R.string.dictionary_save_error
         } else {
-            if (isSaveAction) R.string.dictionary_save_success else R.string.dictionary_delete_success
+            messageTemplate =
+                    if(dictionaryActionState.dictionary.existsInLocal)
+                        R.string.dictionary_save_success
+                    else
+                        R.string.dictionary_delete_success
         }
-        onToastMessageChanged(getString(messageTemplate, dictionaryActionState.dictionary.name))
+        showMessage(getString(messageTemplate, dictionaryActionState.dictionary.name))
     }
 
+    private fun onCloudError(hasError: Boolean) {
+        if(hasError) {
+            showMessage(getString(R.string.error_no_cloud_dictionaries))
+        }
+    }
+
+    private fun showMessage(message: String?) {
+        if (!message.isNullOrEmpty()) {
+            Snackbar.make(clDictionaries, message, Snackbar.LENGTH_SHORT).show()
+        }
+    }
 }

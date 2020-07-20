@@ -1,6 +1,6 @@
 package com.ocram.qichwadic.features.dictionaries.ui
 
-import com.ocram.qichwadic.features.common.domain.DictionaryModel
+import com.ocram.qichwadic.core.domain.model.DictionaryModel
 
 
 data class DictionaryActionState(

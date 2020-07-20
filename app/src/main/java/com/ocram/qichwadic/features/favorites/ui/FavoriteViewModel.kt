@@ -2,7 +2,7 @@ package com.ocram.qichwadic.features.favorites.ui
 
 import androidx.lifecycle.*
 
-import com.ocram.qichwadic.features.common.domain.DefinitionModel
+import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.features.favorites.domain.FavoriteInteractor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

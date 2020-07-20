@@ -2,7 +2,7 @@ package com.ocram.qichwadic.core.preferences
 
 import android.content.SharedPreferences
 
-import com.ocram.qichwadic.features.common.SearchParams
+import com.ocram.qichwadic.core.ui.SearchParams
 
 class PreferencesHelper(private val sharedPreferences: SharedPreferences)  {
 

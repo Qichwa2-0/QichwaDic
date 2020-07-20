@@ -1,18 +1,17 @@
 package com.ocram.qichwadic.features.dictionaries.ui
 
 import androidx.lifecycle.*
-import com.ocram.qichwadic.features.common.domain.DictionaryModel
+import com.ocram.qichwadic.core.domain.model.DictionaryModel
 import com.ocram.qichwadic.features.dictionaries.domain.DictionaryInteractor
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.lang.Exception
 
 class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewModel() {
 
-    var dictionariesByLang: MutableLiveData<out Map<String, List<DictionaryModel>>> = MutableLiveData()
+    var dictionariesByLang: MutableLiveData<out MutableMap<String, MutableList<DictionaryModel>>> = MutableLiveData()
     var dictionaryActionStatus = MutableLiveData<DictionaryActionState>()
     var localLoading = MutableLiveData<Boolean>(true)
+    var cloudError = MutableLiveData<Boolean>(false)
 
     init {
         loadDictionaries()
@@ -21,10 +20,13 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
     private fun loadDictionaries() {
         viewModelScope.launch {
             localLoading.value = true
+            cloudError.value = false
             try {
-                dictionariesByLang.value = interactor.getAllDictionaries()
+                val fetchResult = interactor.getAllDictionaries()
+                dictionariesByLang.value = fetchResult.dictionariesByLang
+                cloudError.value = fetchResult.cloudError
             } catch (_: Exception) {
-                dictionariesByLang.value = emptyMap()
+                dictionariesByLang.value = mutableMapOf()
             } finally {
                 localLoading.value = false
             }
@@ -34,12 +36,11 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
     fun downloadDictionary(pos: Int, dictionary: DictionaryModel) {
         viewModelScope.launch {
             try {
-                withContext(Dispatchers.IO) {
-                    val definitions = interactor.getAllDefinitionsByDictionary(dictionary.id)
-                    interactor.saveDictionaryAndDefinitions(dictionary, definitions)
-                }
+                interactor.saveDictionaryAndDefinitions(dictionary)
                 dictionary.existsInLocal = true
+                dictionary.downloading = false
                 dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary))
+                dictionary.languageBegin?.let { reorderDictionaries(it) }
             } catch (e : Throwable) {
                 dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary, true))
             }
@@ -48,16 +49,26 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
 
     fun removeDictionary(pos: Int, dictionary: DictionaryModel) {
         viewModelScope.launch {
-             withContext(Dispatchers.IO) {
-                val removedTotal = interactor.removeDictionary(dictionary.id)
-                if (removedTotal) {
-                    dictionary.existsInLocal = false
-                    dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary))
-                } else {
-                    dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary, true))
-                }
+            val removedTotal = interactor.removeDictionary(dictionary.id)
+            if (removedTotal) {
+                dictionary.existsInLocal = false
+                dictionary.downloading = false
+                dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary))
+                dictionary.languageBegin?.let { reorderDictionaries(it) }
+            } else {
+                dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary, true))
             }
+
         }
     }
 
+
+    private fun reorderDictionaries(langName: String) {
+        dictionariesByLang.value?.let { dictLangMap ->
+            dictLangMap[langName]?.let {
+                dictLangMap[langName] = it.sorted().toMutableList()
+                dictionariesByLang.value = dictLangMap
+            }
+        }
+    }
 }

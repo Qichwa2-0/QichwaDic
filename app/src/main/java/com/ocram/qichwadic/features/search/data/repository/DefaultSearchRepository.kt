@@ -1,9 +1,9 @@
 package com.ocram.qichwadic.features.search.data.repository
 
-import com.ocram.qichwadic.core.data.ApiResponse
-import com.ocram.qichwadic.features.common.data.model.DefinitionEntity
-import com.ocram.qichwadic.features.common.data.model.SearchResultEntity
-import com.ocram.qichwadic.features.common.domain.SearchResultModel
+import com.ocram.qichwadic.core.data.remote.ApiResponse
+import com.ocram.qichwadic.core.data.model.DefinitionEntity
+import com.ocram.qichwadic.core.data.model.SearchResultEntity
+import com.ocram.qichwadic.core.domain.model.SearchResultModel
 import com.ocram.qichwadic.features.search.data.datastore.SearchCloudDataStore
 import com.ocram.qichwadic.features.search.data.SearchType
 import com.ocram.qichwadic.features.search.data.datastore.SearchLocalDataStore

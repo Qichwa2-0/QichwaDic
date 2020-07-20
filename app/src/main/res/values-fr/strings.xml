@@ -37,7 +37,7 @@
         <item quantity="one">%d résultat</item>
         <item quantity="other">%d résultats</item>
     </plurals>
-    <string name="error_no_dictionaries">Aucun dictionnaire trouvé. Vérifiez votre connection internet.</string>
+    <string name="error_no_cloud_dictionaries">Une erreur est survenue. Vérifiez votre connection internet.</string>
     <string name="dictionary_totalEntries">Total d\'entrées: %1$s </string>
 
     <!-- dictionary messages -->

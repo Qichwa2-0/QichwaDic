@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.features.common.DictLang
+import com.ocram.qichwadic.core.ui.DictLang
 
 class SearchDictLangAdapter(context: Context) : ArrayAdapter<DictLang>(context, R.layout.item_spinner_dict_lang) {
 

@@ -1,10 +1,10 @@
 package com.ocram.qichwadic.features.dictionaries.data.datastore
 
-import com.ocram.qichwadic.core.data.ApiResponse
-import com.ocram.qichwadic.core.data.CloudDataStore
-import com.ocram.qichwadic.features.common.data.model.DefinitionEntity
-import com.ocram.qichwadic.features.common.data.model.DictionaryEntity
-import com.ocram.qichwadic.features.common.data.remote.RetrofitClient
+import com.ocram.qichwadic.core.data.remote.ApiResponse
+import com.ocram.qichwadic.core.data.remote.CloudDataStore
+import com.ocram.qichwadic.core.data.model.DefinitionEntity
+import com.ocram.qichwadic.core.data.model.DictionaryEntity
+import com.ocram.qichwadic.core.data.remote.RetrofitClient
 
 interface DictionaryCloudDataStore {
 

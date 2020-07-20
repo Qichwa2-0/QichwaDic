@@ -3,14 +3,13 @@ package com.ocram.qichwadic.core.di
 import android.content.Context
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
-import com.ocram.qichwadic.features.common.data.model.DefinitionEntity
-import com.ocram.qichwadic.features.common.data.model.DictionaryEntity
-import com.ocram.qichwadic.features.common.domain.SearchResultModel
-import com.ocram.qichwadic.features.common.data.local.dao.AppDatabase
-import com.ocram.qichwadic.features.common.data.remote.RetrofitClient
-import com.ocram.qichwadic.features.common.data.remote.RetrofitService
+import com.ocram.qichwadic.core.data.model.DefinitionEntity
+import com.ocram.qichwadic.core.data.model.DictionaryEntity
+import com.ocram.qichwadic.core.data.local.dao.AppDatabase
+import com.ocram.qichwadic.core.data.remote.RetrofitClient
+import com.ocram.qichwadic.core.data.remote.RetrofitService
 import com.ocram.qichwadic.core.preferences.PreferencesHelper
-import com.ocram.qichwadic.features.common.data.model.SearchResultEntity
+import com.ocram.qichwadic.core.data.model.SearchResultEntity
 import com.ocram.qichwadic.features.dictionaries.data.datastore.DictionaryCloudDataStore
 import com.ocram.qichwadic.features.dictionaries.data.datastore.DictionaryCloudDataStoreImpl
 import com.ocram.qichwadic.features.dictionaries.data.datastore.DictionaryLocalDataStore
@@ -55,13 +54,13 @@ val appModule = module {
 
     single {
         fun <T> getListDeserializer(): JsonDeserializer<T> {
-            return JsonDeserializer { json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext? ->
+            return JsonDeserializer { json: JsonElement, typeOfT: Type?, _: JsonDeserializationContext? ->
                 Gson().fromJson<T>(json.asJsonArray, typeOfT)
             }
         }
 
         fun <T> getObjectDeserializer(): JsonDeserializer<T> {
-            return JsonDeserializer { json: JsonElement, typeOfT: Type?, context: JsonDeserializationContext? ->
+            return JsonDeserializer { json: JsonElement, typeOfT: Type?, _: JsonDeserializationContext? ->
                 Gson().fromJson<T>(json.asJsonObject, typeOfT)
             }
         }

@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.ui.activity.BaseActivity
-import com.ocram.qichwadic.features.common.domain.DefinitionModel
+import com.ocram.qichwadic.core.domain.model.DefinitionModel
 
 import java.util.ArrayList
 

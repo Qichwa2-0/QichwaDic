@@ -17,16 +17,15 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.google.android.material.snackbar.Snackbar
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.features.common.data.model.DefinitionEntity
-import com.ocram.qichwadic.features.common.domain.SearchResultModel
+import com.ocram.qichwadic.core.domain.model.SearchResultModel
 import com.ocram.qichwadic.features.about.ui.AboutActivity
 import com.ocram.qichwadic.features.dictionaries.ui.DictionaryActivity
 import com.ocram.qichwadic.features.favorites.ui.FavoriteActivity
 import com.ocram.qichwadic.features.search.ui.custom.EndlessRecyclerViewScrollListener
-import com.ocram.qichwadic.features.common.DictLang
-import com.ocram.qichwadic.features.common.SearchParams
+import com.ocram.qichwadic.core.ui.DictLang
+import com.ocram.qichwadic.core.ui.SearchParams
 import com.ocram.qichwadic.core.ui.activity.BaseActivity
-import com.ocram.qichwadic.features.common.domain.DefinitionModel
+import com.ocram.qichwadic.core.domain.model.DefinitionModel
 
 import java.util.ArrayList
 

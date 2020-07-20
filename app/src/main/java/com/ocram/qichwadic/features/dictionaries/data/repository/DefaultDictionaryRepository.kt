@@ -1,10 +1,10 @@
 package com.ocram.qichwadic.features.dictionaries.data.repository
 
-import com.ocram.qichwadic.core.data.ApiResponse
-import com.ocram.qichwadic.features.common.data.model.DefinitionEntity
-import com.ocram.qichwadic.features.common.data.model.DictionaryEntity
-import com.ocram.qichwadic.features.common.domain.DefinitionModel
-import com.ocram.qichwadic.features.common.domain.DictionaryModel
+import com.ocram.qichwadic.core.data.remote.ApiResponse
+import com.ocram.qichwadic.core.data.model.DefinitionEntity
+import com.ocram.qichwadic.core.data.model.DictionaryEntity
+import com.ocram.qichwadic.core.domain.model.DefinitionModel
+import com.ocram.qichwadic.core.domain.model.DictionaryModel
 import com.ocram.qichwadic.features.dictionaries.data.datastore.DictionaryCloudDataStore
 import com.ocram.qichwadic.features.dictionaries.data.datastore.DictionaryLocalDataStore
 import com.ocram.qichwadic.features.dictionaries.domain.DictionaryRepository
@@ -12,7 +12,7 @@ import com.ocram.qichwadic.features.dictionaries.domain.DictionaryRepository
 class DefaultDictionaryRepository
 constructor(private val localDataStore: DictionaryLocalDataStore, private val cloudDataStore: DictionaryCloudDataStore) : DictionaryRepository {
 
-    override suspend fun getDictionaries(): List<DictionaryModel> {
+    override suspend fun getCloudDictionaries(): List<DictionaryModel> {
         return when (val response = cloudDataStore.getDictionaries()) {
             is ApiResponse.Success -> response.data.map { it.toDictionaryModel() }
             else -> emptyList()

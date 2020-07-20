@@ -1,8 +1,8 @@
 package com.ocram.qichwadic.features.dictionaries.domain
 
 import android.util.Log
-import com.ocram.qichwadic.features.common.domain.DefinitionModel
-import com.ocram.qichwadic.features.common.domain.DictionaryModel
+import com.ocram.qichwadic.core.domain.model.DefinitionModel
+import com.ocram.qichwadic.core.domain.model.DictionaryModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
@@ -11,71 +11,58 @@ interface DictionaryInteractor {
 
     fun getSavedDictionaries(): List<DictionaryModel>
 
-    suspend fun getAllDefinitionsByDictionary(dictionaryId: Int): List<DefinitionModel>
+    suspend fun saveDictionaryAndDefinitions(dictionaryModel: DictionaryModel)
 
-    fun saveDictionaryAndDefinitions(dictionaryModel: DictionaryModel, definitions: List<DefinitionModel>)
+    suspend fun removeDictionary(id: Int): Boolean
 
-    fun removeDictionary(id: Int): Boolean
-
-    suspend fun getAllDictionaries(): Map<String, List<DictionaryModel>>
+    suspend fun getAllDictionaries(): DictionaryFetchResult
 }
 
 
 class DictionaryInteractorImpl(private val dictionaryRepository: DictionaryRepository) : DictionaryInteractor {
 
-    override suspend fun getAllDictionaries(): Map<String, List<DictionaryModel>> {
+    override suspend fun getAllDictionaries(): DictionaryFetchResult {
 
-        val dictionariesByLang =  mutableMapOf<String, MutableList<DictionaryModel>>()
-
+        val fetchResult = DictionaryFetchResult()
         withContext(Dispatchers.IO) {
-            val savedDictionaries = getSavedDictionaries()
-
-            val allDictionaries = mutableSetOf<DictionaryModel>()
+            fetchResult.localDictionaries = getSavedDictionaries()
             try {
-                allDictionaries.addAll(dictionaryRepository.getDictionaries())
+                fetchResult.cloudDictionaries = dictionaryRepository.getCloudDictionaries()
             } catch (_: Exception) {
                 Log.e("ERROR", "Error loading cloud dictionaries")
+                fetchResult.addError()
             }
 
-            savedDictionaries.forEach { savedDictionary ->
-                val dictionary =
-                        allDictionaries.find { cloudDictionary -> cloudDictionary == savedDictionary }
-                                ?: savedDictionary
-                dictionary.existsInLocal = true
-                allDictionaries.add(savedDictionary)
-            }
-
-
-            val sortedDictionaries = allDictionaries.toMutableList().sortedDescending()//.sortedWith(Comparator())
-
-            sortedDictionaries.forEach { dictionary ->
-                dictionary.languageBegin?.let { languageBegin ->
-                    val dictionaryModels: MutableList<DictionaryModel> = dictionariesByLang[languageBegin] ?: mutableListOf()
-                    dictionaryModels.add(dictionary)
-                    dictionariesByLang.put(languageBegin, dictionaryModels)
-                }
-            }
+            fetchResult.mapDictionaries()
         }
-        return dictionariesByLang
+        return fetchResult
     }
 
     override fun getSavedDictionaries(): List<DictionaryModel> {
         return dictionaryRepository.getSavedDictionaries().map { it.toDictionaryModel() }
     }
 
-    override suspend fun getAllDefinitionsByDictionary(dictionaryId: Int): List<DefinitionModel> {
+    override suspend fun saveDictionaryAndDefinitions(dictionaryModel: DictionaryModel) {
+        withContext(Dispatchers.IO) {
+            val definitions = getAllDefinitionsByDictionary(dictionaryModel.id)
+            definitions.forEach {
+                it.dictionaryId = dictionaryModel.id
+                it.dictionaryName = dictionaryModel.name
+            }
+            dictionaryRepository.saveDictionaryAndDefinitions(dictionaryModel, definitions)
+        }
+    }
+
+
+    private suspend fun getAllDefinitionsByDictionary(dictionaryId: Int): List<DefinitionModel> {
         return dictionaryRepository.getDefinitionsByDictionary(dictionaryId)
     }
 
-    override fun saveDictionaryAndDefinitions(dictionaryModel: DictionaryModel, definitions: List<DefinitionModel>) {
-        definitions.forEach {
-            it.dictionaryId = dictionaryModel.id
-            it.dictionaryName = dictionaryModel.name
+    override suspend fun removeDictionary(id: Int): Boolean {
+        var removed = false
+        withContext(Dispatchers.IO) {
+            removed = dictionaryRepository.removeDictionary(id) > 0
         }
-        dictionaryRepository.saveDictionaryAndDefinitions(dictionaryModel, definitions)
-    }
-
-    override fun removeDictionary(id: Int): Boolean {
-        return dictionaryRepository.removeDictionary(id) > 0
+        return removed
     }
 }

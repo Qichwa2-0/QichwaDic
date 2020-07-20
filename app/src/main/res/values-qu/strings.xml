@@ -36,7 +36,7 @@
         <item quantity="one">%d rimaylla tarisqa</item>
         <item quantity="other">%d tarisqa rimaykuna</item>
     </plurals>
-    <string name="error_no_dictionaries">Manam huklla simitaqitapas tarinichu.  Internetniykita qawapaykullay.</string>
+    <string name="error_no_cloud_dictionaries">Achacháw! Internetniykita qawapaykullay.</string>
     <string name="dictionary_totalEntries">Haykap simintaq: %1$s </string>
 
     <!-- dictionary messages -->
