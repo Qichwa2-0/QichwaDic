@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">QichwaDic</string>
+    <string name="author_app_name" translatable="false">Qichwa 2.0 | QichwaDic</string>
     <string name="version" translatable="false">v3.1.0</string>
     <string name="website" translatable="false">https://www.qichwa.net</string>
     <!-- Toolbar -->
@@ -77,7 +78,6 @@
         This app integrates dictionaries recopilated by &lt;a href="mailto:sankaypillo@gmail.com"&gt;Asociación ILLA&lt;/a&gt;,
         &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; and
         &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/&gt;.
-        &lt;br&gt;&lt;br&gt; &lt;strong&gt;We acknowledge them for their work.&lt;/strong&gt;
     </string>
 
     <string name="about_open_web_version">Go to web version</string>

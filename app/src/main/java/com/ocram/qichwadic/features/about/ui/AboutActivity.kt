@@ -13,7 +13,6 @@ import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.ui.activity.BaseActivity
 
 import kotlinx.android.synthetic.main.activity_about.*
-import java.time.LocalDate
 import java.util.*
 
 class AboutActivity : BaseActivity() {
@@ -56,7 +55,7 @@ class AboutActivity : BaseActivity() {
     }
 
     override fun initViews() {
-        setTitle(getString(R.string.nav_about))
+        setTitle(getString(R.string.author_app_name))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
