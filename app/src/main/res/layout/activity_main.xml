@@ -1,254 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/clSearch"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"/>
 
-        <include
-            android:id="@+id/mToolbar"
-            layout="@layout/toolbar" />
-
-        <LinearLayout
-            android:id="@+id/llSearchOptions"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:background="@color/primary_color"
-            android:orientation="horizontal"
-            android:layout_below="@+id/mToolbar"
-            android:weightSum="10">
-
-            <Spinner
-                android:id="@+id/spSearchTypes"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_small"
-                android:entries="@array/searchTypes"
-                android:textAlignment="center"
-                android:background="@drawable/spinner_gradient_dicts"
-                android:spinnerMode="dialog"
-                android:layout_weight="5">
-            </Spinner>
-
-            <View
-                android:id="@+id/vSeparator"
-                android:layout_width="1dp"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:layout_height="match_parent"
-                android:background="@color/divider_color" />
-
-            <TextView
-                android:id="@+id/tvQichwaLang"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:textColor="@color/accent_color"
-                android:layout_weight="2"
-                android:text="@string/search_lang_qu"/>
-
-            <ImageView
-                android:id="@+id/ivSwapLanguages"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_swap_horiz_white_24dp"
-                android:layout_weight="1"
-                android:padding="@dimen/padding_small"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_small"/>
-
-            <Spinner
-                android:id="@+id/spDictLangs"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:entries="@array/dictLangs"
-                android:textAlignment="center"
-                android:background="@drawable/spinner_gradient_dicts"
-                android:spinnerMode="dialog"
-                android:layout_weight="2"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llSearchMode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_small"
-            android:orientation="horizontal"
-            android:layout_below="@+id/llSearchOptions"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/search_mode_online"
-                android:textSize="@dimen/text_size_small"/>
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/swOfflineSearch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textOff="@string/local_search"
-                android:textSize="@dimen/text_size_small"
-                android:textColor="@color/custom_text_color"
-                app:thumbTint="@color/list_item_header"
-                app:switchPadding="@dimen/padding_small"
-                android:layout_marginStart="@dimen/margin_small"
-                android:layout_marginEnd="@dimen/margin_small"
-                android:checked="false"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/search_mode_local"
-                android:textSize="@dimen/text_size_small"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvError"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/llSearchMode"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/margin_huge"
-            android:visibility="gone"
-            android:drawableTop="@drawable/ic_sentiment_dissatisfied"
-            android:drawablePadding="@dimen/padding_tiny"
-            android:padding="@dimen/padding_medium"
-            android:textSize="@dimen/text_size_normal"/>
-
-        <LinearLayout
-            android:id="@+id/llNoResultsForOffline"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/llSearchMode"
-            android:visibility="gone"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_huge"
-                android:layout_marginBottom="@dimen/margin_medium"
-                android:textSize="16sp"
-                android:textAlignment="center"
-                android:visibility="visible"
-                android:paddingLeft="@dimen/padding_medium"
-                android:paddingRight="@dimen/padding_medium"
-                android:textColor="@color/custom_text_color"
-                android:text="@string/no_results_offline"/>
-
-            <Button
-                android:id="@+id/btnNoResultsGetDictionaries"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_medium"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:textSize="14sp"
-                android:layout_gravity="center"
-                android:drawableEnd="@drawable/ic_action_book_holo_dark"
-                android:drawablePadding="@dimen/padding_medium"
-                android:text="@string/get_dictionaries"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llNoResultsForOnline"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/llSearchMode"
-            android:visibility="gone"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_huge"
-                android:layout_marginBottom="@dimen/margin_medium"
-                android:textSize="16sp"
-                android:textAlignment="center"
-                android:visibility="visible"
-                android:paddingLeft="@dimen/padding_medium"
-                android:paddingRight="@dimen/padding_medium"
-                android:textColor="@color/custom_text_color"
-                android:text="@string/no_results_online"
-                android:drawableStart="@drawable/ic_sentiment_dissatisfied"
-                android:drawablePadding="@dimen/padding_tiny"/>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:id="@+id/llResultsArea"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/llSearchMode"
-            android:visibility="gone">
-
-            <Spinner
-                android:id="@+id/spResults"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:background="@drawable/spinner_gradient"
-                android:entries="@array/searchTypes"
-                android:layout_marginBottom="@dimen/margin_small"
-                android:layout_marginTop="@dimen/margin_small"
-                android:layout_marginStart="@dimen/margin_medium"
-                android:layout_marginEnd="@dimen/margin_medium"
-                android:paddingTop="@dimen/padding_small"
-                android:paddingBottom="@dimen/padding_small"
-                android:visibility="gone"
-                style="@style/spinner_style"/>
-
-            <TextView
-                android:id="@+id/tvResultsTotal"
-                android:layout_below="@id/spResults"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/padding_small"
-                android:textAlignment="center"
-                android:textSize="14sp"
-                android:textColor="@color/custom_text_color"
-                android:visibility="gone"
-                />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvResults"
-                android:layout_below="@id/tvResultsTotal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/padding_medium"
-                android:paddingRight="@dimen/padding_medium"
-                android:visibility="gone"/>
-
-            <ProgressBar
-                android:id="@+id/fetchMoreProgressBar"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:visibility="gone"/>
-        </RelativeLayout>
-
-        <ProgressBar
-            android:id="@+id/searchProgressBar"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_centerInParent="true"
-            />
-    </RelativeLayout>
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabSearch"
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_search"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        app:backgroundTint="@color/list_item_header"
-        app:layout_behavior=".features.search.ui.custom.ScrollAwareFABBehavior"
-        />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/navigation_drawer_header"
+        android:fitsSystemWindows="true"
+        app:itemIconTint="@null"
+        app:menu="@menu/menu_navigation_drawer"/>
+
+</androidx.drawerlayout.widget.DrawerLayout>
 
 

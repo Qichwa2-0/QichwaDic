@@ -4,6 +4,7 @@ import com.ocram.qichwadic.core.data.remote.ApiResponse
 import com.ocram.qichwadic.core.data.model.DefinitionEntity
 import com.ocram.qichwadic.core.data.model.SearchResultEntity
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
+import com.ocram.qichwadic.core.ui.SearchParams
 import com.ocram.qichwadic.features.search.data.datastore.SearchCloudDataStore
 import com.ocram.qichwadic.features.search.data.SearchType
 import com.ocram.qichwadic.features.search.data.datastore.SearchLocalDataStore
@@ -13,21 +14,27 @@ class SearchRepositoryImpl
 constructor(private val searchLocalDataStore: SearchLocalDataStore,
             private val searchCloudDataStore: SearchCloudDataStore) : SearchRepository {
 
-    override suspend fun searchOnline(fromQuechua: Int, target: String, word: String, searchType: Int): List<SearchResultModel> {
-        return when (val response = searchCloudDataStore.search(fromQuechua, target, word, searchType)) {
+    override suspend fun searchOnline(searchParams: SearchParams): List<SearchResultModel> {
+        val response = searchCloudDataStore.search(
+                if (searchParams.isFromQuechua) 1 else 0,
+                searchParams.nonQuechuaLangCode,
+                searchParams.searchWord,
+                searchParams.searchTypePos
+        )
+        return when (response) {
             is ApiResponse.Success -> response.data.map { it.toSearchResultModel() }
             else -> emptyList()
         }
     }
 
-    override suspend fun searchOffline(fromQuechua: Int, target: String, word: String, searchType: Int): List<SearchResultModel> {
+    override suspend fun searchOffline(searchParams: SearchParams): List<SearchResultModel> {
         var langBegin = "qu"
-        var langEnd = target
-        if (fromQuechua == 0) {
+        var langEnd = searchParams.nonQuechuaLangCode
+        if (!searchParams.isFromQuechua) {
             langEnd = langBegin
-            langBegin = target
+            langBegin = searchParams.nonQuechuaLangCode
         }
-        val queryString = SearchType.buildSearchCriteria(searchType, word)
+        val queryString = SearchType.buildSearchCriteria(searchParams.searchTypePos, searchParams.searchWord)
 
         val searchResults = searchLocalDataStore.getDictionariesContainingWord(langBegin, langEnd, queryString)
 

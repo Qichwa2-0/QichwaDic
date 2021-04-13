@@ -1,13 +1,14 @@
 <resources>
     <!-- Toolbar -->
     <!-- menu items -->
+    <string name="nav_search_tips">Yanapay</string>
     <string name="nav_dictionaries">Simitaqi</string>
     <string name="nav_about">Kay Appmanta</string>
     <string name="nav_favorites">Munasqay simikuna</string>
-    <string name="local_search">Mana internetwan maskay</string>
-
+    <string name="nav_share">Chiqirichiy</string>
 
     <!-- search criteria -->
+    <string name="local_search">Mana internetwan maskay</string>
 
     <string-array name="searchTypes">
         <item>Maskana simiyuq</item>
@@ -32,12 +33,10 @@
 
     <string name="get_dictionaries">Simitaqikuna</string>
 
-    <plurals name="total_results">
-        <item quantity="one">%d rimaylla tarisqa</item>
-        <item quantity="other">%d tarisqa rimaykuna</item>
-    </plurals>
     <string name="error_no_cloud_dictionaries">Achacháw! Internetniykita qawapaykullay.</string>
     <string name="dictionary_totalEntries">Haykap simintaq: %1$s </string>
+
+    <string name="see_favorites">Rikuy</string>
 
     <!-- dictionary messages -->
     <string name="dictionary_delete_error">%sta pichachkaptin sasachakuyqa rikurirqamun</string>
@@ -68,8 +67,11 @@
         QichwaDicqa achka simitaqikunawanmi llamkan. Kay simitaqikunaqa kachkanmi &lt;a href="mailto:sankaypillo@gmail.com"&gt;Asociación ILLA&lt;/a&gt;pa huñusqan,
         hinallataqmi &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; paginamantapas utaq &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/a&gt;pa huñusqanpas.
     </string>
-    <string name="about_open_web_version">Webpi rikuy</string>
+    <string name="about_visit_qichwa20">Qichwa2.0 webman riy</string>
+    <string name="about_visit_qichwa20_youtube">Qichwa 2.0 YouTubepi</string>
     <string name="about_rate_app">Google Playpi chaninchaykuy</string>
+    <string name="about_contact">Qillqariwayku</string>
+
     <!-- intro -->
     <string name="intro_skip">Maskamusun</string>
     <string name="intro_done">Allinmi</string>
@@ -80,7 +82,7 @@
         Munasqayki simiwan chaymanta munasqaykikama maskaykuy: Qallariqnin / Tukuqnin / Maskana simiyuq
     </string>
     <string name="intro_offline_title">Mana internetwan maskay</string>
-    <string name="intro_offline_description">Simitaqita instalaykuy maskayta atinaykipaq</string>
+    <string name="intro_offline_description">Simitaqikunata instalaykuy mana internetwanpas maskayta atinaykipaq</string>
 
     <!-- favoritos -->
 
@@ -96,4 +98,56 @@
     <string name="favorite_dialog_clear_cancel">Manam</string>
     <string name="favorite_dialog_title">Simiykikunata pichay</string>
     <string name="favorite_dialog_content">Allinchu llapan simiykikunata pichaptiyki?</string>
+
+    <string name="share_app_message">Allinmi kanman kay appta instalaykuptiyki : %s</string>
+
+    <!-- SEARCH HELP -->
+    <string name="search_help_writing">Allin qillqay</string>
+    <string name="search_help_faq">Tapuykuna</string>
+    <string name="search_help_faq_translator">Imaraykutaq maskasqay simi mana tikrasqachu?</string>
+    <string name="search_help_faq_translator_reply">
+        Kay App nisqa qichwa simikunata maskanapaq paqarichirqayku.
+        \nKay App nisqaqa manam simi tikraqchu.
+    </string>
+
+    <string name="search_help_faq_no_results">Manam imatapas tarinichu</string>
+    <string name="search_help_faq_no_results_reply">
+        Munasqaykita allinta tariwaq:
+        \n\ta) Allin qillqaywan qillqaspaqa,
+        \n\tb) Huk iskay simillawan maskaspaqa,
+        \n\tc) Simitaqikunapi maskasqayki simi kaptin
+        \n\n"Maskana simiyuq"wan maskaptiyki aswanta tariwaq
+    </string>
+
+    <string name="search_help_faq_no_results_complex_word">
+        Huklla simita maskaspapas, manam imatapas tarinichu.
+    </string>
+    <string name="search_help_faq_no_results_complex_word_reply">
+        Qichwapi maskasqanchikpi, \"hatun\" simiqa \"sapi\"simiwan churku/sufijo simikunawan kanman,
+        ama chayta qunqasunchu.
+        \nYachanapaq, \"wasiykita\" maskaspa mana imatapas tarichwanchu.
+        Aswanqa sapi simillawan "Qallariq" maskaywan maskana. Chaymi \"wasi\"ta maskasunman.
+    </string>
+
+    <string name="search_help_writing_tips_intro">
+        Aswan allinta qillqanapaq:
+    </string>
+    <string name="search_help_writing_tips">
+        \u2022 Runasimipi kimsa vocal (A, I, U) nisqawan qillqanam. Wakin simitaqipi pichqa vocal simikuna kaptillan
+        kay app \"qillu\"wan \"qello\"wanpas maskasptiyki kikinta tarinman, atisqanman hina. Chayna kaptinpas,
+        aswan allin kanman \"qillu\" simita qillqaptiyki.
+        \n\n\u2022 \"K\"wan qillqana, manam \"C\"wanchu, manam \"QUE\"/\"QUI\"wanchu. \"Karu\" qillqana, \"caru\" manam.
+        \"Killa\" qillqana, \"quilla\" manam. Runasimipi \"K\"llawan qillqananchik.
+        \n\n\u2022 Kastilla simipi \"H\" manam tuqyachisqachu. Runasimipiñataq \"H\" tuqyachisqam.
+        \n\n\u2022 "CC"wan qillqay ñawpa pacha qillqaypaqmi. Kunanñataq \"Q\"wan qillqananchik.
+        Ñawpahina qillqasqa simitaqipi (Holguinpa) maskayta munaspaqa "CC"wan qillqawaqmi.
+        \n\n\u2022 Runasimipi manam Zwan nitaq Cwan qillqanchikchu, \"S\"llawanmi arí. Chaymi \"isku\" qillqana, \"izku\" manam,
+        \"sisariy\" qillqana, \"sizariy\" manam.
+        \n\n\u2022 Runasimipi manam kaynata qillqanachu: AI, AU, IA, UA, UI, IU. Aswanmi kaynata qillqana: Y y W, lo que daría AY, AW, YA, WA, WI, IW.
+    </string>
+
+
+    <string name="search_help_writing_video_text">
+        Astawan runasimimanta runasimi qillqaymantawan yachakuyta munaspaqa, YouTubepi kanalniykuta qawariykuy.
+    </string>
 </resources>

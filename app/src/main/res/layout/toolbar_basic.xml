@@ -10,5 +10,4 @@
     app:popupTheme="@style/ThemeOverlay.Qichwa"
     android:elevation="4dp"
     tools:targetApi="lollipop">
-
-    </androidx.appcompat.widget.Toolbar>
+</androidx.appcompat.widget.Toolbar>

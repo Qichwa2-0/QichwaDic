@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ocram.qichwadic">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".QichwaDicApplication"
         android:allowBackup="true"
@@ -10,26 +12,21 @@
         android:roundIcon="@drawable/logo_q_scaled"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".features.intro.ui.SplashActivity"
+        <activity
+            android:name=".features.intro.ui.SplashActivity"
             android:configChanges="locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".features.dictionaries.ui.DictionaryActivity" />
-        <activity android:name=".features.search.ui.SearchActivity"
-            android:windowSoftInputMode="stateHidden"
+        <activity android:name=".core.ui.activity.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:configChanges="locale">
         </activity>
         <activity
             android:name=".features.intro.ui.IntroActivity"
-            android:configChanges="locale"/>
-        <activity
-            android:name=".features.about.ui.AboutActivity"
-            android:configChanges="locale"/>
-
-        <activity android:name=".features.favorites.ui.FavoriteActivity"
-            android:configChanges="locale"/>
+            android:configChanges="locale" />
     </application>
+
 </manifest>

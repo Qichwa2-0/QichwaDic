@@ -9,34 +9,52 @@
     android:popupTheme="@style/ThemeOverlay.Qichwa"
     app:popupTheme="@style/ThemeOverlay.Qichwa"
     android:elevation="4dp"
-    tools:targetApi="lollipop">
+    tools:targetApi="lollipop"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
+    app:contentInsetStartWithNavigation="0dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:weightSum="10">
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/padding_small">
 
-
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/glSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintGuide_percent="0.9"
+            android:orientation="vertical"/>
 
         <SearchView
             android:id="@+id/svSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_weight="9"
             android:iconifiedByDefault="false"
             android:searchIcon="@null"
             android:queryHint="@string/search_quechua_placeholder"
             android:theme="@style/AppSearchView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/glSearch"
             android:visibility="visible" />
 
         <ImageView
             android:id="@+id/ivSubmitSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_search"/>
-    </LinearLayout>
+            app:srcCompat="@drawable/ic_search"
+            android:src="@drawable/ic_search"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/glSearch"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.appcompat.widget.Toolbar>

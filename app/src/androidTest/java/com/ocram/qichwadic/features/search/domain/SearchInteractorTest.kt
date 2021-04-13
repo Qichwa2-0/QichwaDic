@@ -17,6 +17,7 @@ import com.ocram.qichwadic.features.search.data.datastore.SearchCloudDataStore
 import com.ocram.qichwadic.core.preferences.PreferencesHelper
 import com.ocram.qichwadic.core.data.model.SearchResultEntity
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
+import com.ocram.qichwadic.core.ui.SearchParams
 import com.ocram.qichwadic.features.search.data.SearchType
 import kotlinx.coroutines.runBlocking
 
@@ -92,7 +93,8 @@ class SearchInteractorTest {
         )
 
         runBlocking {
-            val searchResults = searchInteractor!!.queryWordOffline(1, "es", SearchType.STARTS_WITH.type, wordToSearch)
+            val searchParams = SearchParams(SearchType.STARTS_WITH.type, true, "es", wordToSearch)
+            val searchResults = searchInteractor?.queryWordOffline(searchParams) ?: emptyList()
             Assert.assertFalse(searchResults.isEmpty())
             val searchResult = searchResults[0]
             Assert.assertEquals(searchResult.dictionaryId.toLong(), dictionary.id.toLong())
@@ -126,7 +128,8 @@ class SearchInteractorTest {
         )
 
         runBlocking {
-            val searchResults = searchInteractor!!.queryWordOffline(1, "es", SearchType.STARTS_WITH.type, "a")
+            val searchParams = SearchParams(SearchType.STARTS_WITH.type, true, "es", "a")
+            val searchResults = searchInteractor?.queryWordOffline(searchParams) ?: emptyList()
             Assert.assertFalse(searchResults.isEmpty())
 
             val searchResult = searchResults[0]

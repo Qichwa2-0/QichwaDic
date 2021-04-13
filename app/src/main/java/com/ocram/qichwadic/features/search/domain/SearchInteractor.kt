@@ -3,15 +3,16 @@ package com.ocram.qichwadic.features.search.domain
 import com.ocram.qichwadic.core.data.model.DefinitionEntity
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
+import com.ocram.qichwadic.core.ui.SearchParams
 import com.ocram.qichwadic.features.search.domain.repository.SearchRepository
 
 interface SearchInteractor {
 
-    suspend fun queryWord(offline: Boolean, fromQuechua: Int, target: String, searchType: Int, word: String): List<SearchResultModel>
+    suspend fun queryWord(offline: Boolean, searchParams: SearchParams): List<SearchResultModel>
 
-    suspend fun queryWordOffline(fromQuechua: Int, target: String, searchType: Int, word: String): List<SearchResultModel>
+    suspend fun queryWordOffline(searchParams: SearchParams): List<SearchResultModel>
 
-    suspend fun queryWordOnline(fromQuechua: Int, target: String, searchType: Int, word: String): List<SearchResultModel>
+    suspend fun queryWordOnline(searchParams: SearchParams): List<SearchResultModel>
 
     suspend fun fetchMoreResults(offline: Boolean, dictionaryId: Int, searchType: Int, word: String, page: Int): List<DefinitionModel>
 
@@ -19,19 +20,19 @@ interface SearchInteractor {
 
 class SearchInteractorImpl(private val searchRepository: SearchRepository) : SearchInteractor {
 
-    override suspend fun queryWord(offline: Boolean, fromQuechua: Int, target: String, searchType: Int, word: String): List<SearchResultModel> {
+    override suspend fun queryWord(offline: Boolean, searchParams: SearchParams): List<SearchResultModel> {
         if(offline) {
-            return this.queryWordOffline(fromQuechua, target, searchType, word)
+            return this.queryWordOffline(searchParams)
         }
-        return queryWordOnline(fromQuechua, target, searchType, word)
+        return queryWordOnline(searchParams)
     }
 
-    override suspend fun queryWordOffline(fromQuechua: Int, target: String, searchType: Int, word: String): List<SearchResultModel> {
-        return searchRepository.searchOffline(fromQuechua, target, word, searchType)
+    override suspend fun queryWordOffline(searchParams: SearchParams): List<SearchResultModel> {
+        return searchRepository.searchOffline(searchParams)
     }
 
-    override suspend fun queryWordOnline(fromQuechua: Int, target: String, searchType: Int, word: String): List<SearchResultModel> {
-        return searchRepository.searchOnline(fromQuechua, target, word, searchType)
+    override suspend fun queryWordOnline(searchParams: SearchParams): List<SearchResultModel> {
+        return searchRepository.searchOnline(searchParams)
     }
 
     override suspend fun fetchMoreResults(offline: Boolean, dictionaryId: Int, searchType: Int, word: String, page: Int): List<DefinitionModel> {

@@ -29,16 +29,18 @@ task clean(type: Delete) {
 
 ext {
     coroutines = '1.3.4'
-    corektx = '1.3.0'
+    corektx = '1.3.2'
     koin_version= '2.1.5'
     appcompat = '1.1.0'
     constraint_layout = '1.1.3'
     cardview = '1.0.0'
-    material = '1.1.0'
+    material = '1.3.0'
     preferencev14 = '1.0.0'
-    appIntro = '5.1.0'
-    roomVersion = '2.2.5'
-    archLifecycleVersion = '2.2.0'
+    appIntro = '6.1.0'
+    roomVersion = '2.2.6'
+    archLifecycleExtensionsVersion = '2.2.0'
+    archLifecycleVersion = '2.3.1'
+    nav_version = "2.3.4"
     retrofit2 = '2.9.0'
     retrofit2gson = '2.9.0'
     leakCanary = '2.4'

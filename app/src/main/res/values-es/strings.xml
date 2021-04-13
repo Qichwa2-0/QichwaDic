@@ -1,12 +1,14 @@
 <resources>
     <!-- Toolbar -->
     <!-- menu items -->
+    <string name="nav_search_tips">Ayuda</string>
     <string name="nav_dictionaries">Diccionarios</string>
     <string name="nav_about">Acerca de</string>
     <string name="nav_favorites">Favoritos</string>
-    <string name="local_search">Búsqueda local</string>
+    <string name="nav_share">Compartir</string>
 
     <!-- search criteria -->
+    <string name="local_search">Búsqueda local</string>
 
     <string-array name="searchTypes">
         <item>Contiene</item>
@@ -16,7 +18,7 @@
     </string-array>
     <string name="search_lang_qu">QU</string>
 
-    <string name="search_mode_local">Búsqueda local</string>
+    <string name="search_mode_local">Búsqueda sin conexión</string>
     <string name="search_mode_online">Búsqueda en línea</string>
 
     <!-- search messages -->
@@ -32,14 +34,12 @@
 
     <string name="get_dictionaries">Ver diccionarios</string>
 
-    <plurals name="total_results">
-        <item quantity="one">%d resultado</item>
-        <item quantity="other">%d resultados</item>
-    </plurals>
     <string name="error_no_cloud_dictionaries">
         Ocurrió un error. Verifique su conexión a internet.
     </string>
     <string name="dictionary_totalEntries">Total de Palabras: %1$s </string>
+
+    <string name="see_favorites">Ver</string>
 
     <!-- dictionary messages -->
     <string name="dictionary_delete_error">Error al borrar %s</string>
@@ -71,8 +71,10 @@
         &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; y
         &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/&gt;.
     </string>
-    <string name="about_open_web_version">Abrir versión web</string>
+    <string name="about_visit_qichwa20">Ver Qichwa 2.0</string>
+    <string name="about_visit_qichwa20_youtube">Qichwa 2.0 en YouTube</string>
     <string name="about_rate_app">Valorar en Google Play</string>
+    <string name="about_contact">Contactar</string>
 
     <!-- intro -->
     <string name="intro_skip">Saltar</string>
@@ -82,7 +84,7 @@
     <string name="intro_searchcriteria_title">Criterios de búsqueda</string>
     <string name="intro_searchcriteria_description">Busque por palabra exacta o por criterios: Comienza por / Termina en / Contiene</string>
     <string name="intro_offline_title">Búsqueda sin conexión</string>
-    <string name="intro_offline_description">Descargue los diccionarios para empezar a realizar búsquedas.</string>
+    <string name="intro_offline_description">Descargue los diccionarios para realizar búsquedas sin conexión.</string>
 
     <!-- Favoritos -->
 
@@ -98,4 +100,59 @@
     <string name="favorite_dialog_clear_cancel">No</string>
     <string name="favorite_dialog_title">Eliminar favoritos</string>
     <string name="favorite_dialog_content">¿Está seguro de eliminar sus favoritos?</string>
+
+    <string name="share_app_message">Te recomiendo esta aplicación: %s</string>
+
+    <!-- SEARCH HELP -->
+    <string name="search_help_writing">Escritura</string>
+    <string name="search_help_faq">Preguntas frecuentes</string>
+
+    <string name="search_help_faq_translator">¿Por qué no se traducen mis frases?</string>
+    <string name="search_help_faq_translator_reply">
+        La funcionalidad principal de esta aplicación es la de búsqueda
+        de vocabulario en quechua. Esta aplicación no es un traductor, que requeriría de herramientas
+        más complejas para su desarrollo.
+    </string>
+
+    <string name="search_help_faq_no_results">Mi búsqueda no da resultados</string>
+    <string name="search_help_faq_no_results_reply">
+        Sus resultados dependerán de varios factores como:
+        \n\ta) La escritura utilizada,
+        \n\tb) La búsqueda de palabras simples o raíces en vez de frases largas,
+        \n\tc) El vocabulario de los diccionarios que usa la aplicación.
+    </string>
+
+    <string name="search_help_faq_no_results_complex_word">
+        A pesar de buscar una sola palabra \"simple\", no encuentro resultados.
+    </string>
+    <string name="search_help_faq_no_results_complex_word_reply">
+        Al buscar desde el quechua, debemos tomar en cuenta que, al ser una lengua aglutinante,
+        lo que parece una sola palabra es en realidad una raíz + varios sufijos.
+        \nPor ejemplo, si buscamos \"wasiykita\" es probable que no obtengamos resultados.
+        Lo aconsejable sería intentar buscar con la raíz (por lo general las dos primeras sílabas)
+        con el tipo de búsqueda \"Comienza con\". En este caso buscaríamos \"wasi\".
+    </string>
+
+    <string name="search_help_writing_tips_intro">
+        Algunas recomendaciones para la escritura:
+    </string>
+    <string name="search_help_writing_tips">
+        \u2022 En quechua se escribe con 3 vocales (A, I, U). Algunos diccionarios usan 5 vocales como
+        en el castellano. Por ello, la aplicación trata, en la medida de lo posible, de dar los mismos
+        resultados al buscar \"qillu\" y \"qello\", por ejemplo. Es más probable encontrar resultados buscando \"qillu\".
+        \n\n\u2022 Usar la K en vez de la C (o de las formas QUE/QUI). Por ejemplo, escribir \"karu\" en vez de
+        \"caru\", \"killa\" en vez de \"quilla\". La letra para representar el sonido /k/ en quechua es la K.
+        \n\n\u2022 En quechua la H no es muda como en español, la H tiene un sonido aspirado.
+        \n\n\u2022 La escritura con "cc" es parte de la escritura antigua que muchos aún siguen usando.
+        Sin embargo, es preferible usar la Q, a no ser que se desee buscar en diccionarios antiguos (Holguín).
+        \n\n\u2022 No se usa la Z en el quechua (ni la C) sino solamente la S. Así, se escribe
+        \"isku\" y no \"izku\", \"sisariy\" y no \"sizariy\".
+        \n\n\u2022 En quechua no van dos vocales juntas como en AI, AU, IA, UA, UI, IU. Para esto, se usan las semiconsonantes
+        Y y W, lo que daría AY, AW, YA, WA, WI, IW.
+    </string>
+
+
+    <string name="search_help_writing_video_text">
+        En nuestro canal de YouTube tenemos unos videos dedicados a la escritura en quechua
+    </string>
 </resources>

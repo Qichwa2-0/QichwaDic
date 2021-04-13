@@ -13,8 +13,8 @@ android {
         applicationId "com.ocram.qichwadic"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 18
-        versionName "3.1.0"
+        versionCode 19
+        versionName "3.2.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         javaCompileOptions {
             annotationProcessorOptions {
@@ -26,8 +26,13 @@ android {
         buildConfigField "String", "SERVER_URL", '"https://www.api.qichwa.net/simitaqi/"'
         buildConfigField "String", "DEV_EMAIL", '"qichwa2.0@gmail.com"'
     }
+
+    applicationVariants.all { variant ->
+        variant.resValue "string", "versionName", "v${variant.versionName}"
+    }
+
     buildTypes {
-        debug{
+        debug {
             buildConfigField "boolean", "DEBUGGABLE", 'true'
             buildConfigField "String", "SERVER_URL", '"https://www.api.qichwa.net/simitaqi/"'
             minifyEnabled false
@@ -74,16 +79,24 @@ dependencies {
     // Architecture components
     // room
     implementation "androidx.room:room-runtime:$roomVersion"
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
 
     // Lifecycle
-    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleExtensionsVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-reactivestreams:$archLifecycleVersion"
 
-    // Square related deps
+    // Navigation
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+
+    // Retrofit / LeakCanary
     implementation "com.squareup.retrofit2:retrofit:$retrofit2"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit2gson"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakCanary"
@@ -99,7 +112,7 @@ dependencies {
     implementation "com.github.AppIntro:AppIntro:$appIntro"
 
     // Resolve conflicts between main and test APK:
-    androidTestImplementation  "androidx.annotation:annotation:$annotation"
+    androidTestImplementation "androidx.annotation:annotation:$annotation"
     androidTestImplementation "androidx.appcompat:appcompat:$appcompat"
     androidTestImplementation "com.google.android.material:material:$material"
 

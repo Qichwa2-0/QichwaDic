@@ -1,13 +1,14 @@
 <resources>
     <!-- Toolbar -->
     <!-- menu items -->
+    <string name="nav_search_tips">Aide</string>
     <string name="nav_dictionaries">Dictionnaires</string>
     <string name="nav_about">À propos</string>
     <string name="nav_favorites">Favoris</string>
-    <string name="local_search">Recherche hors-ligne</string>
-
+    <string name="nav_share">Partager</string>
 
     <!-- search criteria -->
+    <string name="local_search">Recherche hors-ligne</string>
 
     <string-array name="searchTypes">
         <item>Contient</item>
@@ -33,12 +34,10 @@
 
     <string name="get_dictionaries">Dictionaires</string>
 
-    <plurals name="total_results">
-        <item quantity="one">%d résultat</item>
-        <item quantity="other">%d résultats</item>
-    </plurals>
     <string name="error_no_cloud_dictionaries">Une erreur est survenue. Vérifiez votre connection internet.</string>
     <string name="dictionary_totalEntries">Total d\'entrées: %1$s </string>
+
+    <string name="see_favorites">Voir</string>
 
     <!-- dictionary messages -->
     <string name="dictionary_delete_error">Erreur de suppression de %s</string>
@@ -70,8 +69,11 @@
         &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; et
         &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/&gt;.
     </string>
-    <string name="about_open_web_version">Voir version web</string>
+    <string name="about_visit_qichwa20">Visiter Qichwa 2.0</string>
+    <string name="about_visit_qichwa20_youtube">Qichwa 2.0 sur YouTube</string>
     <string name="about_rate_app">Évaluer dans Google Play</string>
+    <string name="about_contact">Contacter</string>
+
     <!-- intro -->
     <string name="intro_skip">Passer</string>
     <string name="intro_done">Terminé</string>
@@ -80,7 +82,7 @@
     <string name="intro_searchcriteria_title">Critères de recherche</string>
     <string name="intro_searchcriteria_description">Vous pouvez rechercher par mot clé ou par critère: commence par/se termine par/contient</string>
     <string name="intro_offline_title">Recherche hors-ligne</string>
-    <string name="intro_offline_description">Téléchargez les dictionnaires pour commencer vos recherches</string>
+    <string name="intro_offline_description">Téléchargez les dictionnaires pour commencer vos recherches hors-ligne</string>
 
     <!-- favorites -->
     <string name="favorite_deleted_success">Favori supprimé</string>
@@ -96,4 +98,57 @@
     <string name="favorite_dialog_title">Supprimer les favoris</string>
     <string name="favorite_dialog_content">Confirmez-vous la suppression de vos favoris?</string>
 
+    <string name="share_app_message">Je te recommander cette application : %s</string>
+    <!-- SEARCH HELP -->
+    <string name="search_help_writing">Ortographe</string>
+    <string name="search_help_faq">FAQ</string>
+
+    <string name="search_help_faq_translator">Pourquoi mes phrases ne sont pas traduites ?</string>
+    <string name="search_help_faq_translator_reply">
+        La fonctionnalité de base de cette application est la recherche de vocabulaire pour la langue Quechua.
+        Cette application n\'est pas un traducteur, ceci nécessitant des outils plus complexes à développer.
+    </string>
+
+    <string name="search_help_faq_no_results">Ma recherche ne donne pas de résultats</string>
+    <string name="search_help_faq_no_results_reply">
+        Les résultats de vos recherches dépendent de plusieurs facteurs tels que :
+        \n\ta) L\'orthographe utilisée,
+        \n\tb) La recherche de mots simples ou de racines au lieu de phrases longues,
+        \n\tc) Le vocabulaire des dictionnaires dans l\'application.
+    </string>
+
+    <string name="search_help_faq_no_results_complex_word">
+        Même si je cherche un seul mot \"simple\", je n\'ai pas de résultats.
+    </string>
+    <string name="search_help_faq_no_results_complex_word_reply">
+        Lors d\'une recherche en Quechua, il faut tenir compte du fait que, en tant que langue agglutinante,
+        ce qui peut nous sembler un seul mot est en vrai une racine + plusieurs suffixes.
+        \nPar exemple, lors d\'une recherche du mot \"wasiykita\", il est probable que l\'on
+        n\'obtienne aucun résultat.
+        La recommendation serait d\'essayer la recherche avec la racine (normalement les deux dernières syllabes)
+        en plus du type de recherche \"Commence par\". Dans ce cas-ci, nous chercherions \"wasi\".
+    </string>
+
+    <string name="search_help_writing_tips_intro">
+        Quelques recommandations pour l\'écriture en quechua:
+    </string>
+    <string name="search_help_writing_tips">
+        \u2022 L\'écriture quechua utilise seulement 3 voyelles (A, I, U). Quelques dictionnaires utilisent
+        5 voyelles comme en espagnol. Cette application essaye, dans la mesure du possible, de traîter également
+        les mots \"qillu\" et \"qello\", par exemple. Il est néanmoins recommandé d\'écrire \"qillu\".
+        \n\n\u2022 Il faut utiliser le K au lieu du C (ou de QUE/QUI). Par exemple, il faut écrire \"karu\"
+        au lieu de \"caru\", \"killa\" au lieu de \"quilla\". On utilise toujours la lettre K pour répresenter le son /k/.
+        \n\n\u2022 Le H n\'est jamais muet en Quechua, il est prononcé de manière aspirée.
+        \n\n\u2022 L\'utilisation de \"cc\" fait partie d\'une ancienne écriture quechua. Cependant, il est préferable
+        d\'utiliser la lettre Q, sauf si l\'on souhaite absolumment faire des recherches dans des dictionnaires anciens (Holguín).
+        \n\n\u2022 Le Z et le C ne sont pas utilisés en quechua mais seulement le S. Ainsi,
+        nous devons écrire \"isku\" et ne pas \"izku\", \"sisariy\" et ne pas \"sizariy\".
+        \n\n\u2022 On n\'écrit pas deux voyelles consécutives en quechua. Au lieu de ça, on utilise des semi-consonnes Y et W, ce qui nous
+        donne AY, AW, YA, WA, WI, IW.
+    </string>
+
+
+    <string name="search_help_writing_video_text">
+        Vous pouvez trouver plus d\'information sur la langue quechua et son écriture sur notre chaîne YouTube.
+    </string>
 </resources>

@@ -9,6 +9,7 @@ import com.ocram.qichwadic.core.preferences.PreferencesHelper
 import com.ocram.qichwadic.features.search.domain.SearchInteractor
 import com.ocram.qichwadic.core.ui.SearchParams
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
+import com.ocram.qichwadic.core.ui.Event
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -24,9 +25,11 @@ class SearchViewModel(
     val extraDefinitions = MutableLiveData<List<DefinitionModel>>()
     val searchViewState = MutableLiveData<SearchViewState>()
     val loadFetchMore = MutableLiveData<Boolean>()
-    val saveFavoriteResult = MutableLiveData<Boolean>()
+    val saveFavoriteResult = MutableLiveData<Event<Boolean>>()
     val offlineSearch = MutableLiveData<Boolean>()
-    val searchParams = MutableLiveData<SearchParams>()
+    val searchParams = MutableLiveData<Event<SearchParams>>()
+    var searchFromQuechua = MutableLiveData<Boolean>()
+    private lateinit var _searchParams: SearchParams
 
 
     init {
@@ -44,17 +47,18 @@ class SearchViewModel(
     private fun loadSearchParams() {
         viewModelScope.launch {
             val lastSearchParams = preferencesHelper.lastSearchParams()
-            searchParams.postValue(lastSearchParams)
+            _searchParams = lastSearchParams
+            searchParams.postValue(Event(lastSearchParams))
         }
     }
 
-    fun searchWord(fromQuechua: Int, target: String, searchType: Int, word: String) {
+    fun searchWord(word: String) {
         searchViewState.value = SearchViewState.LOADING
-
+        _searchParams.searchWord = word
         viewModelScope.launch {
-            preferencesHelper.saveSearchParams(target, fromQuechua == 1, searchType)
+            preferencesHelper.saveSearchWord(word)
             try {
-                val results = searchInteractor.queryWord(preferencesHelper.isOfflineSearchMode(), fromQuechua, target, searchType, word)
+                val results = searchInteractor.queryWord(preferencesHelper.isOfflineSearchMode(), _searchParams)
                 onSearchSuccess(results)
             } catch (e: Throwable) {
                 onSearchError(e)
@@ -72,12 +76,19 @@ class SearchViewModel(
         searchViewState.value = SearchViewState.ERROR
     }
 
-    fun fetchMoreResults(dictionaryId: Int, searchType: Int, word: String, page: Int) {
+    fun fetchMoreResults(dictionaryId: Int, page: Int) {
         loadFetchMore.value = true
         viewModelScope.launch {
             try {
-                val results = searchInteractor.fetchMoreResults(preferencesHelper.isOfflineSearchMode(), dictionaryId, searchType, word, page)
+                val results = searchInteractor.fetchMoreResults(
+                        preferencesHelper.isOfflineSearchMode(),
+                        dictionaryId,
+                        _searchParams.searchTypePos,
+                        _searchParams.searchWord,
+                        page
+                )
                 onFetchMoreSuccess(results)
+
             } catch (e: Throwable) {
                 Log.d("QichwaDic", e.message ?: "Error fetching more results")
             }
@@ -93,7 +104,7 @@ class SearchViewModel(
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val added = favoriteInteractor.addFavorite(definition)
-                saveFavoriteResult.postValue(added)
+                saveFavoriteResult.postValue(Event(added))
             }
         }
     }
@@ -105,15 +116,26 @@ class SearchViewModel(
         }
     }
 
-    fun saveSearchFromQuechua(fromQuechua: Boolean) {
+    fun saveSearchFromQuechua() {
+        _searchParams.isFromQuechua = !_searchParams.isFromQuechua
         viewModelScope.launch {
-            preferencesHelper.saveSearchFromQuechua(fromQuechua)
+            preferencesHelper.saveSearchFromQuechua(_searchParams.isFromQuechua)
+            searchFromQuechua.postValue(_searchParams.isFromQuechua)
         }
     }
 
     fun saveNonQuechuaLangPos(langCode: String) {
+        _searchParams.nonQuechuaLangCode = langCode
         viewModelScope.launch {
             preferencesHelper.saveNonQuechuaLangPos(langCode)
+            searchFromQuechua.postValue(_searchParams.isFromQuechua)
+        }
+    }
+
+    fun saveSearchType(searchType: Int) {
+        _searchParams.searchTypePos = searchType
+        viewModelScope.launch {
+            preferencesHelper.saveSearchType(searchType)
         }
     }
 }

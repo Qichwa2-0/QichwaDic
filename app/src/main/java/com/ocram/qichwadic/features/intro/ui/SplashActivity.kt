@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.features.search.ui.SearchActivity
+import com.ocram.qichwadic.core.ui.activity.MainActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import kotlin.concurrent.schedule
@@ -26,7 +26,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun onFirstStartLoaded (isFirstStart: Boolean) {
         Timer("", false).schedule(1500) {
-            val targetCls = if (isFirstStart) IntroActivity::class.java else SearchActivity::class.java
+            val targetCls = if (isFirstStart) IntroActivity::class.java else MainActivity::class.java
             startActivity(Intent(this@SplashActivity, targetCls))
             overridePendingTransition(R.anim.enteranim, R.anim.exitanim)
             this@SplashActivity.finish()

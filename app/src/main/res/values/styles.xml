@@ -2,7 +2,7 @@
 
     <!-- Base application theme. -->
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:textSize">20sp</item>
         <item name="colorPrimary">@color/primary_color</item>
@@ -27,5 +27,14 @@
     <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
         <item name="android:textSize">18sp</item>
         <item name="android:paddingLeft">0dp</item>
+    </style>
+
+    <style name="AppTheme.FaqQuestionText">
+        <item name="android:textSize">@dimen/text_size_normal</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="AppTheme.FaqQuestionReply">
+        <item name="android:textSize">@dimen/text_size_normal</item>
     </style>
 </resources>

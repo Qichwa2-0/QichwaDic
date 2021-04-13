@@ -14,7 +14,8 @@ class PreferencesHelper(private val sharedPreferences: SharedPreferences)  {
         return SearchParams(
                 this.searchTypePos(),
                 this.isSearchFromQuechua(),
-                this.nonQuechuaLangCode()
+                this.nonQuechuaLangCode(),
+                searchWord = this.searchWord()
         )
     }
 
@@ -31,17 +32,22 @@ class PreferencesHelper(private val sharedPreferences: SharedPreferences)  {
     }
 
     private fun nonQuechuaLangCode(): String {
-        return sharedPreferences.getString(SEARCH_PARAM_NON_QUECHUA_CODE_KEY, "es")!!
+        return sharedPreferences.getString(SEARCH_PARAM_NON_QUECHUA_CODE_KEY, "es") ?: "es"
+    }
+
+    private fun searchWord(): String {
+        return sharedPreferences.getString(SEARCH_PARAM_TYPE_WORD_KEY, "") ?: ""
     }
 
     fun saveNotFirstStart() {
         this.putBoolean(FIRST_START_KEY, false)
     }
 
-    fun saveSearchParams(targetLangCode: String, fromQuechua: Boolean, searchTypePos: Int) {
-        this.putString(SEARCH_PARAM_NON_QUECHUA_CODE_KEY, targetLangCode)
-        this.putBoolean(SEARCH_PARAM_IS_QUECHUA_KEY, fromQuechua)
-        this.putInt(SEARCH_PARAM_TYPE_POS_KEY, searchTypePos)
+    fun saveSearchParams(searchParams: SearchParams) {
+        this.saveNonQuechuaLangPos(searchParams.nonQuechuaLangCode)
+        this.saveSearchFromQuechua(searchParams.isFromQuechua)
+        this.saveSearchType(searchParams.searchTypePos)
+        this.saveSearchWord(searchParams.searchWord)
     }
 
     fun saveNonQuechuaLangPos(targetLangCode: String) {
@@ -50,6 +56,14 @@ class PreferencesHelper(private val sharedPreferences: SharedPreferences)  {
 
     fun saveSearchFromQuechua(fromQuechuaSearch: Boolean) {
         this.putBoolean(SEARCH_PARAM_IS_QUECHUA_KEY, fromQuechuaSearch)
+    }
+
+    fun saveSearchType(searchType: Int) {
+        this.putInt(SEARCH_PARAM_TYPE_POS_KEY, searchType)
+    }
+
+    fun saveSearchWord(searchWord: String) {
+        this.putString(SEARCH_PARAM_TYPE_WORD_KEY, searchWord)
     }
 
     fun saveOfflineSearchMode(offline: Boolean) {
@@ -74,6 +88,7 @@ class PreferencesHelper(private val sharedPreferences: SharedPreferences)  {
         private val SEARCH_PARAM_NON_QUECHUA_CODE_KEY = "pref_searchParamNonQuechuaLang"
         private val SEARCH_PARAM_IS_QUECHUA_KEY = "pref_searchParamFromQuechua"
         private val SEARCH_PARAM_TYPE_POS_KEY = "pref_searchParamType"
+        private val SEARCH_PARAM_TYPE_WORD_KEY = "pref_searchParamWord"
         private val SEARCH_MODE_KEY = "pref_searchMode"
     }
 }

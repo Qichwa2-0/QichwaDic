@@ -100,6 +100,10 @@ abstract class EndlessRecyclerViewScrollListener : RecyclerView.OnScrollListener
         this.loading = true
     }
 
+    fun onDestroy() {
+        this.mLayoutManager = null
+    }
+
     // Defines the process for actually loading more data based on page
     abstract fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView)
 

@@ -2,33 +2,28 @@
 <resources>
     <string name="app_name" translatable="false">QichwaDic</string>
     <string name="author_app_name" translatable="false">Qichwa 2.0 | QichwaDic</string>
-    <string name="version" translatable="false">v3.1.0</string>
-    <string name="website" translatable="false">https://www.qichwa.net</string>
+
     <!-- Toolbar -->
     <!-- menu items -->
+    <string name="nav_search_tips">Help</string>
     <string name="nav_dictionaries">Dictionaries</string>
     <string name="nav_about">About</string>
     <string name="nav_favorites">Favorites</string>
-    <string name="local_search">Local search</string>
+    <string name="nav_share">Share</string>
 
     <!-- search criteria -->
+    <string name="local_search">Local search</string>
     <string name="search_quechua_placeholder" translatable="false">Yawar</string>
     <string name="search_spanish_placeholder" translatable="false">Amanecer</string>
     <string name="search_english_placeholder" translatable="false">House</string>
     <string name="search_french_placeholder" translatable="false">Pierre</string>
     <string name="search_german_placeholder" translatable="false">Stuhl</string>
     <string name="search_italian_placeholder" translatable="false">Giocare</string>
-    <string name="search_russian_placeholder" translatable="false">играть</string>
 
-    <string-array name="searchTypes">
-        <item>Contains</item>
-        <item>Exact</item>
-        <item>Starts with</item>
-        <item>Ends with</item>
-    </string-array>
+    <string name="search_russian_placeholder" translatable="false">играть</string>
     <string name="search_lang_qu">QU</string>
 
-    <string name="search_mode_local">Local search</string>
+    <string name="search_mode_local">Offline search</string>
     <string name="search_mode_online">Online search</string>
 
     <!-- search messages -->
@@ -40,64 +35,55 @@
 
     <string name="get_dictionaries">Get dictionaries</string>
 
-    <plurals name="total_results">
-        <item quantity="one">%d result</item>
-        <item quantity="other">%d results</item>
-    </plurals>
     <string name="error_no_cloud_dictionaries">
         An error occurred. Please check your internet connection.
     </string>
     <string name="dictionary_totalEntries">Total entries: %1$s </string>
+    <string name="dictionary_delete_error">Error deleting %s</string>
+
+    <string name="see_favorites">View</string>
 
     <!-- dictionary messages -->
-    <string name="dictionary_delete_error">Error deleting %s</string>
     <string name="dictionary_save_error">Error saving %s</string>
     <string name="dictionary_delete_success">%s deleted</string>
     <string name="dictionary_save_success">%s saved</string>
+    <string name="share_definition_from_dictionary">Dictionary %s &lt;br&gt;&lt;br&gt; %s &lt;br&gt; %s</string>
 
-    <string-array name="dictLangs">
-        <item>qu;Quechua</item>
-        <item>es;Spanish</item>
-        <item>en;English</item>
-        <item>fr;French</item>
-        <item>de;German</item>
-        <item>it;Italian</item>
-        <item>ru;Russian</item>
-    </string-array>
+    <string name="share_with">Share with</string>
 
     <!--Actions-->
-    <string name="share_definition_from_dictionary">Dictionary %s &lt;br&gt;&lt;br&gt; %s &lt;br&gt; %s</string>
-    <string name="share_with">Share with</string>
+    <string name="contact_subject">About QichwaDic</string>
+    <string name="chooser_title">Send message</string>
 
     <!-- Pref -->
 
     <!--About-->
-    <string name="contact_subject">About QichwaDic</string>
-    <string name="chooser_title">Send message</string>
     <string name="about_project_collaboration">
         This app integrates dictionaries recopilated by &lt;a href="mailto:sankaypillo@gmail.com"&gt;Asociación ILLA&lt;/a&gt;,
         &lt;a href="http://runasimi.de"&gt;Runasimi.de&lt;/a&gt; and
         &lt;a href="https://www.qichwa.net"&gt;Qichwa 2.0&lt;/&gt;.
     </string>
-
-    <string name="about_open_web_version">Go to web version</string>
+    <string name="about_visit_qichwa20">Visit Qichwa 2.0</string>
+    <string name="about_visit_qichwa20_youtube">Qichwa 2.0 on YouTube</string>
     <string name="about_rate_app">Rate app in Google Play</string>
-    <string translatable="false" name="about_copyright">\u00A9 2017 - %d Qichwa 2.0 </string>
+    <string name="about_contact">Contact</string>
+
+    <string name="about_copyright" translatable="false">\u00A9 2017 - %d Qichwa 2.0 </string>
+    <string name="intro_skip">Skip</string>
+    <string name="intro_done">Done</string>
 
 
     <!-- intro -->
-    <string name="intro_skip">Skip</string>
-    <string name="intro_done">Done</string>
     <string name="intro_multisearch_title">Multiple search</string>
     <string name="intro_multisearch_description">Perform your searches in multiple dictionaries at the same time. Available in Quechua, Spanish, English, French, German and Italian.</string>
     <string name="intro_searchcriteria_title">Search options</string>
     <string name="intro_searchcriteria_description">Your searches can match different criteria: Exact search/Starts with/Ends with/Contains</string>
     <string name="intro_offline_title">Offline search</string>
-    <string name="intro_offline_description">Download dictionaries in order to run searches</string>
-
-    <!-- Favorites-->
+    <string name="intro_offline_description">Download dictionaries in order to run searches offline</string>
     <string name="favorite_deleted_success">Favorite deleted</string>
     <string name="favorite_deleted_error">Error deleting favorite</string>
+
+    <!-- Favorites-->
     <string name="favorite_added_success">Favorite added</string>
     <string name="favorite_added_error">Error adding favorite</string>
     <string name="favorite_cleared_success">All favorites were deleted</string>
@@ -108,4 +94,76 @@
     <string name="favorite_dialog_clear_cancel">No</string>
     <string name="favorite_dialog_title">Clear favorites</string>
     <string name="favorite_dialog_content">Are you sure you want to remove all your favorites?</string>
+
+    <string name="share_app_message">Let me recommend you this application: %s</string>
+
+    <!-- SEARCH HELP -->
+    <string name="search_help_writing">Orthography</string>
+    <string name="search_help_faq">FAQ</string>
+
+    <string name="search_help_faq_translator">Why aren\'t my sentences translated?</string>
+    <string name="search_help_faq_translator_reply">
+        The main goal of this app is to be a search tool for Quechua language vocabulary. For this,
+        it lets you search in multiple dictionaries at once.
+        Nonetheless, this app is not a translation app.
+    </string>
+
+    <string name="search_help_faq_no_results">There are no results for my search</string>
+    <string name="search_help_faq_no_results_reply">
+        Your results will depend on some factors like:
+        \n\ta) The ortograph you use,
+        \n\tb) Using simple words or word roots instead of complex sentences,
+        \n\tc) the availability of words in the dictionaries.
+        \n\nYou can also try the search type "contains" in order to get more results
+    </string>
+
+    <string name="search_help_faq_no_results_complex_word">
+        I\'ve searched for a \"simple\" word, but got no results.
+    </string>
+    <string name="search_help_faq_no_results_complex_word_reply">
+        While searching from Quechua, bear in mind that because of Quechua\'s agglutinative nature,
+        what may seem like a simple word could actually be a root + multiple suffixes.
+        \nFor instance, while searching for \"wasiykita\" we may probably get no results.
+        Our advice would be to try to use the word root (usually the first two syllabes)
+        while using the "Starts with" search type. That way, we would rather search for \"wasi\".
+    </string>
+
+    <string name="search_help_writing_tips_intro">
+        Some tips for quechua writing:
+    </string>
+    <string name="search_help_writing_tips">
+        \u2022 Quechua language is written with 3 vowels (A, I, U). Some dictionaries use 5 vowels
+        like in Spanish, so this app tries to adapt your search term to work the same whether you search for
+        \"qillu\" or \"qello\", for example. Anyway, in this case, it\'s advisable to write \"qillu\".
+        \n\n\u2022 Use the letter K instead of C or QUE/QUI. For example, you should write \"karu\"
+        instead of \"caru\" and \"killa\" instead of \"quilla\". The letter that represents the /k/ sound is always the letter K.
+        \n\n\u2022 Quechua letter H is not muted as in Spanish, but it is pronounced aspirated.
+        \n\n\u2022 Writing with "cc" corresponds to an old way of writing Quechua. Even though many people
+        still use this way of writing, it\'s advisable to use Q instead of CC, unless you want to search in ancient dictionaries (like Holguín\'s).
+        \n\n\u2022 The letters Z and C are not used in Quechua, but letter S. We should write \"isku\" instead of  \"izku\", \"sisariy\" instead of \"sizariy\".
+        \n\n\u2022 There are no consecutive vowels like AI, AU, IA, UA, UI, IU. In order to avoid this, semiconsonants Y and W are used.
+        This way, we must write AY, AW, YA, WA, WI, IW.
+    </string>
+
+    <string name="search_help_writing_video_text">
+        You can watch and learn more about Quechua writing on our YouTube channel.
+    </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string-array name="searchTypes">
+        <item>Contains</item>
+        <item>Exact</item>
+        <item>Starts with</item>
+        <item>Ends with</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string-array name="dictLangs">
+        <item>qu;Quechua</item>
+        <item>es;Spanish</item>
+        <item>en;English</item>
+        <item>fr;French</item>
+        <item>de;German</item>
+        <item>it;Italian</item>
+        <item>ru;Russian</item>
+    </string-array>
 </resources>
