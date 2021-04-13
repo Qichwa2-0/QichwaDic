@@ -41,3 +41,7 @@
 #junit
 -dontwarn java.lang.management.**
 -dontwarn android.test.**
+
+-keepnames class androidx.navigation.fragment.NavHostFragment
+
+-keep class com.ocram.qichwadic.features.search.ui.results.list.SearchResultsFragment
