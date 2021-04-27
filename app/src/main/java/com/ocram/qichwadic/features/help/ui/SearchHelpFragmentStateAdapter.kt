@@ -27,8 +27,8 @@ class SearchHelpFragmentStateAdapter(fragment: Fragment) : FragmentStateAdapter(
         return fragmentProviders[position].createFragment()
     }
 
-    public fun getTitle(position: Int): String {
-        return fragmentProviders[position]?.title
+    fun getTitle(position: Int): String {
+        return fragmentProviders[position].title
     }
 }
 
