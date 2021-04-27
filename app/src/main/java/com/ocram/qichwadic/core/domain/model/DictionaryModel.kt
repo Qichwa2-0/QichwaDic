@@ -19,7 +19,7 @@ class DictionaryModel(
         if (this === other) return true
         if (other == null || javaClass != other.javaClass) return false
         val that = other as DictionaryModel?
-        return id == that!!.id
+        return id == that?.id
     }
 
     override fun hashCode(): Int {

@@ -44,7 +44,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun hideSoftKeyboard() {
         val inputMethodManager: InputMethodManager = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
+        this.currentFocus?.let {
+            inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+        }
     }
 
     fun openEmailIntent(toEmail: String, subject: String) {
