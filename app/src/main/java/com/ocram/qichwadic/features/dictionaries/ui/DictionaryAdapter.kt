@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DictionaryModel
-
-import kotlinx.android.synthetic.main.item_dictionary.view.*
+import com.ocram.qichwadic.databinding.ItemDictionaryBinding
 
 class DictionaryAdapter(var dictionaries: List<DictionaryModel>?, private val listener: DefinitionDownloadListener) : RecyclerView.Adapter<DictionaryAdapter.DictionaryViewHolder>() {
 
@@ -22,7 +21,9 @@ class DictionaryAdapter(var dictionaries: List<DictionaryModel>?, private val li
         totalEntries = parent.context.getString(R.string.dictionary_totalEntries)
         val v = inflater.inflate(R.layout.item_dictionary, parent, false)
         val viewHolder = DictionaryViewHolder(v)
-        v.ivDicAction.setOnClickListener {
+
+        val binding = ItemDictionaryBinding.bind(v)
+        binding.ivDicAction.setOnClickListener {
             val pos = viewHolder.adapterPosition
             val dictionary = dictionaries!![pos]
             dictionary.downloading = true
@@ -45,19 +46,20 @@ class DictionaryAdapter(var dictionaries: List<DictionaryModel>?, private val li
     }
 
     class DictionaryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val binding = ItemDictionaryBinding.bind(itemView)
 
         fun bindDictionary(dictionary: DictionaryModel) {
-            itemView.tvDictionaryName.text = dictionary.name
-            itemView.tvDictionaryAuthor.text = dictionary.author
-            itemView.tvDictionaryDescription.text = dictionary.description
-            itemView.tvDictionaryTotalEntries.text = String.format(totalEntries, dictionary.totalEntries)
-            itemView.ivDicAction.setImageResource(if (dictionary.existsInLocal) R.drawable.ic_delete else R.drawable.ic_action_download)
+            binding.tvDictionaryName.text = dictionary.name
+            binding.tvDictionaryAuthor.text = dictionary.author
+            binding.tvDictionaryDescription.text = dictionary.description
+            binding.tvDictionaryTotalEntries.text = String.format(totalEntries, dictionary.totalEntries)
+            binding.ivDicAction.setImageResource(if (dictionary.existsInLocal) R.drawable.ic_delete else R.drawable.ic_action_download)
             if (dictionary.downloading) {
-                itemView.ivDicAction.visibility = View.GONE
-                itemView.progress_bar.visibility = View.VISIBLE
+                binding.ivDicAction.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
             } else {
-                itemView.ivDicAction.visibility = View.VISIBLE
-                itemView.progress_bar.visibility = View.GONE
+                binding.ivDicAction.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
             }
         }
     }

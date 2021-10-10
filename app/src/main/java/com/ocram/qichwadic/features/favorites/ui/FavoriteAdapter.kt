@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
-
-import kotlinx.android.synthetic.main.item_favorite.view.*
+import com.ocram.qichwadic.databinding.ItemFavoriteBinding
 
 class FavoriteAdapter(private var favorites: List<DefinitionModel>?, private val listener: FavoriteClickListener) : RecyclerView.Adapter<FavoriteAdapter.FavoriteViewHolder>() {
 
@@ -17,8 +16,9 @@ class FavoriteAdapter(private var favorites: List<DefinitionModel>?, private val
         val inflater = LayoutInflater.from(parent.context)
         val v = inflater.inflate(R.layout.item_favorite, parent, false)
         val viewHolder = FavoriteViewHolder(v)
-        v.ivShare.setOnClickListener { favorites?.get(viewHolder.adapterPosition)?.let { it1 -> listener.onItemShare(it1) } }
-        v.ivRemove.setOnClickListener { favorites?.get(viewHolder.adapterPosition)?.let { it1 -> listener.onItemRemove(it1) } }
+        val binding = ItemFavoriteBinding.bind(v)
+        binding.ivShare.setOnClickListener { favorites?.get(viewHolder.adapterPosition)?.let { it1 -> listener.onItemShare(it1) } }
+        binding.ivRemove.setOnClickListener { favorites?.get(viewHolder.adapterPosition)?.let { it1 -> listener.onItemRemove(it1) } }
         return viewHolder
     }
 
@@ -38,10 +38,12 @@ class FavoriteAdapter(private var favorites: List<DefinitionModel>?, private val
 
     class FavoriteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
+        private val binding = ItemFavoriteBinding.bind(itemView)
+
         fun bindDefinition(favorite: DefinitionModel) {
-            itemView.tvWord.text = favorite.word
-            itemView.tvMeaning.text = HtmlCompat.fromHtml(favorite.meaning!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
-            itemView.tvDicName.text = favorite.dictionaryName
+            binding.tvWord.text = favorite.word
+            binding.tvMeaning.text = HtmlCompat.fromHtml(favorite.meaning!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            binding.tvDicName.text = favorite.dictionaryName
         }
 
     }

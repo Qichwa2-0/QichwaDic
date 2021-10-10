@@ -2,17 +2,14 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.ocram.qichwadic"
-        minSdkVersion 19
-        targetSdkVersion 29
+        minSdkVersion 21
+        targetSdkVersion 30
         versionCode 20
         versionName "3.2.0"
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
@@ -59,12 +56,15 @@ android {
     packagingOptions {
         exclude 'META-INF/atomicfu.kotlin_module'
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
 
     // Kotlin components
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
     implementation "androidx.core:core-ktx:$corektx"
@@ -79,8 +79,6 @@ dependencies {
     // Architecture components
     // room
     implementation "androidx.room:room-runtime:$roomVersion"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
@@ -89,7 +87,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleExtensionsVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-reactivestreams:$archLifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$archLifecycleVersion"
 
     // Navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -117,11 +115,7 @@ dependencies {
     androidTestImplementation "com.google.android.material:material:$material"
 
     // Koin AndroidX Scope feature
-    implementation "org.koin:koin-androidx-scope:$koin_version"
+    implementation "io.insert-koin:koin-androidx-scope:$koin_version"
     // Koin AndroidX ViewModel feature
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-
-    // android debug database
-    debugImplementation "com.amitshekhar.android:debug-db:$debugdb"
-
+    implementation "io.insert-koin:koin-androidx-viewmodel:$koin_version"
 }

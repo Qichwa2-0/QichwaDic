@@ -6,7 +6,6 @@ import android.text.SpannableString
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +20,11 @@ import com.ocram.qichwadic.BuildConfig
 
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.ui.activity.MainActivity
-import kotlinx.android.synthetic.main.fragment_about.*
+import com.ocram.qichwadic.core.ui.fragment.BaseFragment
+import com.ocram.qichwadic.databinding.FragmentAboutBinding
 import java.util.*
 
-class AboutFragment : Fragment() {
+class AboutFragment : BaseFragment<FragmentAboutBinding>() {
 
     private fun TextView.removeLinksUnderline() {
         val spannable = SpannableString(text)
@@ -39,11 +39,6 @@ class AboutFragment : Fragment() {
         text = spannable
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_about, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = findNavController()
 
@@ -54,23 +49,23 @@ class AboutFragment : Fragment() {
 
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
-        tvProjectCollab.text = HtmlCompat.fromHtml(getString(R.string.about_project_collaboration), HtmlCompat.FROM_HTML_MODE_LEGACY)
-        tvProjectCollab.removeLinksUnderline()
-        tvProjectCollab.movementMethod = LinkMovementMethod.getInstance()
+        binding.tvProjectCollab.text = HtmlCompat.fromHtml(getString(R.string.about_project_collaboration), HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding.tvProjectCollab.removeLinksUnderline()
+        binding.tvProjectCollab.movementMethod = LinkMovementMethod.getInstance()
 
-        tvCopyright.text = getString(R.string.about_copyright, Calendar.getInstance().get(Calendar.YEAR))
+        binding.tvCopyright.text = getString(R.string.about_copyright, Calendar.getInstance().get(Calendar.YEAR))
         bindEvents()
     }
 
     private fun bindEvents() {
-        btnRateApp.setOnClickListener {
+        binding.btnRateApp.setOnClickListener {
             (requireActivity() as MainActivity).openMarketIntent()
         }
 
         val qichwaSiteUrl = "https://www.qichwa.net"
-        btnWebsite.setOnClickListener { (requireActivity() as MainActivity).openActionViewIntent(qichwaSiteUrl) }
+        binding.btnWebsite.setOnClickListener { (requireActivity() as MainActivity).openActionViewIntent(qichwaSiteUrl) }
 
-        btnContact.setOnClickListener {
+        binding.btnContact.setOnClickListener {
             (requireActivity() as MainActivity)
                     .openEmailIntent(
                             BuildConfig.DEV_EMAIL,
@@ -78,10 +73,17 @@ class AboutFragment : Fragment() {
                     )
         }
 
-        btnYoutube.setOnClickListener {
+        binding.btnYoutube.setOnClickListener {
             val qichwa20YtUrl = "https://www.youtube.com/channel/UCZ5kIwvo7DlN9qdrQrjUOkg"
             (requireActivity() as MainActivity)
                     .openActionViewIntent(qichwa20YtUrl)
         }
+    }
+
+    override fun viewBindingClass(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentAboutBinding {
+        return FragmentAboutBinding.inflate(inflater, container, false)
     }
 }

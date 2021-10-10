@@ -5,25 +5,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.ui.activity.MainActivity
-import kotlinx.android.synthetic.main.fragment_search_help_writing.*
+import com.ocram.qichwadic.core.ui.fragment.BaseFragment
+import com.ocram.qichwadic.databinding.FragmentSearchHelpWritingBinding
 
-class SearchHelpWritingFragment : Fragment() {
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_search_help_writing, container, false)
+class SearchHelpWritingFragment : BaseFragment<FragmentSearchHelpWritingBinding>() {
+    override fun viewBindingClass(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+    ): FragmentSearchHelpWritingBinding {
+        return FragmentSearchHelpWritingBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val ytUrl = "https://www.youtube.com/watch?v=wgCq5X3ezKo&list=PLYJ5xaOE7Z-kmctE2OICkvVH_GFDEj_zP"
-        listOf(ivQillqayVideo, btnWatchQillqayVideo).forEach {
+        listOf(binding.ivQillqayVideo, binding.btnWatchQillqayVideo).forEach {
             it.setOnClickListener {
                 (requireActivity() as MainActivity).openActionViewIntent(ytUrl)
             }
         }
     }
-
 }

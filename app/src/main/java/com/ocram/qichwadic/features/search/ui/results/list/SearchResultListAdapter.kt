@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
-
-import kotlinx.android.synthetic.main.item_list_result.view.*
+import com.ocram.qichwadic.databinding.ItemListResultBinding
 
 class SearchResultListAdapter(private var definitions: MutableList<DefinitionModel>?, private val listener: DefinitionClickListener) : RecyclerView.Adapter<SearchResultListAdapter.ResultViewHolder>() {
 
@@ -17,8 +16,9 @@ class SearchResultListAdapter(private var definitions: MutableList<DefinitionMod
         val inflater = LayoutInflater.from(parent.context)
         val v = inflater.inflate(R.layout.item_list_result, parent, false)
         val viewHolder = ResultViewHolder(v)
-        v.ivShare.setOnClickListener { listener.onItemShareClick(definitions!![viewHolder.adapterPosition]) }
-        v.ivFavorite.setOnClickListener { listener.onItemFavoriteClick(definitions!![viewHolder.adapterPosition]) }
+        val binding = ItemListResultBinding.bind(v)
+        binding.ivShare.setOnClickListener { listener.onItemShareClick(definitions!![viewHolder.adapterPosition]) }
+        binding.ivFavorite.setOnClickListener { listener.onItemFavoriteClick(definitions!![viewHolder.adapterPosition]) }
         return viewHolder
     }
 
@@ -40,10 +40,11 @@ class SearchResultListAdapter(private var definitions: MutableList<DefinitionMod
     }
 
     class ResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val binding = ItemListResultBinding.bind(itemView)
 
         fun bindDefinition(definition: DefinitionModel) {
-            itemView.tvWord.text = definition.word
-            itemView.tvMeaning.text = HtmlCompat.fromHtml(definition.meaning!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            binding.tvWord.text = definition.word
+            binding.tvMeaning.text = HtmlCompat.fromHtml(definition.meaning!!, HtmlCompat.FROM_HTML_MODE_LEGACY)
         }
     }
 
