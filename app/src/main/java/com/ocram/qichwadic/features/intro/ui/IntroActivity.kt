@@ -1,13 +1,11 @@
 package com.ocram.qichwadic.features.intro.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.github.appintro.AppIntro
 import com.github.appintro.AppIntroFragment
 import com.github.appintro.AppIntroPageTransformerType
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.core.ui.activity.MainActivity
 
 class IntroActivity : AppIntro() {
 
@@ -56,8 +54,6 @@ class IntroActivity : AppIntro() {
     }
 
     private fun goToSearchActivity() {
-        val intent = Intent(this@IntroActivity, MainActivity::class.java)
-        startActivity(intent)
         finish()
     }
 }

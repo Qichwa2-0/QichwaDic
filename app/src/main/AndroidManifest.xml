@@ -8,21 +8,18 @@
         android:name=".QichwaDicApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher_app"
-        android:label="@string/app_name"
+        android:label="${appLabel}"
         android:roundIcon="@drawable/logo_q_scaled"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".features.intro.ui.SplashActivity"
+        <activity android:name=".core.ui.activity.MainActivity"
+            android:label="${appLabel}"
+            android:windowSoftInputMode="adjustPan"
             android:configChanges="locale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".core.ui.activity.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            android:configChanges="locale">
         </activity>
         <activity
             android:name=".features.intro.ui.IntroActivity"

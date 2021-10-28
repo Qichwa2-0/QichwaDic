@@ -12,12 +12,8 @@ class DictionaryModelTest {
         val totalDictionaries = 5
         var count = 0
         // dictionaries in odd position will be in local
-        val dictionaries  = generateSequence { (++count).takeIf { it <= totalDictionaries } }.map { current ->
-            DictionaryModel(
-                    id = current,
-                    name = "Dictionary QU $current",
-                    isQuechua = true
-            )
+        val dictionaries  = generateSequence { (++count).takeIf { it <= totalDictionaries } }.map {
+                current -> DictionaryModel(current, "Dictionary QU $current", isQuechua = true)
         }.toMutableList()
 
         val targetedDicId = dictionaries[2].id

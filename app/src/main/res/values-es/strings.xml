@@ -155,4 +155,6 @@
     <string name="search_help_writing_video_text">
         En nuestro canal de YouTube tenemos unos videos dedicados a la escritura en quechua
     </string>
+    <string name="online_search_active">Búsqueda en línea activada</string>
+    <string name="offline_search_active">Búsqueda local activada</string>
 </resources>

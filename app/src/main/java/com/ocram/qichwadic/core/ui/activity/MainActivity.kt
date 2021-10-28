@@ -1,18 +1,24 @@
 package com.ocram.qichwadic.core.ui.activity
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
-import android.view.inputmethod.InputMethodManager
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.material.navigation.NavigationView
+import androidx.compose.material.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.google.android.material.composethemeadapter.MdcTheme
 import com.ocram.qichwadic.BuildConfig
 import com.ocram.qichwadic.R
+import com.ocram.qichwadic.core.ui.common.AppNavGraph
+import com.ocram.qichwadic.core.ui.common.Drawer
+import com.ocram.qichwadic.core.ui.common.DrawerItem
+import kotlinx.coroutines.launch
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,59 +27,84 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val navController = navHostFragment.navController
-        navController.setGraph(R.navigation.nav_graph)
-
-        val navView = findViewById<NavigationView>(R.id.nav_view)
-        val shareItem = navView.menu.findItem(R.id.shareApp)
-        shareItem.setOnMenuItemClickListener {
-            openShareIntent(getString(R.string.share_app_message, marketUrl))
-            true
-        }
-        navView.setupWithNavController(navController)
-
-        findViewById<DrawerLayout>(R.id.drawer_layout).addDrawerListener(object: DrawerLayout.SimpleDrawerListener() {
-            override fun onDrawerOpened(drawerView: View) {
-                hideSoftKeyboard()
+        setContent {
+            MdcTheme {
+                MainScreen()
             }
-        })
+        }
     }
 
-    private fun hideSoftKeyboard() {
-        val inputMethodManager: InputMethodManager = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(this.currentFocus!!.windowToken, 0)
+    @Composable
+    fun MainScreen() {
+        val scaffoldState = rememberScaffoldState(
+            rememberDrawerState(initialValue = DrawerValue.Closed)
+        )
+        val navController = rememberNavController()
+        val coroutineScope = rememberCoroutineScope()
+        val openDrawer = {
+            coroutineScope.launch { scaffoldState.drawerState.open() }
+        }
+        val showSnackbar = { message: String, label: String?, action: () -> Unit, onDismiss: () -> Unit ->
+            coroutineScope.launch {
+                val result = scaffoldState.snackbarHostState.showSnackbar(message, label)
+                if(result == SnackbarResult.ActionPerformed) {
+                    action()
+                } else if (result == SnackbarResult.Dismissed) {
+                    onDismiss()
+                }
+            }
+        }
+
+        val shareAppMsg = stringResource(R.string.share_app_message, marketUrl)
+        Scaffold(
+            scaffoldState = scaffoldState,
+            drawerContent = {
+                Drawer(
+                    onDestinationClicked = { drawerScreen ->
+                        coroutineScope.launch { scaffoldState.drawerState.close() }
+                        if (drawerScreen is DrawerItem.Share) {
+                            openShareIntent(shareAppMsg)
+                        } else {
+                            navController.navigate(drawerScreen.route) {
+                                popUpTo(navController.graph.startDestinationId)
+                                launchSingleTop = true
+                            }
+                        }
+
+                    }
+                )
+            },
+            content = {
+                AppNavGraph(
+                    navController = navController,
+                    openDrawer = { openDrawer() },
+                    showSnackbar = { text, label, action, onDismiss ->
+                        showSnackbar(text, label, action, onDismiss) },
+                    openShareIntent = this::openShareIntent,
+                    openActionWebView = this::openActionViewIntent
+                )
+            }
+        )
     }
 
-    fun openEmailIntent(toEmail: String, subject: String) {
-        val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:$toEmail"))
-        intent.putExtra(Intent.EXTRA_SUBJECT, subject)
-        startActivity(Intent.createChooser(intent, getString(R.string.chooser_title)))
+    @Composable
+    @Preview
+    fun PreviewMainScreen() {
+        MainScreen()
     }
 
-    fun openActionViewIntent(uri: String) {
+    private fun openActionViewIntent(uri: String) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.data = Uri.parse(uri)
         startActivity(intent)
     }
 
-    fun openMarketIntent() {
-        val appUrl = "market://details?id=${BuildConfig.APPLICATION_ID}"
-        var intent = Intent(Intent.ACTION_VIEW, Uri.parse(appUrl))
-        if(intent.resolveActivity(packageManager) == null) {
-            intent = Intent(Intent.ACTION_VIEW, Uri.parse(marketUrl))
-        }
-        startActivity(intent)
-    }
-
-    fun openShareIntent(textToShare: String, subject: String? = null) {
-        val TEXT_TYPE = "text/plain"
+    private fun openShareIntent(textToShare: String, subject: String? = null) {
+        val textype = "text/plain"
         val sendIntent = Intent()
         sendIntent.action = Intent.ACTION_SEND
         sendIntent.putExtra(Intent.EXTRA_TEXT, textToShare)
-        sendIntent.type = TEXT_TYPE
+        sendIntent.type = textype
         subject?.let { sendIntent.putExtra(Intent.EXTRA_SUBJECT, subject) }
         startActivity(Intent.createChooser(sendIntent, getString(R.string.share_with)))
     }

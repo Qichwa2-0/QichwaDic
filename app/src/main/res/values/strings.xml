@@ -101,7 +101,7 @@
     <string name="search_help_writing">Orthography</string>
     <string name="search_help_faq">FAQ</string>
 
-    <string name="search_help_faq_translator">Why aren\'t my sentences translated?</string>
+    <string name="search_help_faq_translator" translatable="false">Why aren\'t my sentences translated?</string>
     <string name="search_help_faq_translator_reply">
         The main goal of this app is to be a search tool for Quechua language vocabulary. For this,
         it lets you search in multiple dictionaries at once.
@@ -148,15 +148,14 @@
     <string name="search_help_writing_video_text">
         You can watch and learn more about Quechua writing on our YouTube channel.
     </string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="online_search_active">Online search activated</string>
+    <string name="offline_search_active">Offline search activated</string>
     <string-array name="searchTypes">
         <item>Contains</item>
         <item>Exact</item>
         <item>Starts with</item>
         <item>Ends with</item>
     </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string-array name="dictLangs">
         <item>qu;Quechua</item>
         <item>es;Spanish</item>

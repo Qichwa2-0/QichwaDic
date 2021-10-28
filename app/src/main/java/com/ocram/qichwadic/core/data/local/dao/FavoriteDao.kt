@@ -1,6 +1,5 @@
 package com.ocram.qichwadic.core.data.local.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -13,7 +12,7 @@ import com.ocram.qichwadic.core.data.model.FavoriteEntity
 interface FavoriteDao {
 
     @Query("SELECT * from favorite ORDER BY word, id")
-    fun getFavorites(): LiveData<List<FavoriteEntity>>
+    fun getFavorites(): List<FavoriteEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addFavorite(favorite: FavoriteEntity): Long

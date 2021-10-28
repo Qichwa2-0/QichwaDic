@@ -8,6 +8,8 @@ class DictionaryFetchResult {
     var cloudError = false
     var localDictionaries: List<DictionaryModel> = emptyList()
     var dictionariesByLang = mutableMapOf<String, MutableList<DictionaryModel>>()
+        private set
+    var allDictionaries: List<DictionaryModel> = emptyList()
 
     fun addError() {
         cloudError = true
@@ -15,18 +17,14 @@ class DictionaryFetchResult {
     }
 
     internal fun mapDictionaries() {
-
-        mergeDictionaries()
-            .sorted()
-            .forEach { dictionary ->
-                dictionary.languageBegin?.let {
-                    val dictionaryModels = dictionariesByLang[it] ?: mutableListOf()
-                    dictionaryModels.add(dictionary)
-                    dictionariesByLang.put(it, dictionaryModels)
-                }
-
-
+        allDictionaries = mergeDictionaries().sorted()
+        allDictionaries.forEach { dictionary ->
+            dictionary.languageBegin?.let {
+                val dictionaryModels = dictionariesByLang[it] ?: mutableListOf()
+                dictionaryModels.add(dictionary)
+                dictionariesByLang.put(it, dictionaryModels)
             }
+        }
     }
 
     private fun mergeDictionaries(): Set<DictionaryModel> {

@@ -1,13 +1,12 @@
 package com.ocram.qichwadic.features.favorites.domain
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
-import java.lang.Exception
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 interface FavoriteInteractor {
 
-    fun getFavorites(): LiveData<List<DefinitionModel>>
+    suspend fun getFavorites(): List<DefinitionModel>
 
     fun addFavorite(definition: DefinitionModel): Boolean
 
@@ -18,14 +17,12 @@ interface FavoriteInteractor {
 
 class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository) : FavoriteInteractor {
 
-    override fun getFavorites(): LiveData<List<DefinitionModel>> {
-        try {
-            return favoriteRepository.getFavorites()
-        } catch (_: Exception) {
-            return liveData {
-                emit(emptyList())
-            }
+    override suspend fun getFavorites():List<DefinitionModel> {
+        var favorites: List<DefinitionModel>
+        withContext(Dispatchers.IO) {
+            favorites = favoriteRepository.getFavorites()
         }
+        return favorites
     }
 
     override fun addFavorite(definition: DefinitionModel): Boolean {

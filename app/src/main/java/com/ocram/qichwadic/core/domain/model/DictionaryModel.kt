@@ -34,4 +34,28 @@ class DictionaryModel(
         !this.existsInLocal && other.existsInLocal ->   1
         else -> this.id - other.id
     }
+
+    fun copy(
+        id: Int = this.id,
+        name: String? = this.name,
+        author: String? = this.author,
+        description: String? = this.description,
+        languageBegin: String? = this.languageBegin,
+        languageEnd: String? = this.languageEnd,
+        isQuechua: Boolean = this.isQuechua,
+        totalEntries: Int = this.totalEntries,
+        existsInLocal: Boolean = this.existsInLocal,
+        downloading: Boolean = this.downloading
+    ) = DictionaryModel(
+        id = id,
+        name = name,
+        author = author,
+        description = description,
+        languageBegin = languageBegin,
+        languageEnd = languageEnd,
+        isQuechua = isQuechua,
+        totalEntries = totalEntries,
+        existsInLocal = existsInLocal,
+        downloading = downloading
+    )
 }

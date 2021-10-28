@@ -4,7 +4,7 @@ data class SearchResultModel(
         var dictionaryId: Int = 0,
         var dictionaryName: String? = null,
         var total: Int = 0,
-        var definitions: MutableList<DefinitionModel> = mutableListOf()
+        var definitions: MutableList<DefinitionModel> = mutableListOf(),
 ) : Comparable<SearchResultModel> {
 
     override fun compareTo(other: SearchResultModel): Int {
@@ -17,3 +17,4 @@ data class SearchResultModel(
         }
     }
 }
+

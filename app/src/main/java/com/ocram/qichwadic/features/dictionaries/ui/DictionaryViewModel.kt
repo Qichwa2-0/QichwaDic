@@ -1,17 +1,40 @@
 package com.ocram.qichwadic.features.dictionaries.ui
 
-import androidx.lifecycle.*
+import androidx.annotation.StringRes
+import androidx.compose.runtime.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DictionaryModel
 import com.ocram.qichwadic.features.dictionaries.domain.DictionaryInteractor
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
+
+sealed class DictionaryDownloadState(@StringRes val strResourceId: Int, val dictionaryName: String)
+class SaveError(dictionaryName: String)
+    : DictionaryDownloadState(R.string.dictionary_save_error, dictionaryName)
+class SaveSuccess(dictionaryName: String)
+    : DictionaryDownloadState(R.string.dictionary_save_success, dictionaryName)
+class DeleteError(dictionaryName: String)
+    : DictionaryDownloadState(R.string.dictionary_delete_error, dictionaryName)
+class DeleteSuccess(dictionaryName: String)
+    : DictionaryDownloadState(R.string.dictionary_delete_success, dictionaryName)
+
+data class DictionaryUiState(
+    var loadingDictionaries: Boolean = true,
+    var cloudLoadingError: Boolean = false,
+    val dictionaryLanguages: List<DictionaryLanguage> = DictionaryLanguage.values().toList(),
+    var selectedLanguage: String = dictionaryLanguages.first().code,
+    var dictionaryDownloadState: DictionaryDownloadState? = null
+)
+
 class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewModel() {
 
-    var dictionariesByLang: MutableLiveData<out MutableMap<String, MutableList<DictionaryModel>>> = MutableLiveData()
-    var dictionaryActionStatus = MutableLiveData<DictionaryActionState>()
-    var localLoading = MutableLiveData<Boolean>(true)
-    var cloudError = MutableLiveData<Boolean>(false)
+    var dictionaryUiState by mutableStateOf(DictionaryUiState())
+        private set
+
+    val allDictionaries = mutableStateListOf<DictionaryModel>()
 
     init {
         loadDictionaries()
@@ -19,56 +42,57 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
 
     private fun loadDictionaries() {
         viewModelScope.launch {
-            localLoading.value = true
-            cloudError.value = false
             try {
                 val fetchResult = interactor.getAllDictionaries()
-                dictionariesByLang.value = fetchResult.dictionariesByLang
-                cloudError.value = fetchResult.cloudError
+                allDictionaries.apply {
+                    clear()
+                    addAll(fetchResult.allDictionaries)
+                }
+                dictionaryUiState = dictionaryUiState.copy(cloudLoadingError = fetchResult.cloudError)
             } catch (_: Exception) {
-                dictionariesByLang.value = mutableMapOf()
+                allDictionaries.clear()
             } finally {
-                localLoading.value = false
+                dictionaryUiState = dictionaryUiState.copy(loadingDictionaries = false)
             }
         }
     }
 
-    fun downloadDictionary(pos: Int, dictionary: DictionaryModel) {
-        viewModelScope.launch {
-            try {
-                interactor.saveDictionaryAndDefinitions(dictionary)
-                dictionary.existsInLocal = true
-                dictionary.downloading = false
-                dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary))
-                dictionary.languageBegin?.let { reorderDictionaries(it) }
-            } catch (e : Throwable) {
-                dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary, true))
-            }
-        }
+    fun onLanguageSelected(lang: String) {
+        dictionaryUiState = dictionaryUiState.copy(selectedLanguage = lang)
     }
 
-    fun removeDictionary(pos: Int, dictionary: DictionaryModel) {
+    fun onDownloadClicked(dictionary: DictionaryModel) {
         viewModelScope.launch {
-            val removedTotal = interactor.removeDictionary(dictionary.id)
-            if (removedTotal) {
-                dictionary.existsInLocal = false
-                dictionary.downloading = false
-                dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary))
-                dictionary.languageBegin?.let { reorderDictionaries(it) }
+            val pos = allDictionaries.indexOf(dictionary)
+            allDictionaries[pos] = dictionary.copy(downloading = true)
+            val actionStatus = if(dictionary.existsInLocal) {
+                removeDictionary(pos, dictionary)
             } else {
-                dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary, true))
+                downloadDictionary(pos, dictionary)
             }
-
+            dictionaryUiState = dictionaryUiState.copy(dictionaryDownloadState = actionStatus)
         }
     }
 
-
-    private fun reorderDictionaries(langName: String) {
-        dictionariesByLang.value?.let { dictLangMap ->
-            dictLangMap[langName]?.let {
-                dictLangMap[langName] = it.sorted().toMutableList()
-                dictionariesByLang.value = dictLangMap
-            }
+    private suspend fun downloadDictionary(pos: Int, dictionary: DictionaryModel)
+    : DictionaryDownloadState {
+        val name = allDictionaries[pos].name ?: ""
+        return try {
+            interactor.saveDictionaryAndDefinitions(dictionary)
+            allDictionaries[pos] = dictionary.copy(downloading = false, existsInLocal = true)
+            SaveSuccess(name)
+        } catch (e : Throwable) {
+            SaveError(name)
         }
+    }
+
+    private suspend fun removeDictionary(pos: Int, dictionary: DictionaryModel)
+    : DictionaryDownloadState {
+        val removedTotal = interactor.removeDictionary(dictionary.id)
+        if (removedTotal) {
+            allDictionaries[pos] = dictionary.copy(downloading = false, existsInLocal = false)
+        }
+        val name = allDictionaries[pos].name ?: ""
+        return if (removedTotal) DeleteSuccess(name) else DeleteError(name)
     }
 }
