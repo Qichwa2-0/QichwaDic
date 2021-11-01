@@ -134,7 +134,7 @@ class SearchViewModel(
                     val results = searchInteractor.queryWord(
                         _searchOffline,
                         uiState.searchParams
-                    ).sortedByDescending { it.total }
+                    )
                     onSearchSuccess(results)
                 } catch (e: Throwable) {
                     onSearchError()

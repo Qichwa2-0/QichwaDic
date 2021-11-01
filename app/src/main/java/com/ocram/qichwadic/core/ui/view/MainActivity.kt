@@ -43,7 +43,7 @@ fun MainScreen(
             SplashScreen()
         } else {
             if (showFirstTime) {
-                IntroScreen(finish = { showFirstTime = false },)
+                IntroScreen(finishIntro = { showFirstTime = false },)
             } else {
                 MainAppScreen()
             }
