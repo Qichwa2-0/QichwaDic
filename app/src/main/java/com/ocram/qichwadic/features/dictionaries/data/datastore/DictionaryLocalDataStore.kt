@@ -6,25 +6,25 @@ import com.ocram.qichwadic.core.data.local.dao.DictionaryDao
 
 interface DictionaryLocalDataStore {
 
-    fun getDictionaries(): List<DictionaryEntity>
+    suspend fun getDictionaries(): List<DictionaryEntity>
 
-    fun saveDictionaryAndDefinitions(dictionary: DictionaryEntity, definitions: List<DefinitionEntity>)
+    suspend fun saveDictionaryAndDefinitions(dictionary: DictionaryEntity, definitions: List<DefinitionEntity>)
 
-    fun removeDictionary(id: Int): Int
+    suspend fun removeDictionary(id: Int): Int
 }
 
 class DictionaryLocalDataStoreImpl
 constructor(private val dictionaryDao: DictionaryDao): DictionaryLocalDataStore {
 
-    override fun getDictionaries(): List<DictionaryEntity> {
+    override suspend fun getDictionaries(): List<DictionaryEntity> {
         return dictionaryDao.getDictionaries()
     }
 
-    override fun saveDictionaryAndDefinitions(dictionary: DictionaryEntity, definitions: List<DefinitionEntity>) {
+    override suspend fun saveDictionaryAndDefinitions(dictionary: DictionaryEntity, definitions: List<DefinitionEntity>) {
         return dictionaryDao.insertDictionaryAndDefinitions(dictionary, definitions)
     }
 
-    override fun removeDictionary(id: Int): Int {
+    override suspend fun removeDictionary(id: Int): Int {
         return dictionaryDao.removeOne(id)
     }
 

@@ -40,7 +40,6 @@ android {
     buildTypes {
         debug {
             buildConfigField "boolean", "DEBUGGABLE", 'true'
-            buildConfigField "String", "SERVER_URL", '"https://www.api.qichwa.net/simitaqi/"'
             minifyEnabled false
         }
         release {
@@ -89,12 +88,6 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
     implementation "androidx.core:core-ktx:$corektx"
 
-    // Support
-    implementation "androidx.appcompat:appcompat:$appcompat"
-    implementation "androidx.constraintlayout:constraintlayout:$constraint_layout"
-    implementation "androidx.cardview:cardview:$cardview"
-    implementation "com.google.android.material:material:$material"
-
     // Architecture components
     // room
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -120,13 +113,8 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
     androidTestImplementation "androidx.test:runner:$testrunner"
 
-    // other deps
-    implementation "com.github.AppIntro:AppIntro:$appIntro"
-
     // Resolve conflicts between main and test APK:
     androidTestImplementation "androidx.annotation:annotation:$annotation"
-    androidTestImplementation "androidx.appcompat:appcompat:$appcompat"
-    androidTestImplementation "com.google.android.material:material:$material"
 
     // Koin
     implementation "io.insert-koin:koin-android:$koin_version"
@@ -144,9 +132,9 @@ dependencies {
     // Tooling support (Previews, etc.)
     implementation "androidx.compose.ui:ui-tooling:$jetpack_compose"
     // Integration with ViewModels
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0-rc01'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.4.0'
     // Integration with navigation
-    implementation "androidx.navigation:navigation-compose:2.4.0-alpha10"
+    implementation "androidx.navigation:navigation-compose:2.4.0-beta01"
     // Integration with livedata
     implementation "androidx.compose.runtime:runtime:$jetpack_compose"
     implementation "androidx.compose.runtime:runtime-livedata:$jetpack_compose"

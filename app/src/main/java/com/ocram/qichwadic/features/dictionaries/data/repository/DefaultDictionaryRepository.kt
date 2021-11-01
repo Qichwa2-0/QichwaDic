@@ -19,7 +19,7 @@ constructor(private val localDataStore: DictionaryLocalDataStore, private val cl
         }
     }
 
-    override fun getSavedDictionaries(): List<DictionaryEntity> {
+    override suspend fun getSavedDictionaries(): List<DictionaryEntity> {
         return localDataStore.getDictionaries()
     }
 
@@ -30,14 +30,14 @@ constructor(private val localDataStore: DictionaryLocalDataStore, private val cl
         }
     }
 
-    override fun saveDictionaryAndDefinitions(dictionary: DictionaryModel, definitions: List<DefinitionModel>) {
+    override suspend fun saveDictionaryAndDefinitions(dictionary: DictionaryModel, definitions: List<DefinitionModel>) {
         localDataStore.saveDictionaryAndDefinitions(
                 DictionaryEntity.fromDictionaryModel(dictionary),
                 definitions.map { DefinitionEntity.fromDefinitionModel(it) }
         )
     }
 
-    override fun removeDictionary(id: Int): Int {
+    override suspend fun removeDictionary(id: Int): Int {
         return localDataStore.removeDictionary(id)
     }
 }

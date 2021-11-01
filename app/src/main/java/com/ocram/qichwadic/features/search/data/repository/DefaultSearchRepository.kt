@@ -2,9 +2,8 @@ package com.ocram.qichwadic.features.search.data.repository
 
 import com.ocram.qichwadic.core.data.remote.ApiResponse
 import com.ocram.qichwadic.core.data.model.DefinitionEntity
-import com.ocram.qichwadic.core.data.model.SearchResultEntity
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
-import com.ocram.qichwadic.core.ui.SearchParams
+import com.ocram.qichwadic.core.domain.model.SearchParams
 import com.ocram.qichwadic.features.search.data.datastore.SearchCloudDataStore
 import com.ocram.qichwadic.features.search.data.SearchType
 import com.ocram.qichwadic.features.search.data.datastore.SearchLocalDataStore
@@ -40,26 +39,18 @@ constructor(private val searchLocalDataStore: SearchLocalDataStore,
 
         if(searchResults.isNotEmpty()) {
 
-            val searchResultMap = mutableMapOf<Int, SearchResultEntity>()
-            searchResults.forEach { searchResultMap.put(it.dictionaryId, it) }
+            val searchResultMap = searchResults.associateBy { it.dictionaryId }
 
+            val definitionsByDictionaryId = searchLocalDataStore.findDefinitionsInDictionary(
+                searchResultMap.keys, queryString
+            ).groupBy(DefinitionEntity::dictionaryId)
 
-            val definitions = searchLocalDataStore.findDefinitionsInDictionary(searchResultMap.keys.toList(), queryString)
-            val definitionsByDictionaryId = definitions.groupBy { it.dictionaryId }
-
-            definitionsByDictionaryId.keys.forEach { dictionaryId ->
-                searchResultMap[dictionaryId]?.let { searchResult ->
-                    definitionsByDictionaryId[dictionaryId]?.let { searchResult.definitions.addAll(it) }
-                }
+            searchResultMap.entries.forEach { entry ->
+                entry.value.definitions.addAll(definitionsByDictionaryId[entry.key] ?: emptyList())
             }
-
-            val finalResult = mutableListOf<SearchResultModel>()
-            finalResult.addAll(searchResultMap.values.map { it.toSearchResultModel() })
-            return finalResult
+            return searchResultMap.values.map { it.toSearchResultModel() }
         }
-
         return emptyList()
-
     }
 
     override suspend fun fetchMoreResultsOffline(dictionaryId: Int, searchType: Int, word: String, page: Int): List<DefinitionEntity> {

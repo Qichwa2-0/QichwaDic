@@ -20,12 +20,14 @@ fun SearchHelpScreen(
     onBackPressed: () -> Unit,
     openActionWebview: (uri: String) -> Unit
 ) {
-    var tabState by remember { mutableStateOf(0) }
     val context = LocalContext.current
-    val tabTitles = listOf(R.string.search_help_writing, R.string.search_help_faq)
+
+    var tabState by remember { mutableStateOf(0) }
+    val tabTitles = remember { listOf(R.string.search_help_writing, R.string.search_help_faq) }
+
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
-            title = "Ayuda",
+            title = stringResource(id = R.string.nav_search_tips),
             buttonIcon = Icons.Filled.ArrowBack,
             onButtonClicked = { onBackPressed() }
         )

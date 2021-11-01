@@ -34,7 +34,14 @@ data class DictionaryEntity(
 ) {
         fun toDictionaryModel(): DictionaryModel {
                 return DictionaryModel(
-                        id, name, author, description, languageBegin, languageEnd, isQuechua, totalEntries
+                        id,
+                        name,
+                        author,
+                        description,
+                        languageBegin,
+                        languageEnd,
+                        isQuechua,
+                        totalEntries
                 )
         }
 

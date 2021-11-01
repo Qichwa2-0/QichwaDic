@@ -3,8 +3,6 @@ package com.ocram.qichwadic.features.favorites.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -111,11 +109,11 @@ fun FavoriteCard(
 @Composable
 @Preview
 fun PreviewFavoritesGrid() {
-    val exampleText = "Amanecer. Inicio del día. <strong>Strong text</strong>"
+    val exampleText = "Example text. <strong>Strong text</strong>"
     FavoritesGrid(
         favorites = listOf(
             DefinitionModel(
-                word = "ACHIKYAY",
+                word = "Word",
                 meaning = exampleText
             ),
             DefinitionModel(

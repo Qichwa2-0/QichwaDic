@@ -3,7 +3,7 @@ package com.ocram.qichwadic.features.search.domain
 import com.ocram.qichwadic.core.data.model.DefinitionEntity
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
-import com.ocram.qichwadic.core.ui.SearchParams
+import com.ocram.qichwadic.core.domain.model.SearchParams
 import com.ocram.qichwadic.features.search.domain.repository.SearchRepository
 
 interface SearchInteractor {

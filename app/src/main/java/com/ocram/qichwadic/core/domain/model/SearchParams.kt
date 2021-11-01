@@ -1,4 +1,4 @@
-package com.ocram.qichwadic.core.ui
+package com.ocram.qichwadic.core.domain.model
 
 data class SearchParams(
     var searchTypePos: Int = 2,

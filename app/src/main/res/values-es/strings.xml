@@ -39,7 +39,7 @@
     </string>
     <string name="dictionary_totalEntries">Total de Palabras: %1$s </string>
 
-    <string name="see_favorites">Ver</string>
+    <string name="message_action_view">Ver</string>
 
     <!-- dictionary messages -->
     <string name="dictionary_delete_error">Error al borrar %s</string>

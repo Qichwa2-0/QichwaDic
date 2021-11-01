@@ -8,19 +8,19 @@ import com.ocram.qichwadic.features.favorites.domain.FavoriteRepository
 class DefaultFavoriteRepository
 constructor(private val favoriteDao: FavoriteDao) : FavoriteRepository {
 
-    override fun getFavorites(): List<DefinitionModel> {
+    override suspend fun getFavorites(): List<DefinitionModel> {
         return favoriteDao.getFavorites().map { it.toDefinitionModel()  }
     }
 
-    override fun addFavorite(favorite: DefinitionModel): Long {
+    override suspend fun addFavorite(favorite: DefinitionModel): Long {
         return favoriteDao.addFavorite(FavoriteEntity.fromDefinitionModel(favorite))
     }
 
-    override fun removeFavorite(favorite: DefinitionModel): Int {
+    override suspend fun removeFavorite(favorite: DefinitionModel): Int {
         return favoriteDao.removeFavorite(FavoriteEntity.fromDefinitionModel(favorite))
     }
 
-    override fun clearFavorites(): Int {
+    override suspend fun clearFavorites(): Int {
         return favoriteDao.clearFavorites()
     }
 }

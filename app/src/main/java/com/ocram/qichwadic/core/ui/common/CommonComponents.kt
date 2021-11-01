@@ -6,23 +6,53 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.ui.theme.defaultDropdownItemTextStyle
 import com.ocram.qichwadic.core.ui.theme.defaultDropdownTextStyle
 import com.ocram.qichwadic.core.ui.theme.textStyleNormal
 import com.ocram.qichwadic.core.ui.theme.textStyleSmall
+
+@Composable
+fun TopBar(
+    title: String = stringResource(id = R.string.app_name),
+    buttonIcon: ImageVector = Icons.Filled.ArrowBack,
+    onButtonClicked: () -> Unit,
+    actions: @Composable () -> Unit = {}
+) {
+    TopAppBar (
+        title = {
+            Text(text = title)
+        },
+        navigationIcon = {
+            IconButton(onClick = onButtonClicked) {
+                Icon(buttonIcon, contentDescription = "")
+            }
+        },
+        actions = { actions() }
+    )
+}
+
+@Composable
+fun LoadingIndicator() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        CircularProgressIndicator(Modifier.align(Alignment.Center))
+    }
+}
 
 @Composable
 fun <T>SimpleGridView(
@@ -100,6 +130,7 @@ fun SelectionDialogText (
                 Icon(
                     imageVector = Icons.Filled.KeyboardArrowDown,
                     contentDescription = "",
+                    tint = textStyle.color
                 )
             }
         }

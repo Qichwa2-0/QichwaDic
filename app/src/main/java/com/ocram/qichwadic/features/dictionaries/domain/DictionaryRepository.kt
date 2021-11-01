@@ -8,11 +8,11 @@ interface DictionaryRepository {
 
     suspend fun getCloudDictionaries(): List<DictionaryModel>
 
-    fun getSavedDictionaries(): List<DictionaryEntity>
+    suspend fun getSavedDictionaries(): List<DictionaryEntity>
 
     suspend fun getDefinitionsByDictionary(dictionaryId: Int): List<DefinitionModel>
 
-    fun saveDictionaryAndDefinitions(dictionary: DictionaryModel, definitions: List<DefinitionModel>)
+    suspend fun saveDictionaryAndDefinitions(dictionary: DictionaryModel, definitions: List<DefinitionModel>)
 
-    fun removeDictionary(id: Int): Int
+    suspend fun removeDictionary(id: Int): Int
 }

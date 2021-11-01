@@ -1,18 +1,16 @@
-package com.ocram.qichwadic.core.ui.common
+package com.ocram.qichwadic.core.ui.view
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.ocram.qichwadic.R
-import com.ocram.qichwadic.features.about.ui.AboutScreen
+import com.ocram.qichwadic.core.ui.common.parseHtml
+import com.ocram.qichwadic.features.about.AboutScreen
 import com.ocram.qichwadic.features.dictionaries.ui.DictionaryScreen
 import com.ocram.qichwadic.features.dictionaries.ui.DictionaryViewModel
 import com.ocram.qichwadic.features.favorites.ui.FavoriteScreen
 import com.ocram.qichwadic.features.favorites.ui.FavoriteViewModel
 import com.ocram.qichwadic.features.help.ui.SearchHelpScreen
-import com.ocram.qichwadic.features.intro.ui.SplashScreen
-import com.ocram.qichwadic.features.intro.ui.SplashViewModel
 import com.ocram.qichwadic.features.search.ui.SearchScreen
 import com.ocram.qichwadic.features.search.ui.SearchViewModel
 import org.koin.androidx.compose.getViewModel
@@ -26,22 +24,13 @@ fun AppNavGraph(
     openActionWebView: (uri: String) -> Unit
 ) {
     val onBackPressed = { navController.popBackStack() }
+    val shareHtmlText = { text: String ->
+        openShareIntent(parseHtml(text).toString(), null)
+    }
     NavHost(
         navController = navController,
-        startDestination = DrawerItem.Splash.route
+        startDestination = DrawerItem.Home.route
     ) {
-        composable(DrawerItem.Splash.route) {
-            val viewModel = getViewModel<SplashViewModel>()
-            SplashScreen(isFirstStart = viewModel.firstStart) {
-                navController.navigate(DrawerItem.Home.route,) {
-                    popUpTo(DrawerItem.Splash.route) { inclusive = true }
-                    anim {
-                        enter = R.anim.enteranim
-                        exit = R.anim.exitanim
-                    }
-                }
-            }
-        }
         composable(DrawerItem.Home.route) {
             val viewModel = getViewModel<SearchViewModel>()
             SearchScreen(
@@ -58,7 +47,7 @@ fun AppNavGraph(
                 switchFromQuechua = viewModel::switchIsFromQuechua,
                 search = viewModel::searchWord,
                 onSearchResultsItemSelected = viewModel::onSearchResultsItemSelected,
-                shareDefinition = { openShareIntent(it, null) },
+                shareDefinition = { shareHtmlText(it) },
                 saveFavoriteDefinition = viewModel::saveFavorite,
                 resetFavoriteAdded = viewModel::resetFavoriteAddedState,
                 fetchMoreResults = viewModel::fetchMoreResults
@@ -89,7 +78,7 @@ fun AppNavGraph(
                 onBackPressed = { onBackPressed() },
                 showSnackbar = { message, onDismiss -> showSnackbar(message, null, {}, onDismiss) },
                 deleteAll = viewModel::clearFavorites,
-                share = { openShareIntent(it, null) },
+                share = { shareHtmlText(it) },
                 deleteOne = viewModel::removeFavorite,
                 resetDeleteStates = viewModel::resetDeleteStates
             )

@@ -11,33 +11,33 @@ interface SearchLocalDataStore {
 
     suspend fun getDictionariesContainingWord(langBegin: String, landEnd: String, wordQuery: String): List<SearchResultEntity>
 
-    suspend fun findDefinitionsInDictionary(dictionaryIds: List<Int>, wordQuery: String): List<DefinitionEntity>
+    suspend fun findDefinitionsInDictionary(dictionaryIds: Collection<Int>, wordQuery: String): List<DefinitionEntity>
 
     suspend fun fetchMoreResults(dictionaryId: Int, word: String, searchType: Int, page: Int): List<DefinitionEntity>
 }
 
 class SearchLocalDataStoreImpl(private val searchDao: SearchDao): SearchLocalDataStore {
 
-    private val MAX_SEARCH_RESULTS = 20
+    private val maxSearchResults = 20
 
     override suspend fun getDictionariesContainingWord(langBegin: String, landEnd: String, wordQuery: String): List<SearchResultEntity> {
         return searchDao.getDictionariesContainingWord(langBegin, landEnd, wordQuery)
     }
 
-    override suspend fun findDefinitionsInDictionary(dictionaryIds: List<Int>, wordQuery: String): List<DefinitionEntity> {
+    override suspend fun findDefinitionsInDictionary(dictionaryIds: Collection<Int>, wordQuery: String): List<DefinitionEntity> {
         return searchDao.findDefinitionsInAllDictionaries(buildCompatibleWritingWord(dictionaryIds, wordQuery))
     }
 
-    private fun buildCompatibleWritingWord(dictionaryIds: List<Int>, word: String): SimpleSQLiteQuery {
+    private fun buildCompatibleWritingWord(dictionaryIds: Collection<Int>, word: String): SimpleSQLiteQuery {
         val query = "SELECT * FROM " +
                 "(SELECT de.* " +
                 "FROM definition de INNER JOIN dictionary di ON de.dictionary_id = di.id " +
                 "WHERE di.id = %s AND de.word LIKE \"%s\" " +
                 "ORDER BY de.id LIMIT 20)"
         val queryBuilder = StringBuilder()
-        for (i in dictionaryIds.indices) {
-            queryBuilder.append(String.format(query, dictionaryIds[i], word))
-            if (i < dictionaryIds.size - 1) {
+        dictionaryIds.forEachIndexed { index, dictionaryId ->
+            queryBuilder.append(query.format(dictionaryId, word))
+            if (index < dictionaryIds.size - 1) {
                 queryBuilder.append(" UNION ALL ")
             }
         }
@@ -49,6 +49,6 @@ class SearchLocalDataStoreImpl(private val searchDao: SearchDao): SearchLocalDat
     }
 
     private fun computeOffset(page: Int): Int {
-        return MAX_SEARCH_RESULTS * (page - 1)
+        return maxSearchResults * (page - 1)
     }
 }

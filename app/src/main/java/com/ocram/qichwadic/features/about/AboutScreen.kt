@@ -1,4 +1,4 @@
-package com.ocram.qichwadic.features.about.ui
+package com.ocram.qichwadic.features.about
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -28,6 +28,10 @@ import com.ocram.qichwadic.core.ui.common.TopBar
 import com.ocram.qichwadic.core.ui.theme.textStyleSmall
 import java.util.*
 
+const val ytChannelUrl = "https://www.youtube.com/channel/UCZ5kIwvo7DlN9qdrQrjUOkg"
+const val websiteUrl = "https://www.qichwa.net"
+const val appUrl = "market://details?id=${BuildConfig.APPLICATION_ID}"
+
 @Composable
 fun AboutScreen(
     onBackPressed: () -> Unit,
@@ -36,6 +40,7 @@ fun AboutScreen(
     val context = LocalContext.current
     val chooserTitle = stringResource(R.string.chooser_title)
     val mailSubject = "${stringResource(R.string.contact_subject)} ${stringResource(R.string.versionName)}"
+
     val sendContactMail = {
         val intent = Intent(
             Intent.ACTION_SENDTO, Uri.parse("mailto:${BuildConfig.DEV_EMAIL}")
@@ -43,19 +48,20 @@ fun AboutScreen(
         intent.putExtra(Intent.EXTRA_SUBJECT, mailSubject)
         startActivity(context, Intent.createChooser(intent, chooserTitle), null)
     }
+
     val openMarketIntent = {
-        val appUrl = "market://details?id=${BuildConfig.APPLICATION_ID}"
         try {
             startActivity(context, Intent(Intent.ACTION_VIEW, Uri.parse(appUrl)), null)
         } catch (e: ActivityNotFoundException) {
             println("Error")
         }
     }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
         TopBar(
-            title = "About",
+            title = stringResource(id = R.string.nav_about),
             buttonIcon = Icons.Filled.ArrowBack,
             onButtonClicked = { onBackPressed() }
         )
@@ -69,7 +75,7 @@ fun AboutScreen(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.logo_q_scaled),
-                contentDescription = "logo"
+                contentDescription = ""
             )
             Text(text = stringResource(id = R.string.author_app_name))
             Text(
@@ -95,14 +101,14 @@ fun AboutScreen(
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
-                    onClick = { openActionWebview("https://www.qichwa.net") },
+                    onClick = { openActionWebview(websiteUrl) },
                     Modifier.fillMaxWidth()
                 ) {
                     Text(text = stringResource(R.string.about_visit_qichwa20))
                 }
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
-                    onClick = { openActionWebview("https://www.youtube.com/channel/UCZ5kIwvo7DlN9qdrQrjUOkg") },
+                    onClick = { openActionWebview(ytChannelUrl) },
                     Modifier.fillMaxWidth()
                 ) {
                     Text(text = stringResource(R.string.about_visit_qichwa20_youtube))

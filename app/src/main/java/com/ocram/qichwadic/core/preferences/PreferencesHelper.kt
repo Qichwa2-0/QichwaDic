@@ -2,7 +2,7 @@ package com.ocram.qichwadic.core.preferences
 
 import android.content.SharedPreferences
 
-import com.ocram.qichwadic.core.ui.SearchParams
+import com.ocram.qichwadic.core.domain.model.SearchParams
 
 class PreferencesHelper(private val sharedPreferences: SharedPreferences)  {
 
@@ -84,11 +84,11 @@ class PreferencesHelper(private val sharedPreferences: SharedPreferences)  {
 
     companion object {
 
-        private val FIRST_START_KEY = "pref_firstStart"
-        private val SEARCH_PARAM_NON_QUECHUA_CODE_KEY = "pref_searchParamNonQuechuaLang"
-        private val SEARCH_PARAM_IS_QUECHUA_KEY = "pref_searchParamFromQuechua"
-        private val SEARCH_PARAM_TYPE_POS_KEY = "pref_searchParamType"
-        private val SEARCH_PARAM_TYPE_WORD_KEY = "pref_searchParamWord"
-        private val SEARCH_MODE_KEY = "pref_searchMode"
+        private const val FIRST_START_KEY = "pref_firstStart"
+        private const val SEARCH_PARAM_NON_QUECHUA_CODE_KEY = "pref_searchParamNonQuechuaLang"
+        private const val SEARCH_PARAM_IS_QUECHUA_KEY = "pref_searchParamFromQuechua"
+        private const val SEARCH_PARAM_TYPE_POS_KEY = "pref_searchParamType"
+        private const val SEARCH_PARAM_TYPE_WORD_KEY = "pref_searchParamWord"
+        private const val SEARCH_MODE_KEY = "pref_searchMode"
     }
 }

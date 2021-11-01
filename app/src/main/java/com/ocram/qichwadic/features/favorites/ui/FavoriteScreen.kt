@@ -12,7 +12,6 @@ import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.ui.common.ConfirmDialog
 import com.ocram.qichwadic.core.ui.common.TopBar
-import com.ocram.qichwadic.core.util.parseHtml
 
 @Composable
 fun FavoriteScreen(
@@ -83,7 +82,7 @@ fun FavoriteScreen(
                         it.word,
                         it.meaning
                     )
-                    share(parseHtml(textToShare).toString())
+                    share(textToShare)
                 },
                 deleteOne = { deleteOne(it) }
             ) 

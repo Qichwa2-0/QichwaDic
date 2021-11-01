@@ -41,7 +41,7 @@
     <string name="dictionary_totalEntries">Total entries: %1$s </string>
     <string name="dictionary_delete_error">Error deleting %s</string>
 
-    <string name="see_favorites">View</string>
+    <string name="message_action_view">View</string>
 
     <!-- dictionary messages -->
     <string name="dictionary_save_error">Error saving %s</string>
@@ -101,7 +101,7 @@
     <string name="search_help_writing">Orthography</string>
     <string name="search_help_faq">FAQ</string>
 
-    <string name="search_help_faq_translator" translatable="false">Why aren\'t my sentences translated?</string>
+    <string name="search_help_faq_translator">Why aren\'t my sentences translated?</string>
     <string name="search_help_faq_translator_reply">
         The main goal of this app is to be a search tool for Quechua language vocabulary. For this,
         it lets you search in multiple dictionaries at once.

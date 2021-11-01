@@ -2,9 +2,7 @@ package com.ocram.qichwadic.features.search.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -13,9 +11,10 @@ import androidx.compose.ui.unit.dp
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
-import com.ocram.qichwadic.core.ui.SearchParams
+import com.ocram.qichwadic.core.domain.model.SearchParams
 import com.ocram.qichwadic.core.ui.common.InfiniteScrollList
-import com.ocram.qichwadic.core.util.parseHtml
+import com.ocram.qichwadic.core.ui.common.LoadingIndicator
+import com.ocram.qichwadic.features.search.ui.components.*
 
 @Composable
 fun SearchScreen(
@@ -42,7 +41,7 @@ fun SearchScreen(
             R.string.favorite_added_success
         else R.string.favorite_added_error
         val text  = stringResource(stringId)
-        val actionLabel = stringResource(R.string.see_favorites)
+        val actionLabel = stringResource(R.string.message_action_view)
         DisposableEffect(searchUiState.favoriteAdded) {
             showSnackbar(text, actionLabel, goToFavorites, resetFavoriteAdded)
             onDispose {
@@ -73,11 +72,7 @@ fun SearchScreen(
             switchFromQuechua
         )
         when (searchUiState.searchState) {
-            SearchState.LOADING -> {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    CircularProgressIndicator(Modifier.align(Alignment.Center))
-                }
-            }
+            SearchState.LOADING -> { LoadingIndicator() }
             SearchState.ERROR -> {
                 SearchResultsError(Modifier.padding(top = 64.dp), searchUiState.offlineSearch)
             }
@@ -142,7 +137,6 @@ fun SearchResults(
     saveFavoriteDefinition: (definition: DefinitionModel) -> Unit,
     fetchMoreResults: () -> Unit
 ) {
-
     if(searchResults.isNotEmpty()) {
         val context = LocalContext.current
         val listState = rememberLazyListState()
@@ -173,7 +167,7 @@ fun SearchResults(
                         it.word,
                         it.meaning
                     )
-                    shareDefinition(parseHtml(textToShare).toString())
+                    shareDefinition(textToShare)
                 },
                 saveFavorite = { saveFavoriteDefinition(it) }
             )

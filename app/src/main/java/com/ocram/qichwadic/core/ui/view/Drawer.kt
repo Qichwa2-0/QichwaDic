@@ -1,4 +1,4 @@
-package com.ocram.qichwadic.core.ui.common
+package com.ocram.qichwadic.core.ui.view
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.*
@@ -24,7 +24,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.ui.theme.textStyleNormal
-import com.ocram.qichwadic.core.ui.theme.textStyleSmall
 
 sealed class DrawerItem(
     val title: String,
@@ -32,8 +31,6 @@ sealed class DrawerItem(
     val buttonIcon: ImageVector? = null,
     @DrawableRes val drawableId: Int? = null,
 ) {
-    object Splash
-        : DrawerItem("Splash", "splash")
     object Home
         : DrawerItem("Home", "home", Icons.Filled.Home)
     object Dictionaries

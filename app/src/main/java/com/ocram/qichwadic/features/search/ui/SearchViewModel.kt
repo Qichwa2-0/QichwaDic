@@ -12,10 +12,8 @@ import com.ocram.qichwadic.features.favorites.domain.FavoriteInteractor
 import com.ocram.qichwadic.core.preferences.PreferencesHelper
 import com.ocram.qichwadic.features.search.domain.SearchInteractor
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
-import com.ocram.qichwadic.core.ui.SearchParams
-import kotlinx.coroutines.Dispatchers
+import com.ocram.qichwadic.core.domain.model.SearchParams
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 enum class SearchState { LOADING, ERROR, SUCCESS }
 enum class FavoriteAdded { NONE, SUCCESS, ERROR }
@@ -43,10 +41,10 @@ data class SearchUiState(
 )
 
 class SearchViewModel(
-        private val searchInteractor: SearchInteractor,
-        private val favoriteInteractor: FavoriteInteractor,
-        private val preferencesHelper: PreferencesHelper
-        ) : ViewModel() {
+    private val searchInteractor: SearchInteractor,
+    private val favoriteInteractor: FavoriteInteractor,
+    private val preferencesHelper: PreferencesHelper
+) : ViewModel() {
 
     private val defaultPlaceholder = placeholders.values.first()
 
@@ -128,24 +126,28 @@ class SearchViewModel(
     }
 
     fun searchWord() {
-        uiState = uiState.copy(searchState = SearchState.LOADING, searchResultSelectedPos = 0)
-        viewModelScope.launch {
-            preferencesHelper.saveSearchWord(uiState.searchParams.searchWord)
-            try {
-                val results = searchInteractor.queryWord(
-                    _searchOffline,
-                    uiState.searchParams
-                ).sortedByDescending { it.total }
-                onSearchSuccess(results)
-            } catch (e: Throwable) {
-                onSearchError()
-            } finally {
+        if(enableSearch()) {
+            uiState = uiState.copy(searchState = SearchState.LOADING, searchResultSelectedPos = 0)
+            viewModelScope.launch {
                 preferencesHelper.saveSearchWord(uiState.searchParams.searchWord)
-                preferencesHelper.saveOfflineSearchMode(_searchOffline)
-                loadSearchModeConfig()
+                try {
+                    val results = searchInteractor.queryWord(
+                        _searchOffline,
+                        uiState.searchParams
+                    ).sortedByDescending { it.total }
+                    onSearchSuccess(results)
+                } catch (e: Throwable) {
+                    onSearchError()
+                } finally {
+                    preferencesHelper.saveSearchWord(uiState.searchParams.searchWord)
+                    preferencesHelper.saveOfflineSearchMode(_searchOffline)
+                    loadSearchModeConfig()
+                }
             }
         }
     }
+
+    private fun enableSearch(): Boolean = uiState.searchParams.searchWord.isNotBlank()
 
     private fun onSearchSuccess(searchResults: List<SearchResultModel>) {
         uiState = uiState.copy(searchState = SearchState.SUCCESS)
@@ -196,12 +198,10 @@ class SearchViewModel(
 
     fun saveFavorite(definition: DefinitionModel) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val added = favoriteInteractor.addFavorite(definition)
-                uiState = uiState.copy(
-                    favoriteAdded = if (added) FavoriteAdded.SUCCESS else FavoriteAdded.ERROR
-                )
-            }
+            val added = favoriteInteractor.addFavorite(definition)
+            uiState = uiState.copy(
+                favoriteAdded = if (added) FavoriteAdded.SUCCESS else FavoriteAdded.ERROR
+            )
         }
     }
 }

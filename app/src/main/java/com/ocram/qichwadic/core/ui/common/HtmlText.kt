@@ -1,6 +1,7 @@
 package com.ocram.qichwadic.core.ui.common
 
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.URLSpan
@@ -8,7 +9,11 @@ import android.view.View
 import android.widget.TextView
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.viewinterop.AndroidView
-import com.ocram.qichwadic.core.util.parseHtml
+import androidx.core.text.HtmlCompat
+
+fun parseHtml(text: String): Spanned {
+    return HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY)
+}
 
 @Composable
 fun HtmlText(

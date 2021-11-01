@@ -36,7 +36,7 @@
     <string name="error_no_cloud_dictionaries">Achacháw! Internetniykita qawapaykullay.</string>
     <string name="dictionary_totalEntries">Haykap simintaq: %1$s </string>
 
-    <string name="see_favorites">Rikuy</string>
+    <string name="message_action_view">Rikuy</string>
 
     <!-- dictionary messages -->
     <string name="dictionary_delete_error">%sta pichachkaptin sasachakuyqa rikurirqamun</string>

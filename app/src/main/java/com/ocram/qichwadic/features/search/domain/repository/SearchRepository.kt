@@ -2,7 +2,7 @@ package com.ocram.qichwadic.features.search.domain.repository
 
 import com.ocram.qichwadic.core.data.model.DefinitionEntity
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
-import com.ocram.qichwadic.core.ui.SearchParams
+import com.ocram.qichwadic.core.domain.model.SearchParams
 
 interface SearchRepository {
 

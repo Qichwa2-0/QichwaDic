@@ -12,7 +12,7 @@
         android:roundIcon="@drawable/logo_q_scaled"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".core.ui.activity.MainActivity"
+        <activity android:name=".core.ui.view.MainActivity"
             android:label="${appLabel}"
             android:windowSoftInputMode="adjustPan"
             android:configChanges="locale">
@@ -21,9 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".features.intro.ui.IntroActivity"
-            android:configChanges="locale" />
     </application>
 
 </manifest>

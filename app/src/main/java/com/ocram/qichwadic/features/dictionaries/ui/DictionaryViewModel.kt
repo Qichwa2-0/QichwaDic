@@ -10,7 +10,6 @@ import com.ocram.qichwadic.features.dictionaries.domain.DictionaryInteractor
 import kotlinx.coroutines.launch
 import java.lang.Exception
 
-
 sealed class DictionaryDownloadState(@StringRes val strResourceId: Int, val dictionaryName: String)
 class SaveError(dictionaryName: String)
     : DictionaryDownloadState(R.string.dictionary_save_error, dictionaryName)
@@ -21,11 +20,12 @@ class DeleteError(dictionaryName: String)
 class DeleteSuccess(dictionaryName: String)
     : DictionaryDownloadState(R.string.dictionary_delete_success, dictionaryName)
 
+const val DEFAULT_LANG_CODE = "qu"
+
 data class DictionaryUiState(
     var loadingDictionaries: Boolean = true,
     var cloudLoadingError: Boolean = false,
-    val dictionaryLanguages: List<DictionaryLanguage> = DictionaryLanguage.values().toList(),
-    var selectedLanguage: String = dictionaryLanguages.first().code,
+    var selectedLanguage: String = DEFAULT_LANG_CODE,
     var dictionaryDownloadState: DictionaryDownloadState? = null
 )
 
@@ -36,9 +36,7 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
 
     val allDictionaries = mutableStateListOf<DictionaryModel>()
 
-    init {
-        loadDictionaries()
-    }
+    init { loadDictionaries() }
 
     private fun loadDictionaries() {
         viewModelScope.launch {

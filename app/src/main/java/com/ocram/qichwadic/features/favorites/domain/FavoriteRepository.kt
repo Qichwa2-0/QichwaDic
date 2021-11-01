@@ -4,12 +4,12 @@ import com.ocram.qichwadic.core.domain.model.DefinitionModel
 
 interface FavoriteRepository {
 
-    fun getFavorites(): List<DefinitionModel>
+    suspend fun getFavorites(): List<DefinitionModel>
 
-    fun addFavorite(favorite: DefinitionModel): Long
+    suspend fun addFavorite(favorite: DefinitionModel): Long
 
-    fun removeFavorite(favorite: DefinitionModel): Int
+    suspend fun removeFavorite(favorite: DefinitionModel): Int
 
-    fun clearFavorites(): Int
+    suspend fun clearFavorites(): Int
 
 }

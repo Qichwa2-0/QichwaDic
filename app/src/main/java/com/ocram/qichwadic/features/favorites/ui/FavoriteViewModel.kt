@@ -9,9 +9,7 @@ import com.ocram.qichwadic.R
 
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.features.favorites.domain.FavoriteInteractor
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 enum class DeletedFavoriteState(val msgId: Int? = null) {
     NONE,
@@ -25,7 +23,6 @@ class FavoriteViewModel(private val favoriteInteractor: FavoriteInteractor) : Vi
 
     val favorites = mutableStateListOf<DefinitionModel>()
     var deletedFavoriteState by mutableStateOf(DeletedFavoriteState.NONE)
-
 
     init {
         loadFavorites()
@@ -42,29 +39,25 @@ class FavoriteViewModel(private val favoriteInteractor: FavoriteInteractor) : Vi
 
     fun removeFavorite(favorite: DefinitionModel) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val removed = favoriteInteractor.removeFavorite(favorite)
-                deletedFavoriteState = if (removed) {
-                    DeletedFavoriteState.DELETE_SUCCESS
-                } else {
-                    DeletedFavoriteState.DELETE_ERROR
-                }
-                loadFavorites()
+            val removed = favoriteInteractor.removeFavorite(favorite)
+            deletedFavoriteState = if (removed) {
+                DeletedFavoriteState.DELETE_SUCCESS
+            } else {
+                DeletedFavoriteState.DELETE_ERROR
             }
+            loadFavorites()
         }
     }
 
     fun clearFavorites() {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                val cleared = favoriteInteractor.clearFavorites()
-                deletedFavoriteState = if (cleared) {
-                    DeletedFavoriteState.CLEAR_SUCCESS
-                } else {
-                    DeletedFavoriteState.CLEAR_ERROR
-                }
-                loadFavorites()
+            val cleared = favoriteInteractor.clearFavorites()
+            deletedFavoriteState = if (cleared) {
+                DeletedFavoriteState.CLEAR_SUCCESS
+            } else {
+                DeletedFavoriteState.CLEAR_ERROR
             }
+            loadFavorites()
         }
     }
 

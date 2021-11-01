@@ -55,13 +55,13 @@ val appModule = module {
     single {
         fun <T> getListDeserializer(): JsonDeserializer<T> {
             return JsonDeserializer { json: JsonElement, typeOfT: Type?, _: JsonDeserializationContext? ->
-                Gson().fromJson<T>(json.asJsonArray, typeOfT)
+                Gson().fromJson(json.asJsonArray, typeOfT)
             }
         }
 
         fun <T> getObjectDeserializer(): JsonDeserializer<T> {
             return JsonDeserializer { json: JsonElement, typeOfT: Type?, _: JsonDeserializationContext? ->
-                Gson().fromJson<T>(json.asJsonObject, typeOfT)
+                Gson().fromJson(json.asJsonObject, typeOfT)
             }
         }
 

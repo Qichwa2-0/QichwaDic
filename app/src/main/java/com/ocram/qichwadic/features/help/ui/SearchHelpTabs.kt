@@ -23,12 +23,11 @@ import androidx.compose.ui.unit.sp
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.ui.theme.listItemHeaderColor
 
+const val videoUrl = "https://www.youtube.com/watch?v=wgCq5X3ezKo&list=PLYJ5xaOE7Z-kmctE2OICkvVH_GFDEj_zP"
+
 @Composable
 fun SearchHelpWritingView(openActionWebview: (uri: String) -> Unit) {
-    val openYtUrl = {
-        val ytUrl = "https://www.youtube.com/watch?v=wgCq5X3ezKo&list=PLYJ5xaOE7Z-kmctE2OICkvVH_GFDEj_zP"
-        openActionWebview(ytUrl)
-    }
+    val openYtUrl = { openActionWebview(videoUrl) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -54,12 +53,14 @@ fun SearchHelpWritingView(openActionWebview: (uri: String) -> Unit) {
             color = listItemHeaderColor
         )
         Image(
-            modifier = Modifier.padding(vertical = 16.dp).clickable { openYtUrl() },
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .clickable { openYtUrl() },
             painter = painterResource(R.drawable.qillqay_youtube_video),
             contentDescription = ""
         )
         Button(onClick = openYtUrl) {
-            Text(text = "Ver")
+            Text(text = stringResource(id = R.string.message_action_view))
         }
     }
 }

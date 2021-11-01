@@ -12,12 +12,12 @@ import com.ocram.qichwadic.core.data.model.DictionaryEntity
 interface DictionaryDao {
 
     @Query("SELECT d.* from dictionary d order by d.is_quechua DESC, d.id")
-    fun getDictionaries(): List<DictionaryEntity>
+    suspend fun getDictionaries(): List<DictionaryEntity>
 
     @Query("DELETE from dictionary where id = :id")
-    fun removeOne(id: Int): Int
+    suspend fun removeOne(id: Int): Int
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertDictionaryAndDefinitions(dictionary: DictionaryEntity, definitions: List<DefinitionEntity>)
+    suspend fun insertDictionaryAndDefinitions(dictionary: DictionaryEntity, definitions: List<DefinitionEntity>)
 
 }

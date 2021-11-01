@@ -12,14 +12,14 @@ import com.ocram.qichwadic.core.data.model.FavoriteEntity
 interface FavoriteDao {
 
     @Query("SELECT * from favorite ORDER BY word, id")
-    fun getFavorites(): List<FavoriteEntity>
+    suspend fun getFavorites(): List<FavoriteEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addFavorite(favorite: FavoriteEntity): Long
+    suspend fun addFavorite(favorite: FavoriteEntity): Long
 
     @Delete
-    fun removeFavorite(favorite: FavoriteEntity): Int
+    suspend fun removeFavorite(favorite: FavoriteEntity): Int
 
     @Query("DELETE from favorite")
-    fun clearFavorites(): Int
+    suspend fun clearFavorites(): Int
 }

@@ -10,9 +10,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DictionaryModel
+import com.ocram.qichwadic.core.ui.view.DictLang
 import com.ocram.qichwadic.core.ui.common.TopBar
 
 @Composable
@@ -24,7 +26,6 @@ fun DictionaryScreen(
     onDictionaryLanguageSelected: (lang: String) -> Unit,
     onDownloadClicked: (DictionaryModel) -> Unit
 ) {
-    println(uiState.loadingDictionaries)
     if(uiState.cloudLoadingError) {
         val onErrorText = stringResource(id = R.string.error_no_cloud_dictionaries)
         LaunchedEffect(uiState.cloudLoadingError) {
@@ -40,7 +41,7 @@ fun DictionaryScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
-            title = "Dictionaries",
+            title = stringResource(id = R.string.nav_dictionaries),
             buttonIcon = Icons.Filled.ArrowBack,
             onButtonClicked = { onBackPressed() }
         )
@@ -54,7 +55,7 @@ fun DictionaryScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 DictionaryDropDown(
-                    items = uiState.dictionaryLanguages,
+                    items = stringArrayResource(id = R.array.dictLangs).map { DictLang(it) },
                     selectedLanguage = uiState.selectedLanguage,
                     onItemSelected = onDictionaryLanguageSelected
                 )

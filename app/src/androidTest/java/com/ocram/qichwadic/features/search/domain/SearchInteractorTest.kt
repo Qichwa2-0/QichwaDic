@@ -17,7 +17,7 @@ import com.ocram.qichwadic.features.search.data.datastore.SearchCloudDataStore
 import com.ocram.qichwadic.core.preferences.PreferencesHelper
 import com.ocram.qichwadic.core.data.model.SearchResultEntity
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
-import com.ocram.qichwadic.core.ui.SearchParams
+import com.ocram.qichwadic.core.domain.model.SearchParams
 import com.ocram.qichwadic.features.search.data.SearchType
 import kotlinx.coroutines.runBlocking
 
@@ -87,12 +87,11 @@ class SearchInteractorTest {
         definition3.meaning = "mano"
         definition3.dictionaryId = dictionary.id
 
-        appDatabase!!.dictionaryDao().insertDictionaryAndDefinitions(
+        runBlocking {
+            appDatabase!!.dictionaryDao().insertDictionaryAndDefinitions(
                 dictionary,
                 listOf(definition, definition2, definition3).map { DefinitionEntity.fromDefinitionModel(it) }
-        )
-
-        runBlocking {
+            )
             val searchParams = SearchParams(SearchType.STARTS_WITH.type, true, "es", wordToSearch)
             val searchResults = searchInteractor?.queryWordOffline(searchParams) ?: emptyList()
             Assert.assertFalse(searchResults.isEmpty())
@@ -122,12 +121,12 @@ class SearchInteractorTest {
             definition.dictionaryId = dictionary.id
             fakeDefinitions.add(definition)
         }
-        appDatabase!!.dictionaryDao().insertDictionaryAndDefinitions(
-                dictionary,
-                fakeDefinitions.map { DefinitionEntity.fromDefinitionModel(it) }
-        )
 
         runBlocking {
+            appDatabase!!.dictionaryDao().insertDictionaryAndDefinitions(
+                dictionary,
+                fakeDefinitions.map { DefinitionEntity.fromDefinitionModel(it) }
+            )
             val searchParams = SearchParams(SearchType.STARTS_WITH.type, true, "es", "a")
             val searchResults = searchInteractor?.queryWordOffline(searchParams) ?: emptyList()
             Assert.assertFalse(searchResults.isEmpty())
@@ -157,12 +156,13 @@ class SearchInteractorTest {
             definition.dictionaryId = dictionary.id
             fakeDefinitions.add(definition)
         }
-        appDatabase!!.dictionaryDao().insertDictionaryAndDefinitions(
-                dictionary,
-                fakeDefinitions.map { DefinitionEntity.fromDefinitionModel(it) }
-        )
+
 
         runBlocking {
+            appDatabase!!.dictionaryDao().insertDictionaryAndDefinitions(
+                dictionary,
+                fakeDefinitions.map { DefinitionEntity.fromDefinitionModel(it) }
+            )
             val searchResults = searchInteractor!!.fetchMoreResults(true, dictionary.id, SearchType.STARTS_WITH.type, "a", 2)
             Assert.assertFalse(searchResults.isEmpty())
 

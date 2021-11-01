@@ -19,13 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DictionaryModel
+import com.ocram.qichwadic.core.ui.view.DictLang
 import com.ocram.qichwadic.core.ui.common.SelectionDialogText
 import com.ocram.qichwadic.core.ui.common.SelectionListDialog
 import com.ocram.qichwadic.core.ui.theme.defaultDropdownItemTextStyle
 
 @Composable
 fun DictionaryDropDown(
-    items: List<DictionaryLanguage>,
+    items: List<DictLang>,
     onItemSelected: (language: String) -> Unit,
     selectedLanguage: String
 ) {
@@ -36,7 +37,7 @@ fun DictionaryDropDown(
             .padding(vertical = 8.dp, horizontal = 16.dp)
             .border(1.dp, Color.Gray, RoundedCornerShape(5.dp)),
         onClick = { expanded = !expanded },
-        text = items.find { it.code == selectedLanguage }?.text ?: "",
+        text = items.find { it.code == selectedLanguage }?.name ?: "",
         enableSelection = canChangeSelection
     )
     if (canChangeSelection) {
@@ -50,7 +51,7 @@ fun DictionaryDropDown(
             onDismissRequest = { expanded = false },
             itemView = {
                 Text(
-                    text = it.text,
+                    text = it.name,
                     modifier = Modifier.fillMaxWidth(),
                     style = defaultDropdownItemTextStyle
                 )
@@ -128,12 +129,14 @@ fun DictionaryIndicator(
     if(dictionary.downloading) {
         CircularProgressIndicator()
     } else {
-        val icon =
-            if (dictionary.existsInLocal) Icon(imageVector = Icons.Filled.Delete, contentDescription = "")
-            else  Icon(painter = painterResource(id = R.drawable.ic_action_download), contentDescription = "")
         IconButton(
             onClick = { onDownloadClicked() },
-            content = { icon }
+            content = {
+                if (dictionary.existsInLocal)
+                    Icon(Icons.Filled.Delete, contentDescription = "")
+                else
+                    Icon(painterResource(R.drawable.ic_action_download), contentDescription = "")
+            }
         )
 
     }
