@@ -59,7 +59,7 @@ class DictionaryInteractorImpl(private val dictionaryRepository: DictionaryRepos
     }
 
     override suspend fun removeDictionary(id: Int): Boolean {
-        var removed = false
+        var removed: Boolean
         withContext(Dispatchers.IO) {
             removed = dictionaryRepository.removeDictionary(id) > 0
         }
