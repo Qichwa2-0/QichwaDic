@@ -4,11 +4,13 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +23,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.core.ui.theme.listItemHeaderColor
 
 const val videoUrl = "https://www.youtube.com/watch?v=wgCq5X3ezKo&list=PLYJ5xaOE7Z-kmctE2OICkvVH_GFDEj_zP"
 
@@ -46,11 +47,12 @@ fun SearchHelpWritingView(openActionWebview: (uri: String) -> Unit) {
             text = stringResource(R.string.search_help_writing_tips),
             fontSize = 14.sp
         )
+        Spacer(modifier = Modifier.padding(vertical = 16.dp))
         Text(
             text = stringResource(R.string.search_help_writing_video_text),
             fontSize = 14.sp,
             textAlign = TextAlign.Center,
-            color = listItemHeaderColor
+            color = MaterialTheme.colors.secondaryVariant
         )
         Image(
             modifier = Modifier
@@ -76,14 +78,20 @@ fun SearchHelpFaqView() {
         Modifier
             .fillMaxSize()
             .padding(8.dp)
-            .verticalScroll(rememberScrollState())) {
+            .verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally) {
         textParts.map { ContentWithTitle(it.key, it.value) }
     }
 }
 
 @Composable
 fun ContentWithTitle(@StringRes titleResId: Int, @StringRes contentResId: Int) {
-    Text(text = stringResource(titleResId), fontWeight = FontWeight.Bold, fontSize = 16.sp)
+    Text(
+        modifier = Modifier.padding(vertical = 8.dp),
+        text = stringResource(titleResId),
+        fontWeight = FontWeight.Bold,
+        fontSize = 16.sp
+    )
     Text(text = stringResource(contentResId), fontSize = 14.sp)
 }
 

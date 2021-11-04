@@ -1,5 +1,6 @@
 package com.ocram.qichwadic.core.ui.common
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,10 +11,11 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -26,6 +28,17 @@ import com.ocram.qichwadic.core.ui.theme.defaultDropdownItemTextStyle
 import com.ocram.qichwadic.core.ui.theme.defaultDropdownTextStyle
 import com.ocram.qichwadic.core.ui.theme.textStyleNormal
 import com.ocram.qichwadic.core.ui.theme.textStyleSmall
+
+@Composable
+fun AppLogo(modifier: Modifier = Modifier, width: Float = 320F) {
+    Box(modifier.width(width.dp)) {
+        Image(
+            modifier = Modifier.padding(8.dp),
+            painter = painterResource(id = R.drawable.logo_q),
+            contentDescription = "App Icon",
+        )
+    }
+}
 
 @Composable
 fun TopBar(
@@ -49,8 +62,10 @@ fun TopBar(
 
 @Composable
 fun LoadingIndicator() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        CircularProgressIndicator(Modifier.align(Alignment.Center))
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .padding(top = 64.dp)) {
+        CircularProgressIndicator(Modifier.align(Alignment.TopCenter))
     }
 }
 
@@ -59,17 +74,22 @@ fun <T>SimpleGridView(
     cols: Int,
     items: List<T>,
     listState: LazyListState = rememberLazyListState(),
-    itemView: @Composable (item: T, modifier: Modifier) -> Unit
+    itemView: @Composable (index: Int, item: T, modifier: Modifier) -> Unit
 ) {
-    val rows = items.chunked(2)
     LazyColumn(state = listState) {
         itemsIndexed(
-            items = rows,
+            items = items.chunked(cols),
             key = { index, _ -> index }
-        ) { _, rowItems ->
-            Row(Modifier.fillMaxWidth()) {
+        ) { index, rowItems ->
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Max)) {
                 rowItems.forEach {
-                    itemView(it, Modifier.weight(1f))
+                    itemView(index, it,
+                        Modifier
+                            .weight(1f)
+                            .fillMaxHeight())
                     if(cols - rowItems.size > 0) {
                         Box(Modifier.weight(1f))
                     }
@@ -84,55 +104,54 @@ fun DefinitionCard(
     definition: DefinitionModel,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = definition.word?.uppercase() ?: "",
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            style = textStyleNormal
-        )
-        HtmlText(
-            text = definition.meaning ?: "",
-            textSize = textStyleSmall.fontSize.value
-        )
+    Surface(modifier = modifier) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = definition.word?.uppercase() ?: "",
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                style = textStyleNormal
+            )
+            HtmlText(
+                text = definition.meaning ?: "",
+                textSize = textStyleSmall.fontSize.value
+            )
+        }
     }
+
 }
 
 @Composable
 fun SelectionDialogText (
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
     text: String,
-    textStyle: TextStyle = defaultDropdownTextStyle,
+    textStyle: TextStyle = defaultDropdownTextStyle(),
     enableSelection: Boolean = true
 ) {
     val clickableModifier = if (enableSelection) Modifier.clickable { onClick() } else Modifier
-    Box(modifier = modifier) {
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .then(clickableModifier),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text(
-                text = text,
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .weight(1f),
-                style = textStyle
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .then(clickableModifier),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ){
+        Text(
+            text = text,
+            modifier = Modifier
+                .padding(vertical = 8.dp)
+                .weight(1f),
+            style = textStyle
+        )
+        if (enableSelection) {
+            Icon(
+                imageVector = Icons.Filled.KeyboardArrowDown,
+                contentDescription = "",
+                tint = textStyle.color
             )
-            if (enableSelection) {
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowDown,
-                    contentDescription = "",
-                    tint = textStyle.color
-                )
-            }
         }
     }
 }
@@ -142,8 +161,20 @@ fun BasicDropdownItemView(text: String) {
     Text(
         text = text,
         modifier = Modifier.fillMaxWidth(),
-        style = defaultDropdownItemTextStyle
+        style = defaultDropdownItemTextStyle()
     )
+}
+
+@Composable
+fun ReversibleList(reversed: Boolean = false, composables: List<@Composable () -> Unit>) {
+    val components = if (reversed) composables.reversed() else composables
+    components.forEach{ it() }
+}
+
+@Composable
+@Preview
+fun PreviewLogo() {
+    AppLogo()
 }
 
 @Composable
@@ -151,8 +182,8 @@ fun BasicDropdownItemView(text: String) {
 fun PreviewDefinitionCard() {
     DefinitionCard(
         definition = DefinitionModel(
-            word = "ACHIKYAY",
-            meaning = "Amanecer. Inicio del día. <strong>Strong text</strong>"
+            word = "DEFINITION",
+            meaning = "Text for meaning. <strong>Strong text</strong>"
         ),
     )
 }
@@ -160,6 +191,6 @@ fun PreviewDefinitionCard() {
 @Composable
 @Preview
 fun PreviewSelectionDialogText() {
-    SelectionDialogText(modifier = Modifier, onClick = {}, text = "Text")
+    SelectionDialogText(onClick = {}, text = "Text")
 }
 

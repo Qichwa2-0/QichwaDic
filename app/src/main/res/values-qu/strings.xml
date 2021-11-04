@@ -28,6 +28,10 @@
     <string name="no_results_online">
         Manam imapas tarisqachu.
     </string>
+    <plurals name="results_found_in_dictionaries">
+        <item quantity="one">%d tarisqakuna kachkan %d simitaqipi</item>
+        <item quantity="other">%d tarisqakuna kachkan %d simitaqikunapi</item>
+    </plurals>
     <string name="error_offline">Achacháw! Sasachakuy kachkan.</string>
     <string name="error_online">Achacháw! Sasachakuy kachkan. Internetniykita qawapaykullay.</string>
 
@@ -148,7 +152,7 @@
 
 
     <string name="search_help_writing_video_text">
-        Astawan runasimimanta runasimi qillqaymantawan yachakuyta munaspaqa, YouTubepi kanalniykuta qawariykuy.
+        Astawan runasimimanta runasimi qillqaymantawan yachakuyta munaspaqa, kay videota qawariykuy:
     </string>
     <string name="online_search_active">Internetwan maskana akllasqam</string>
     <string name="offline_search_active">Mana internetwan maskana akllasqam</string>

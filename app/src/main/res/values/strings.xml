@@ -29,6 +29,10 @@
     <!-- search messages -->
     <string name="no_results_offline">No results found. \nTry checking the word\'s spelling or downloading more dictionaries.</string>
     <string name="no_results_online">No results found.</string>
+    <plurals name="results_found_in_dictionaries">
+        <item quantity="one">%d results found in %d dictionary</item>
+        <item quantity="other">%d results found in %d dictionaries</item>
+    </plurals>
 
     <string name="error_offline">An error occurred.</string>
     <string name="error_online">An error occurred. Please, verify your internet connection.</string>
@@ -146,7 +150,7 @@
     </string>
 
     <string name="search_help_writing_video_text">
-        You can watch and learn more about Quechua writing on our YouTube channel.
+        You can watch and learn more about Quechua writing in this video:
     </string>
     <string name="online_search_active">Online search activated</string>
     <string name="offline_search_active">Offline search activated</string>

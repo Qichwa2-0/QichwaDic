@@ -2,6 +2,8 @@ package com.ocram.qichwadic.features.help.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Surface
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
@@ -12,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.ui.common.TopBar
 
@@ -40,11 +43,14 @@ fun SearchHelpScreen(
                 )
             }
         }
-        if (tabState == 0) {
-            SearchHelpWritingView(openActionWebview)
-        } else {
-            SearchHelpFaqView()
+        Surface(Modifier.padding(horizontal = 16.dp)) {
+            if (tabState == 0) {
+                SearchHelpWritingView(openActionWebview)
+            } else {
+                SearchHelpFaqView()
+            }
         }
+
     }
 }
 

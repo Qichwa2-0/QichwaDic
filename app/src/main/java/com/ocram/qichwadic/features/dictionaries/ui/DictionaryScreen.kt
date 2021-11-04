@@ -86,17 +86,3 @@ fun DictionaryScreenPreview() {
         onDictionaryLanguageSelected = {}
     ) {}
 }
-
-@Composable
-@Preview
-fun DictionaryCardPreview() {
-    DictionaryCard(
-        dictionary = DictionaryModel(
-            id = 1,
-            name = "Dictionary",
-            description = "some description",
-            author = "the author",
-            totalEntries = 199
-        )
-    ) {}
-}

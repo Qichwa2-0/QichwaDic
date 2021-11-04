@@ -8,9 +8,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.ui.common.ConfirmDialog
+import com.ocram.qichwadic.core.ui.common.SimpleGridView
 import com.ocram.qichwadic.core.ui.common.TopBar
 
 @Composable
@@ -70,23 +73,65 @@ fun FavoriteScreen(
                 }
             }
         )
-        if(favorites.isEmpty()) {
-            EmptyFavoritesView()
-        } else {
-            FavoritesGrid(
-                favorites = favorites,
-                share = {
-                    val textToShare = context.getString(
-                        R.string.share_definition_from_dictionary,
-                        it.dictionaryName,
-                        it.word,
-                        it.meaning
-                    )
-                    share(textToShare)
-                },
-                deleteOne = { deleteOne(it) }
-            ) 
+        Surface(Modifier.fillMaxSize()) {
+            if(favorites.isEmpty()) {
+                EmptyFavoritesView()
+            } else {
+                Box(Modifier.fillMaxWidth().padding(8.dp)) {
+                    SimpleGridView(
+                        cols = 2,
+                        items = favorites
+                    ) { _, favorite, modifier -> FavoriteCard(
+                        modifier = modifier,
+                        definition = favorite,
+                        share = {
+                            share(
+                                context.getString(
+                                    R.string.share_definition_from_dictionary,
+                                    favorite.dictionaryName,
+                                    favorite.word,
+                                    favorite.meaning
+                                )
+                            )
+                        },
+                        delete = { deleteOne(favorite) })
+                    }
+                }
+
+            }
         }
+
     }
 }
 
+@Preview
+@Composable
+fun PreviewEmptyFavoriteScreen() {
+    FavoriteScreen(
+        deletedFavoriteState = DeletedFavoriteState.NONE,
+        favorites = emptyList(),
+        onBackPressed = { },
+        showSnackbar = {_, _ -> },
+        deleteAll = { },
+        share = {},
+        deleteOne = {}
+    ) {}
+}
+
+@Preview
+@Composable
+fun PreviewFavoriteScreen() {
+    FavoriteScreen(
+        deletedFavoriteState = DeletedFavoriteState.NONE,
+        favorites = listOf(
+            DefinitionModel(id = 1, word = "Word 1", meaning = "Meaning for 1"),
+            DefinitionModel(id = 2, word = "Word 2", meaning = "Meaning for 2"),
+            DefinitionModel(id = 3, word = "Word 3", meaning = "Meaning for 3")
+        ),
+        onBackPressed = { },
+        showSnackbar = {_, _ -> },
+        deleteAll = { },
+        share = {},
+        deleteOne = {}
+    ) {}
+}

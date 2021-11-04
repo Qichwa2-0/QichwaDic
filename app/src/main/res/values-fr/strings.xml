@@ -28,6 +28,10 @@
     <string name="no_results_online">
         Aucun résultat trouvé.
     </string>
+    <plurals name="results_found_in_dictionaries">
+        <item quantity="one">%d résultats dans %d dictionnaire</item>
+        <item quantity="other">%d résultats dans %d dictionaries</item>
+    </plurals>
 
     <string name="error_offline">Une erreur est survenue.</string>
     <string name="error_online">Une erreur est survenue. Veuillez vérifier votre connexion internet.</string>
@@ -149,7 +153,7 @@
 
 
     <string name="search_help_writing_video_text">
-        Vous pouvez trouver plus d\'information sur la langue quechua et son écriture sur notre chaîne YouTube.
+        Vous pouvez trouver plus d\'information sur la langue quechua et son écriture en regardant cette vidéo :
     </string>
     <string name="online_search_active">Recherche en ligne activée</string>
     <string name="offline_search_active">Recherche hors-ligne activée</string>

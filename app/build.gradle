@@ -121,6 +121,8 @@ dependencies {
     // Koin AndroidX Jetpack Compose
     implementation "io.insert-koin:koin-androidx-compose:$koin_version"
 
+    // appcompat
+    implementation "androidx.appcompat:appcompat:$appcompat"
     // for compose
 
     // Integration with activities
@@ -140,5 +142,7 @@ dependencies {
     implementation "androidx.compose.runtime:runtime-livedata:$jetpack_compose"
 
     // When using a AppCompat theme
-    implementation "com.google.android.material:compose-theme-adapter:$jetpack_compose"
+    implementation "com.google.android.material:compose-theme-adapter:$accompanist_theme_adapter"
+
+
 }

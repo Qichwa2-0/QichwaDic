@@ -23,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.ui.common.DefinitionCard
-import com.ocram.qichwadic.core.ui.common.SimpleGridView
 import com.ocram.qichwadic.core.ui.theme.textStyleSmall
 
 @Composable
@@ -44,23 +43,6 @@ fun EmptyFavoritesView() {
 }
 
 @Composable
-fun FavoritesGrid(
-    favorites: List<DefinitionModel>,
-    share: (favorite: DefinitionModel) -> Unit,
-    deleteOne: (favorite: DefinitionModel) -> Unit
-) {
-    SimpleGridView(
-        cols = 2,
-        items = favorites
-    ) { favorite, modifier -> FavoriteCard(
-        modifier = modifier,
-        definition = favorite,
-        share = { share(favorite) },
-        delete = { deleteOne(favorite) })
-    }
-}
-
-@Composable
 fun FavoriteCard(
     modifier: Modifier,
     definition: DefinitionModel,
@@ -69,7 +51,6 @@ fun FavoriteCard(
 ) {
     Surface(
         modifier = modifier
-            .background(color = Color.White)
             .padding(horizontal = 4.dp, vertical = 8.dp)
             .border(
                 width = 1.dp,
@@ -104,30 +85,6 @@ fun FavoriteCard(
             }
         }
     }
-}
-
-@Composable
-@Preview
-fun PreviewFavoritesGrid() {
-    val exampleText = "Example text. <strong>Strong text</strong>"
-    FavoritesGrid(
-        favorites = listOf(
-            DefinitionModel(
-                word = "Word",
-                meaning = exampleText
-            ),
-            DefinitionModel(
-                word = "Word 2",
-                meaning = exampleText.repeat(10)
-            ),
-            DefinitionModel(
-                word = "Word 3",
-                meaning = exampleText
-            )
-        ),
-        {},
-        {}
-    )
 }
 
 @Composable

@@ -1,5 +1,7 @@
 package com.ocram.qichwadic.core.ui.theme
 
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -22,14 +24,19 @@ val textStyleNormal = TextStyle(
     fontSize = 14.sp
 )
 
-val defaultDropdownTextStyle = TextStyle(
-    color = primaryDarkColor,
+@Composable
+fun defaultDropdownTextStyle(): TextStyle = TextStyle(
+    color = MaterialTheme.colors.primary,
     textAlign = TextAlign.Center,
     fontSize = textStyleNormal.fontSize
 )
 
-val defaultDropdownItemTextStyle = TextStyle(
-    color = customTextColor,
+@Composable
+fun searchOptionsDropdownTextStyle(): TextStyle
+        = defaultDropdownTextStyle().copy(color = MaterialTheme.colors.onPrimary)
+
+@Composable
+fun defaultDropdownItemTextStyle(): TextStyle = TextStyle(
     textAlign = TextAlign.Center,
     fontSize = textStyleNormal.fontSize
 )

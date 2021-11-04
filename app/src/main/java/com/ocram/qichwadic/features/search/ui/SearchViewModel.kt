@@ -50,10 +50,12 @@ class SearchViewModel(
 
     var uiState by mutableStateOf(SearchUiState())
 
-    var searchResults = mutableStateListOf<SearchResultModel>()
+    var searchResults by mutableStateOf(listOf<SearchResultModel>())
         private set
 
     private var _searchOffline = false
+
+    private val enableSearch get(): Boolean = uiState.searchParams.searchWord.isNotBlank()
 
     init {
         loadSearchModeConfig()
@@ -126,18 +128,15 @@ class SearchViewModel(
     }
 
     fun searchWord() {
-        if(enableSearch()) {
+        if(enableSearch) {
             uiState = uiState.copy(searchState = SearchState.LOADING, searchResultSelectedPos = 0)
             viewModelScope.launch {
                 preferencesHelper.saveSearchWord(uiState.searchParams.searchWord)
                 try {
-                    val results = searchInteractor.queryWord(
-                        _searchOffline,
-                        uiState.searchParams
-                    )
-                    onSearchSuccess(results)
+                    searchResults = searchInteractor.queryWord(_searchOffline, uiState.searchParams)
+                    uiState = uiState.copy(searchState = SearchState.SUCCESS)
                 } catch (e: Throwable) {
-                    onSearchError()
+                    uiState = uiState.copy(searchState = SearchState.ERROR)
                 } finally {
                     preferencesHelper.saveSearchWord(uiState.searchParams.searchWord)
                     preferencesHelper.saveOfflineSearchMode(_searchOffline)
@@ -147,19 +146,6 @@ class SearchViewModel(
         }
     }
 
-    private fun enableSearch(): Boolean = uiState.searchParams.searchWord.isNotBlank()
-
-    private fun onSearchSuccess(searchResults: List<SearchResultModel>) {
-        uiState = uiState.copy(searchState = SearchState.SUCCESS)
-        this.searchResults.apply {
-            clear()
-            addAll(searchResults)
-        }
-    }
-
-    private fun onSearchError() {
-        uiState = uiState.copy(searchState = SearchState.ERROR)
-    }
 
     fun onSearchResultsItemSelected(pos: Int) {
         uiState = uiState.copy(searchResultSelectedPos = pos)

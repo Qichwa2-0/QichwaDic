@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
 import com.ocram.qichwadic.BuildConfig
 import com.ocram.qichwadic.R
+import com.ocram.qichwadic.core.ui.theme.AppTheme
 import kotlinx.coroutines.launch
 
 private const val marketUrl =
@@ -58,33 +59,35 @@ fun MainAppScreen() {
 
     val shareAppMsg = remember { context.getString(R.string.share_app_message, marketUrl) }
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        drawerContent = {
-            Drawer(
-                onDestinationClicked = { drawerScreen ->
-                    coroutineScope.launch { scaffoldState.drawerState.close() }
-                    if (drawerScreen is DrawerItem.Share) {
-                        openShareIntent(shareAppMsg, null)
-                    } else {
-                        navController.navigate(drawerScreen.route) {
-                            popUpTo(navController.graph.startDestinationId)
-                            launchSingleTop = true
+    AppTheme {
+        Scaffold(
+            scaffoldState = scaffoldState,
+            drawerContent = {
+                Drawer(
+                    onDestinationClicked = { drawerScreen ->
+                        coroutineScope.launch { scaffoldState.drawerState.close() }
+                        if (drawerScreen is DrawerItem.Share) {
+                            openShareIntent(shareAppMsg, null)
+                        } else {
+                            navController.navigate(drawerScreen.route) {
+                                popUpTo(navController.graph.startDestinationId)
+                                launchSingleTop = true
+                            }
                         }
-                    }
 
-                }
-            )
-        },
-        content = {
-            AppNavGraph(
-                navController = navController,
-                openDrawer = { openDrawer() },
-                showSnackbar = { text, label, action, onDismiss ->
-                    showSnackbar(text, label, action, onDismiss) },
-                openShareIntent = openShareIntent,
-                openActionWebView = openActionViewIntent
-            )
-        }
-    )
+                    }
+                )
+            },
+            content = {
+                AppNavGraph(
+                    navController = navController,
+                    openDrawer = { openDrawer() },
+                    showSnackbar = { text, label, action, onDismiss ->
+                        showSnackbar(text, label, action, onDismiss) },
+                    openShareIntent = openShareIntent,
+                    openActionWebView = openActionViewIntent
+                )
+            }
+        )
+    }
 }

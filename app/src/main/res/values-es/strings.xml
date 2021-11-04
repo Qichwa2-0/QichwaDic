@@ -28,6 +28,10 @@
     <string name="no_results_online">
         No se encontraron resultados.
     </string>
+    <plurals name="results_found_in_dictionaries">
+        <item quantity="one">%d resultados en %d diccionario</item>
+        <item quantity="other">%d resultados en %d diccionarios</item>
+    </plurals>
 
     <string name="error_offline">Error inesperado. Por favor, verifique los diccionarios instalados.</string>
     <string name="error_online">Error inesperado. Por favor, verifique su conexión a internet.</string>
@@ -153,7 +157,7 @@
 
 
     <string name="search_help_writing_video_text">
-        En nuestro canal de YouTube tenemos unos videos dedicados a la escritura en quechua
+        A continuación, un video sobre la escritura en quechua:
     </string>
     <string name="online_search_active">Búsqueda en línea activada</string>
     <string name="offline_search_active">Búsqueda local activada</string>

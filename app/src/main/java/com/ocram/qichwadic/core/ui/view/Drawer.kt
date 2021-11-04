@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ocram.qichwadic.R
+import com.ocram.qichwadic.core.ui.common.AppLogo
 import com.ocram.qichwadic.core.ui.theme.textStyleNormal
 
 sealed class DrawerItem(
@@ -73,15 +74,7 @@ fun Drawer(onDestinationClicked: (route: DrawerItem) -> Unit) {
                         /*TODO angle 45*/
                     )
                 ),
-        ) {
-            Image(
-                modifier = Modifier
-                    .align(Center)
-                    .padding(8.dp),
-                painter = painterResource(id = R.drawable.logo_q_scaled),
-                contentDescription = "App Icon",
-                )
-        }
+        ) { AppLogo(Modifier.align(Center), width = 240F) }
         Column(
             Modifier
                 .padding(start = 8.dp)

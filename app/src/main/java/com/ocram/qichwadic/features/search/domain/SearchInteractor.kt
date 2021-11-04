@@ -21,10 +21,12 @@ interface SearchInteractor {
 class SearchInteractorImpl(private val searchRepository: SearchRepository) : SearchInteractor {
 
     override suspend fun queryWord(offline: Boolean, searchParams: SearchParams): List<SearchResultModel> {
-        if(offline) {
-            return this.queryWordOffline(searchParams)
+        val result = if(offline) {
+             this.queryWordOffline(searchParams)
+        } else {
+            queryWordOnline(searchParams)
         }
-        return queryWordOnline(searchParams)
+        return result.sortedByDescending { it.total }
     }
 
     override suspend fun queryWordOffline(searchParams: SearchParams): List<SearchResultModel> {

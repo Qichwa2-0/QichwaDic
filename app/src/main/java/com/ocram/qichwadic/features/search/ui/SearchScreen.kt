@@ -1,5 +1,6 @@
 package com.ocram.qichwadic.features.search.ui
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
@@ -12,8 +13,8 @@ import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
 import com.ocram.qichwadic.core.domain.model.SearchParams
-import com.ocram.qichwadic.core.ui.common.InfiniteScrollList
 import com.ocram.qichwadic.core.ui.common.LoadingIndicator
+import com.ocram.qichwadic.core.ui.common.SimpleGridView
 import com.ocram.qichwadic.features.search.ui.components.*
 
 @Composable
@@ -71,23 +72,25 @@ fun SearchScreen(
             onLanguageSelected,
             switchFromQuechua
         )
-        when (searchUiState.searchState) {
-            SearchState.LOADING -> { LoadingIndicator() }
-            SearchState.ERROR -> {
-                SearchResultsError(Modifier.padding(top = 64.dp), searchUiState.offlineSearch)
-            }
-            SearchState.SUCCESS -> {
-                SearchResults(
-                    offline = searchUiState.offlineSearch,
-                    searchResults = searchResults,
-                    selectedItemPos = searchUiState.searchResultSelectedPos,
-                    fetchMoreLoading = searchUiState.fetchMoreLoading,
-                    goToDictionaries = goToDictionaries,
-                    onItemSelected = onSearchResultsItemSelected,
-                    shareDefinition = shareDefinition,
-                    saveFavoriteDefinition = saveFavoriteDefinition,
-                    fetchMoreResults = fetchMoreResults
-                )
+        Crossfade(targetState = searchUiState.searchState) { state ->
+            when (state) {
+                SearchState.LOADING -> { LoadingIndicator() }
+                SearchState.ERROR -> {
+                    SearchResultsError(Modifier.padding(top = 64.dp), searchUiState.offlineSearch)
+                }
+                SearchState.SUCCESS -> {
+                    SearchResults(
+                        offline = searchUiState.offlineSearch,
+                        searchResults = searchResults,
+                        selectedItemPos = searchUiState.searchResultSelectedPos,
+                        fetchMoreLoading = searchUiState.fetchMoreLoading,
+                        goToDictionaries = goToDictionaries,
+                        onItemSelected = onSearchResultsItemSelected,
+                        shareDefinition = shareDefinition,
+                        saveFavoriteDefinition = saveFavoriteDefinition,
+                        fetchMoreResults = fetchMoreResults
+                    )
+                }
             }
         }
     }
@@ -141,37 +144,50 @@ fun SearchResults(
         val context = LocalContext.current
         val listState = rememberLazyListState()
 
-        if (searchResults[selectedItemPos].definitions.size - listState.firstVisibleItemIndex < 5) {
-            fetchMoreResults()
-        }
+        val definitionToShareTemplate = context.getString(R.string.share_definition_from_dictionary)
+        val definitions = searchResults[selectedItemPos].definitions
+
         LaunchedEffect(selectedItemPos) {
             listState.scrollToItem(0)
         }
-        SearchResultsDropdown(
-            searchResults = searchResults,
-            selectedItemPos = selectedItemPos,
-            onItemSelected = onItemSelected
-        )
-        InfiniteScrollList(
-            items = searchResults[selectedItemPos].definitions,
-            computeKey = { it.id },
-            state = listState,
-            fetchMoreLoading = fetchMoreLoading,
-        ) {
-            ResultDefinitionCard(
-                definition = it,
-                shareDefinition = {
-                    val textToShare = context.getString(
-                        R.string.share_definition_from_dictionary,
-                        it.dictionaryName,
-                        it.word,
-                        it.meaning
-                    )
-                    shareDefinition(textToShare)
-                },
-                saveFavorite = { saveFavoriteDefinition(it) }
+        Column(Modifier.fillMaxSize()) {
+            SearchResultsDropdown(
+                searchResults = searchResults,
+                selectedItemPos = selectedItemPos,
+                onItemSelected = onItemSelected
             )
+            BoxWithConstraints {
+                val cols = if (maxWidth < 400.dp) 1 else 2
+                listState.layoutInfo.visibleItemsInfo.lastOrNull()?.let {
+                    if ((definitions.size - (it.index) * cols) < 5) {
+                        fetchMoreResults()
+                    }
+                }
+                SimpleGridView(
+                    cols = cols,
+                    items = definitions,
+                    listState = listState
+                ) { index, item, modifier ->
+                    ResultDefinitionCard(
+                        modifier = modifier,
+                        definition = item,
+                        shareDefinition = {
+                            val textToShare = definitionToShareTemplate.format(
+                                item.dictionaryName,
+                                item.word,
+                                item.meaning
+                            )
+                            shareDefinition(textToShare)
+                        },
+                        saveFavorite = { saveFavoriteDefinition(item) }
+                    )
+                    if(index == definitions.size - 1 && fetchMoreLoading) {
+                        LoadingIndicator()
+                    }
+                }
+            }
         }
+
     } else {
         if (offline) {
             SearchNoResultsOffline(Modifier.padding(top = 64.dp), goToDictionaries)

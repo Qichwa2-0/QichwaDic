@@ -11,6 +11,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -21,7 +22,6 @@ import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
 import com.ocram.qichwadic.core.ui.common.*
-import com.ocram.qichwadic.core.ui.theme.*
 
 @Composable
 fun SearchResultsDropdown(
@@ -34,36 +34,47 @@ fun SearchResultsDropdown(
     val buildItemText = { item: SearchResultModel -> "(${item.total}) ${item.dictionaryName}" }
     if(searchResults.isNotEmpty()) {
         val canChangeSelection = searchResults.size > 1
-        SelectionDialogText(
-            modifier = Modifier
+        Box(
+            Modifier
                 .padding(vertical = 8.dp, horizontal = 16.dp)
-                .border(1.dp, Color.Gray, RoundedCornerShape(5.dp)),
-            onClick = { expanded = !expanded },
-            text = buildItemText(selectedItem),
-            enableSelection = canChangeSelection
-        )
+                .border(1.dp, MaterialTheme.colors.primaryVariant, RoundedCornerShape(5.dp))) {
+            SelectionDialogText(
+                onClick = { expanded = !expanded },
+                text = buildItemText(selectedItem),
+                enableSelection = canChangeSelection
+            )
+        }
+
+        val dialogTitle = LocalContext
+            .current
+            .resources
+            .getQuantityString(
+                R.plurals.results_found_in_dictionaries,
+                searchResults.size,
+                searchResults.sumOf { it.total },
+                searchResults.size
+            )
         SelectionListDialog(
             open = expanded,
             items = searchResults,
             onItemSelected = {
-                onItemSelected(searchResults.indexOf(it))
+                onItemSelected(it)
                 expanded = !expanded
             },
             onDismissRequest = { expanded = false },
             titleView = {
-                Row(
+                Box(
                     Modifier
                         .fillMaxWidth()
-                        .background(primaryDarkColor)
-                        .padding(vertical = 16.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                        .background(MaterialTheme.colors.primaryVariant)
+                        .padding(vertical = 16.dp)
                 ) {
                     Text(
-                        text = "Results found in ${searchResults.size} dictionaries",
+                        modifier = Modifier.align(Alignment.Center),
+                        text = dialogTitle,
                         textAlign = TextAlign.Center,
                         fontSize = 14.sp,
-                        color = Color.White
+                        color = MaterialTheme.colors.onPrimary
                     )
                 }
             },
@@ -78,26 +89,28 @@ fun DictionaryNameWithTotal(item: SearchResultModel) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(horizontal = 8.dp)
     ) {
-        Surface(
-            modifier = Modifier.weight(2f),
-            color = primaryColor,
-            border = BorderStroke(1.dp, primaryColor),
-            shape = CircleShape
-        ) {
-            Text(
-                text = "${item.total}",
-                color = Color.White,
-                textAlign = TextAlign.Center,
-                fontSize = 12.sp,
-                modifier = Modifier.fillMaxSize().padding(4.dp)
-            )
-        }
         Text(
-            modifier = Modifier.weight(9f).padding(horizontal = 8.dp),
+            modifier = Modifier
+                .weight(9f)
+                .padding(horizontal = 8.dp),
             text = item.dictionaryName ?: "",
             fontSize = 14.sp,
             textAlign = TextAlign.Center
         )
+        Box(
+            modifier = Modifier.weight(2f),
+        ) {
+            Text(
+                text = "${item.total}",
+                color = MaterialTheme.colors.secondary,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .fillMaxSize()
+                    .padding(4.dp)
+            )
+        }
     }
 }
 
@@ -124,6 +137,7 @@ fun SearchNoResultsOnline(modifier: Modifier = Modifier) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
+            modifier = Modifier.padding(horizontal = 4.dp),
             painter = painterResource(id = R.drawable.ic_sentiment_dissatisfied),
             contentDescription = ""
         )
@@ -141,13 +155,13 @@ fun SearchNoResultsOffline(modifier: Modifier = Modifier, goToDictionaries: () -
             stringResource(id = R.string.no_results_offline),
             fontSize = 16.sp,
             textAlign = TextAlign.Center,
-            color = customTextColor
+            color = MaterialTheme.colors.secondaryVariant
         )
         TextButton(
             modifier = Modifier.padding(vertical = 16.dp),
             onClick = goToDictionaries,
             colors = ButtonDefaults.textButtonColors(
-                contentColor = Color.White,
+                contentColor = MaterialTheme.colors.onPrimary,
                 backgroundColor = MaterialTheme.colors.primary
             )
         ) {
@@ -178,13 +192,10 @@ fun ResultDefinitionCard(
 ) {
     Surface(
         modifier = modifier
-            .background(color = Color.White)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .border(
-                width = 1.dp,
-                color = Color.LightGray,
-                shape = RoundedCornerShape(5.dp)
-            )
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(5.dp),
+        elevation = 2.dp,
+        border = BorderStroke(1.dp, Color.LightGray)
     ) {
         Row(
             Modifier
@@ -194,7 +205,7 @@ fun ResultDefinitionCard(
         ) {
             DefinitionCard(definition = definition, modifier = Modifier.weight(8f))
             Column(
-                modifier = Modifier.weight(2f),
+                modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -202,10 +213,7 @@ fun ResultDefinitionCard(
                     Icon(imageVector = Icons.Filled.Favorite, contentDescription = "")
                 }
                 IconButton(onClick = shareDefinition) {
-                    Icon(
-                        imageVector = Icons.Filled.Share,
-                        contentDescription = ""
-                    )
+                    Icon(imageVector = Icons.Filled.Share, contentDescription = "")
                 }
             }
         }
@@ -228,4 +236,13 @@ fun PreviewSearchNoResultsOnline() {
 @Preview
 fun PreviewSearchNoResultsOffline() {
     SearchNoResultsOffline {}
+}
+
+@Composable
+@Preview
+fun PreviewResultDefinitionCard() {
+    ResultDefinitionCard(
+        definition = DefinitionModel(word = "My word", meaning = "A long meaning. More meaning"),
+        shareDefinition = { /*TODO*/ }
+    ) {}
 }

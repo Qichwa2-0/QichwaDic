@@ -5,7 +5,6 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.*
-import com.google.android.material.composethemeadapter.MdcTheme
 import com.ocram.qichwadic.features.intro.ui.IntroScreen
 import com.ocram.qichwadic.features.intro.ui.SplashScreen
 import com.ocram.qichwadic.features.intro.ui.SplashViewModel
@@ -17,11 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            MdcTheme {
-                MainScreen()
-            }
-        }
+        setContent { MainScreen() }
     }
 }
 

@@ -1,6 +1,6 @@
 package com.ocram.qichwadic.features.dictionaries.ui
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.ocram.qichwadic.R
@@ -32,20 +33,23 @@ fun DictionaryDropDown(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val canChangeSelection = items.size > 1
-    SelectionDialogText(
-        modifier = Modifier
+    Box(
+        Modifier
             .padding(vertical = 8.dp, horizontal = 16.dp)
-            .border(1.dp, Color.Gray, RoundedCornerShape(5.dp)),
-        onClick = { expanded = !expanded },
-        text = items.find { it.code == selectedLanguage }?.name ?: "",
-        enableSelection = canChangeSelection
-    )
+            .border(1.dp, MaterialTheme.colors.primaryVariant, RoundedCornerShape(5.dp))
+    ) {
+        SelectionDialogText(
+            onClick = { expanded = !expanded },
+            text = items.find { it.code == selectedLanguage }?.name ?: "",
+            enableSelection = canChangeSelection
+        )
+    }
     if (canChangeSelection) {
         SelectionListDialog(
             open = expanded,
             items = items,
             onItemSelected = {
-                onItemSelected(it.code)
+                onItemSelected(items[it].code)
                 expanded = !expanded
             },
             onDismissRequest = { expanded = false },
@@ -53,7 +57,7 @@ fun DictionaryDropDown(
                 Text(
                     text = it.name,
                     modifier = Modifier.fillMaxWidth(),
-                    style = defaultDropdownItemTextStyle
+                    style = defaultDropdownItemTextStyle()
                 )
             }
         )
@@ -68,14 +72,9 @@ fun DictionaryCard(
     onDownloadClicked: () -> Unit
 ) {
     Surface(
-        modifier = modifier
-            .background(color = Color.White)
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .border(
-                width = 1.dp,
-                color = Color.LightGray,
-                shape = RoundedCornerShape(5.dp)
-            )
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        shape = RoundedCornerShape(5.dp),
+        border = BorderStroke(1.dp, Color.LightGray)
     ) {
         Row(
             Modifier
@@ -84,7 +83,7 @@ fun DictionaryCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier = Modifier.weight(8f),
+                modifier = Modifier.weight(8f).padding(horizontal = 8.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -112,7 +111,7 @@ fun DictionaryCard(
                 )
             }
             Box(
-                modifier = Modifier.weight(2f),
+                modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
                 DictionaryIndicator(dictionary) { onDownloadClicked() }
@@ -140,4 +139,18 @@ fun DictionaryIndicator(
         )
 
     }
+}
+
+@Composable
+@Preview
+fun DictionaryCardPreview() {
+    DictionaryCard(
+        dictionary = DictionaryModel(
+            id = 1,
+            name = "Dictionary",
+            description = "some description",
+            author = "the author",
+            totalEntries = 199
+        )
+    ) {}
 }
