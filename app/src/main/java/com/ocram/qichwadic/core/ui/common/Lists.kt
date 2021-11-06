@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
@@ -19,10 +18,7 @@ internal fun <T>LazySelectableList(
     onItemSelected: (item: Int) -> Unit,
     itemView: (@Composable (item: T) -> Unit)
 ) {
-    Surface(
-        shape = RoundedCornerShape(10.dp),
-        color = Color.White,
-    ) {
+    Surface(shape = RoundedCornerShape(10.dp),) {
         LazyColumn(
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
