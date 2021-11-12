@@ -21,6 +21,11 @@
     <string name="search_mode_local">Búsqueda sin conexión</string>
     <string name="search_mode_online">Búsqueda en línea</string>
 
+    <!-- generic messages -->
+    <string name="loading">Cargando</string>
+    <string name="loading_dictionaries">Cargando diccionarios</string>
+    <string name="loading_search">Realizando búsqueda</string>
+
     <!-- search messages -->
     <string name="no_results_offline">
         No se encontraron resultados. \nVerifique que la palabra a buscar esté bien escrita o descargue más diccionarios.

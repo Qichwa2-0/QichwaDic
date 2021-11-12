@@ -1,5 +1,6 @@
 package com.ocram.qichwadic.core.ui.common
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -61,12 +62,31 @@ fun TopBar(
 }
 
 @Composable
-fun LoadingIndicator() {
+fun CircularLoadingIndicator() {
     Box(modifier = Modifier
         .fillMaxSize()
         .padding(top = 64.dp)) {
         CircularProgressIndicator(Modifier.align(Alignment.TopCenter))
     }
+}
+
+@Composable
+fun LinearLoadingIndicator(
+    modifier: Modifier = Modifier,
+    @StringRes loadingMessageId: Int = R.string.loading
+) {
+    Column(
+        modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Text(
+            stringResource(loadingMessageId),
+            Modifier.padding(vertical = 16.dp)
+        )
+        LinearProgressIndicator()
+    }
+
 }
 
 @Composable

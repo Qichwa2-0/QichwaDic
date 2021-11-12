@@ -21,6 +21,11 @@
     <string name="search_mode_local">Recherche hors-ligne</string>
     <string name="search_mode_online">Recherche en ligne</string>
 
+    <!-- generic messages -->
+    <string name="loading">En cours de téléchargement</string>
+    <string name="loading_dictionaries">Dictionnaires en cours de téléchargement</string>
+    <string name="loading_search">Recherche en cours</string>
+
     <!-- search messages -->
     <string name="no_results_offline">
         Aucun résultat trouvé. \nVeuillez vérifier l\'ortographe du mot à chercher ou télécharchez d\'autres dictionnaires.

@@ -12,13 +12,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
-import com.ocram.qichwadic.core.ui.common.ConfirmDialog
-import com.ocram.qichwadic.core.ui.common.SimpleGridView
-import com.ocram.qichwadic.core.ui.common.TopBar
+import com.ocram.qichwadic.core.ui.common.*
 
 @Composable
 fun FavoriteScreen(
     deletedFavoriteState: DeletedFavoriteState,
+    loading: Boolean,
     favorites: List<DefinitionModel>,
     onBackPressed: () -> Unit,
     showSnackbar: (message: String, onDismiss: () -> Unit) -> Unit,
@@ -36,10 +35,9 @@ fun FavoriteScreen(
         title = stringResource(R.string.favorite_dialog_title),
         content = stringResource(R.string.favorite_dialog_content),
         dismissBtnText = stringResource(R.string.favorite_dialog_clear_cancel),
-        confirmBtnText = stringResource(R.string.favorite_dialog_clear_confirm)
-    ) {
-        deleteAll()
-    }
+        confirmBtnText = stringResource(R.string.favorite_dialog_clear_confirm),
+        onConfirm = deleteAll
+    )
 
     if (deletedFavoriteState != DeletedFavoriteState.NONE) {
         deletedFavoriteState.msgId?.let {
@@ -73,31 +71,38 @@ fun FavoriteScreen(
                 }
             }
         )
-        Surface(Modifier.fillMaxSize()) {
-            if(favorites.isEmpty()) {
-                EmptyFavoritesView()
-            } else {
-                Box(Modifier.fillMaxWidth().padding(8.dp)) {
-                    SimpleGridView(
-                        cols = 2,
-                        items = favorites
-                    ) { _, favorite, modifier -> FavoriteCard(
-                        modifier = modifier,
-                        definition = favorite,
-                        share = {
-                            share(
-                                context.getString(
-                                    R.string.share_definition_from_dictionary,
-                                    favorite.dictionaryName,
-                                    favorite.word,
-                                    favorite.meaning
+        if (loading) {
+            LinearLoadingIndicator()
+        } else {
+            Surface(Modifier.fillMaxSize()) {
+                if(favorites.isEmpty()) {
+                    EmptyFavoritesView()
+                } else {
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp)) {
+                        SimpleGridView(
+                            cols = 2,
+                            items = favorites
+                        ) { _, favorite, modifier -> FavoriteCard(
+                            modifier = modifier,
+                            definition = favorite,
+                            share = {
+                                share(
+                                    context.getString(
+                                        R.string.share_definition_from_dictionary,
+                                        favorite.dictionaryName,
+                                        favorite.word,
+                                        favorite.meaning
+                                    )
                                 )
-                            )
-                        },
-                        delete = { deleteOne(favorite) })
+                            },
+                            delete = { deleteOne(favorite) })
+                        }
                     }
-                }
 
+                }
             }
         }
 
@@ -109,6 +114,7 @@ fun FavoriteScreen(
 fun PreviewEmptyFavoriteScreen() {
     FavoriteScreen(
         deletedFavoriteState = DeletedFavoriteState.NONE,
+        loading = false,
         favorites = emptyList(),
         onBackPressed = { },
         showSnackbar = {_, _ -> },
@@ -123,6 +129,7 @@ fun PreviewEmptyFavoriteScreen() {
 fun PreviewFavoriteScreen() {
     FavoriteScreen(
         deletedFavoriteState = DeletedFavoriteState.NONE,
+        loading = false,
         favorites = listOf(
             DefinitionModel(id = 1, word = "Word 1", meaning = "Meaning for 1"),
             DefinitionModel(id = 2, word = "Word 2", meaning = "Meaning for 2"),

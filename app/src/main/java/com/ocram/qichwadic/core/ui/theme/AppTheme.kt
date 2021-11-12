@@ -1,6 +1,5 @@
 package com.ocram.qichwadic.core.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
@@ -21,29 +20,18 @@ private val LightColors = lightColors(
     error = errorColor
 )
 
-private val DarkColors = darkColors()
-
 @Composable
-fun AppTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
-) {
+fun AppTheme(content: @Composable () -> Unit) {
     MaterialTheme (
-        colors = if (darkTheme) DarkColors else LightColors,
+        colors = LightColors,
         content = content
     )
 }
 
 @Preview
 @Composable
-fun PreviewQichwaDicLightTheme() {
-    AppTheme(darkTheme = false) { SampleApp() }
-}
-
-@Preview
-@Composable
-fun PreviewQichwaDicDarkTheme() {
-    AppTheme(darkTheme = true) { SampleApp() }
+private fun PreviewQichwaDicLightTheme() {
+    AppTheme { SampleApp() }
 }
 
 @Composable

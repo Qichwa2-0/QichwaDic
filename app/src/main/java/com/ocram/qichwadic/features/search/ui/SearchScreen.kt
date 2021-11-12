@@ -13,7 +13,8 @@ import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
 import com.ocram.qichwadic.core.domain.model.SearchParams
-import com.ocram.qichwadic.core.ui.common.LoadingIndicator
+import com.ocram.qichwadic.core.ui.common.LinearLoadingIndicator
+import com.ocram.qichwadic.core.ui.common.CircularLoadingIndicator
 import com.ocram.qichwadic.core.ui.common.SimpleGridView
 import com.ocram.qichwadic.features.search.ui.components.*
 
@@ -82,7 +83,9 @@ fun SearchScreen(
         )
         Crossfade(targetState = searchUiState.searchState) { state ->
             when (state) {
-                SearchState.LOADING -> { LoadingIndicator() }
+                SearchState.LOADING -> {
+                    LinearLoadingIndicator(loadingMessageId = R.string.loading_search)
+                }
                 SearchState.ERROR -> {
                     SearchResultsError(Modifier.padding(top = 64.dp), searchUiState.offlineSearch)
                 }
@@ -190,7 +193,7 @@ fun SearchResults(
                         saveFavorite = { saveFavoriteDefinition(item) }
                     )
                     if(index == definitions.size - 1 && fetchMoreLoading) {
-                        LoadingIndicator()
+                        CircularLoadingIndicator()
                     }
                 }
             }

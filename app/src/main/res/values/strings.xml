@@ -26,6 +26,11 @@
     <string name="search_mode_local">Offline search</string>
     <string name="search_mode_online">Online search</string>
 
+    <!-- generic messages -->
+    <string name="loading">Loading</string>
+    <string name="loading_dictionaries">Loading dictionaries</string>
+    <string name="loading_search">Searching</string>
+
     <!-- search messages -->
     <string name="no_results_offline">No results found. \nTry checking the word\'s spelling or downloading more dictionaries.</string>
     <string name="no_results_online">No results found.</string>

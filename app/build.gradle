@@ -108,7 +108,6 @@ dependencies {
 
 
     // Testing
-//    testImplementation "junit:junit:$junit"
     androidTestImplementation "androidx.test.ext:junit:$extjunit"
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
     androidTestImplementation "androidx.test:runner:$testrunner"

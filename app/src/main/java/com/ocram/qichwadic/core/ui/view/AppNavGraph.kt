@@ -1,10 +1,10 @@
 package com.ocram.qichwadic.core.ui.view
 
 import androidx.compose.runtime.Composable
+import androidx.core.text.parseAsHtml
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.ocram.qichwadic.core.ui.common.parseHtml
 import com.ocram.qichwadic.features.about.AboutScreen
 import com.ocram.qichwadic.features.dictionaries.ui.DictionaryScreen
 import com.ocram.qichwadic.features.dictionaries.ui.DictionaryViewModel
@@ -24,7 +24,7 @@ fun AppNavGraph(
     openActionWebView: (uri: String) -> Unit
 ) {
     val onBackPressed = { navController.popBackStack() }
-    val shareHtmlText = { text: String -> openShareIntent(parseHtml(text).toString(), null) }
+    val shareHtmlText = { text: String -> openShareIntent(text.parseAsHtml().toString(), null) }
     NavHost(
         navController = navController,
         startDestination = DrawerItem.Home.route
@@ -72,6 +72,7 @@ fun AppNavGraph(
             val viewModel = getViewModel<FavoriteViewModel>()
             FavoriteScreen(
                 deletedFavoriteState = viewModel.deletedFavoriteState,
+                loading = viewModel.loading,
                 favorites = viewModel.favorites,
                 onBackPressed = { onBackPressed() },
                 showSnackbar = { message, onDismiss -> showSnackbar(message, null, {}, onDismiss) },

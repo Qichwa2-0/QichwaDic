@@ -104,7 +104,6 @@ fun AboutScreen(
                 }
                 Column(
                     modifier = Modifier.padding(vertical = 8.dp).width(IntrinsicSize.Max),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     actionButtons.forEach {
                         Button(onClick = it.action, Modifier.fillMaxWidth()) {

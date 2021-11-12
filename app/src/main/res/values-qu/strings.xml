@@ -21,6 +21,11 @@
     <string name="search_mode_local">Internetwan maskay</string>
     <string name="search_mode_online">Mana internetwan maskay</string>
 
+    <!-- generic messages -->
+    <string name="loading">Chayamuchkanña</string>
+    <string name="loading_dictionaries">Chayamuchkanña simitaqikunaqa</string>
+    <string name="loading_search">Chayamuchkanña maskasqayki</string>
+
     <!-- search messages -->
     <string name="no_results_offline">
         Manam imapas tarisqachu. \nQillqasqaykita qawapaykunki utaq musuq simitaqikunata instalaykuy.

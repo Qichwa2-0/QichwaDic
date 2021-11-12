@@ -21,8 +21,13 @@ enum class DeletedFavoriteState(val msgId: Int? = null) {
 
 class FavoriteViewModel(private val favoriteInteractor: FavoriteInteractor) : ViewModel() {
 
+    var loading by mutableStateOf(true)
+        private set
+
     val favorites = mutableStateListOf<DefinitionModel>()
+
     var deletedFavoriteState by mutableStateOf(DeletedFavoriteState.NONE)
+        private set
 
     init {
         loadFavorites()
@@ -34,6 +39,7 @@ class FavoriteViewModel(private val favoriteInteractor: FavoriteInteractor) : Vi
                 clear()
                 addAll(favoriteInteractor.getFavorites())
             }
+            loading = false
         }
     }
 
