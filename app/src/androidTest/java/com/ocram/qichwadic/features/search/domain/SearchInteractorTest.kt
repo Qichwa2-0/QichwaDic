@@ -16,6 +16,7 @@ import com.ocram.qichwadic.core.data.local.dao.AppDatabase
 import com.ocram.qichwadic.features.search.data.datastore.SearchCloudDataStore
 import com.ocram.qichwadic.core.preferences.PreferencesHelper
 import com.ocram.qichwadic.core.data.model.SearchResultEntity
+import com.ocram.qichwadic.core.data.model.fromDefinitionModel
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.domain.model.SearchParams
 import com.ocram.qichwadic.features.search.data.SearchType
@@ -33,11 +34,13 @@ class SearchInteractorTest {
     private var searchInteractor: SearchInteractor? = null
 
     private object DummyCloudDataStore: CloudDataStore(), SearchCloudDataStore {
-        override suspend fun search(fromQuechua: Int, target: String, word: String, searchType: Int): ApiResponse<out List<SearchResultEntity>> {
+        override suspend fun search(fromQuechua: Int, target: String, word: String, searchType: Int)
+        : ApiResponse<out List<SearchResultEntity>> {
             return ApiResponse.Success(emptyList())
         }
 
-        override suspend fun fetchMoreResults(dictionaryId: Int, word: String, searchType: Int, page: Int): ApiResponse<out SearchResultEntity> {
+        override suspend fun fetchMoreResults(dictionaryId: Int, word: String, searchType: Int, page: Int)
+        : ApiResponse<out SearchResultEntity> {
             return ApiResponse.Success(SearchResultEntity())
         }
     }
@@ -54,7 +57,11 @@ class SearchInteractorTest {
         val preferencesHelper = PreferencesHelper(sharedPreferences)
         preferencesHelper.saveOfflineSearchMode(true)
 
-        val searchRepository = SearchRepositoryImpl(SearchLocalDataStoreImpl(appDatabase!!.definitionDao()), DummyCloudDataStore)
+        val searchRepository = SearchRepositoryImpl(
+            SearchLocalDataStoreImpl(appDatabase!!.definitionDao()),
+            DummyCloudDataStore,
+            preferencesHelper
+        )
         searchInteractor = SearchInteractorImpl(searchRepository)
     }
 
@@ -87,13 +94,14 @@ class SearchInteractorTest {
         definition3.meaning = "mano"
         definition3.dictionaryId = dictionary.id
 
+        val definitions = listOf(definition, definition2, definition3).map {
+            DefinitionEntity.fromDefinitionModel(it)
+        }
         runBlocking {
-            appDatabase!!.dictionaryDao().insertDictionaryAndDefinitions(
-                dictionary,
-                listOf(definition, definition2, definition3).map { DefinitionEntity.fromDefinitionModel(it) }
-            )
+            appDatabase?.dictionaryDao()?.insertDictionaries(listOf(dictionary))
+            appDatabase?.dictionaryDao()?.insertDefinitions(definitions)
             val searchParams = SearchParams(SearchType.STARTS_WITH.type, true, "es", wordToSearch)
-            val searchResults = searchInteractor?.queryWordOffline(searchParams) ?: emptyList()
+            val searchResults = searchInteractor?.queryWord(searchParams) ?: emptyList()
             Assert.assertFalse(searchResults.isEmpty())
             val searchResult = searchResults[0]
             Assert.assertEquals(searchResult.dictionaryId.toLong(), dictionary.id.toLong())
@@ -123,12 +131,12 @@ class SearchInteractorTest {
         }
 
         runBlocking {
-            appDatabase!!.dictionaryDao().insertDictionaryAndDefinitions(
-                dictionary,
+            appDatabase?.dictionaryDao()?.insertDictionaries(listOf(dictionary))
+            appDatabase?.dictionaryDao()?.insertDefinitions(
                 fakeDefinitions.map { DefinitionEntity.fromDefinitionModel(it) }
             )
             val searchParams = SearchParams(SearchType.STARTS_WITH.type, true, "es", "a")
-            val searchResults = searchInteractor?.queryWordOffline(searchParams) ?: emptyList()
+            val searchResults = searchInteractor?.queryWord(searchParams) ?: emptyList()
             Assert.assertFalse(searchResults.isEmpty())
 
             val searchResult = searchResults[0]
@@ -159,8 +167,8 @@ class SearchInteractorTest {
 
 
         runBlocking {
-            appDatabase!!.dictionaryDao().insertDictionaryAndDefinitions(
-                dictionary,
+            appDatabase?.dictionaryDao()?.insertDictionaries(listOf(dictionary))
+            appDatabase?.dictionaryDao()?.insertDefinitions(
                 fakeDefinitions.map { DefinitionEntity.fromDefinitionModel(it) }
             )
             val searchResults = searchInteractor!!.fetchMoreResults(true, dictionary.id, SearchType.STARTS_WITH.type, "a", 2)

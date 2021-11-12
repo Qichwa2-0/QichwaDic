@@ -155,6 +155,6 @@
     <string name="search_help_writing_video_text">
         Vous pouvez trouver plus d\'information sur la langue quechua et son écriture en regardant cette vidéo :
     </string>
-    <string name="online_search_active">Recherche en ligne activée</string>
     <string name="offline_search_active">Recherche hors-ligne activée</string>
+    <string name="offline_search_inactive">Recherche hors-ligne désactivée</string>
 </resources>

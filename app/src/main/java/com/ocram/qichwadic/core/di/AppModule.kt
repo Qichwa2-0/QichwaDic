@@ -94,7 +94,7 @@ val appModule = module {
     single<SearchCloudDataStore> { SearchCloudDataStoreImpl(get()) }
 
     single<DictionaryRepository> { DefaultDictionaryRepository(get(), get()) }
-    single<SearchRepository> { SearchRepositoryImpl(get(), get()) }
+    single<SearchRepository> { SearchRepositoryImpl(get(), get(), get()) }
     single<FavoriteRepository> { DefaultFavoriteRepository(get()) }
 
     single<DictionaryInteractor> { DictionaryInteractorImpl(get()) }

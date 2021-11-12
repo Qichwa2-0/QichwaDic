@@ -152,8 +152,8 @@
     <string name="search_help_writing_video_text">
         You can watch and learn more about Quechua writing in this video:
     </string>
-    <string name="online_search_active">Online search activated</string>
     <string name="offline_search_active">Offline search activated</string>
+    <string name="offline_search_inactive">Offline search deactivated</string>
     <string-array name="searchTypes">
         <item>Contains</item>
         <item>Exact</item>

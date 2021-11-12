@@ -2,6 +2,8 @@ package com.ocram.qichwadic.features.favorites.data.repository
 
 import com.ocram.qichwadic.core.data.model.FavoriteEntity
 import com.ocram.qichwadic.core.data.local.dao.FavoriteDao
+import com.ocram.qichwadic.core.data.model.fromDefinitionModel
+import com.ocram.qichwadic.core.data.model.toDefinitionModel
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.features.favorites.domain.FavoriteRepository
 

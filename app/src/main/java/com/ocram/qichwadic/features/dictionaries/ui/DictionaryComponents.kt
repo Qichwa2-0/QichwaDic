@@ -131,10 +131,11 @@ fun DictionaryIndicator(
         IconButton(
             onClick = { onDownloadClicked() },
             content = {
-                if (dictionary.existsInLocal)
+                if (dictionary.existsInLocal) {
                     Icon(Icons.Filled.Delete, contentDescription = "")
-                else
+                } else {
                     Icon(painterResource(R.drawable.ic_action_download), contentDescription = "")
+                }
             }
         )
 

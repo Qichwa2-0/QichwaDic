@@ -159,6 +159,6 @@
     <string name="search_help_writing_video_text">
         A continuación, un video sobre la escritura en quechua:
     </string>
-    <string name="online_search_active">Búsqueda en línea activada</string>
     <string name="offline_search_active">Búsqueda local activada</string>
+    <string name="offline_search_inactive">Búsqueda local desactivada</string>
 </resources>

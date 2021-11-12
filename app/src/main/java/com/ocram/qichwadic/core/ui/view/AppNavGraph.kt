@@ -24,9 +24,7 @@ fun AppNavGraph(
     openActionWebView: (uri: String) -> Unit
 ) {
     val onBackPressed = { navController.popBackStack() }
-    val shareHtmlText = { text: String ->
-        openShareIntent(parseHtml(text).toString(), null)
-    }
+    val shareHtmlText = { text: String -> openShareIntent(parseHtml(text).toString(), null) }
     NavHost(
         navController = navController,
         startDestination = DrawerItem.Home.route
@@ -49,7 +47,7 @@ fun AppNavGraph(
                 onSearchResultsItemSelected = viewModel::onSearchResultsItemSelected,
                 shareDefinition = { shareHtmlText(it) },
                 saveFavoriteDefinition = viewModel::saveFavorite,
-                resetFavoriteAdded = viewModel::resetFavoriteAddedState,
+                resetMessagesStates = viewModel::resetMessageStates,
                 fetchMoreResults = viewModel::fetchMoreResults
             )
         }

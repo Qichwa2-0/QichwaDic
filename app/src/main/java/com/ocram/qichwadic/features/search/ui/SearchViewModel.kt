@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.setValue
 
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
@@ -53,8 +52,6 @@ class SearchViewModel(
     var searchResults by mutableStateOf(listOf<SearchResultModel>())
         private set
 
-    private var _searchOffline = false
-
     private val enableSearch get(): Boolean = uiState.searchParams.searchWord.isNotBlank()
 
     init {
@@ -67,7 +64,6 @@ class SearchViewModel(
         viewModelScope.launch {
             val isOffline = preferencesHelper.isOfflineSearchMode()
             uiState = uiState.copy(offlineSearch = isOffline)
-            _searchOffline = isOffline
         }
     }
 
@@ -122,8 +118,13 @@ class SearchViewModel(
     }
 
     fun onOfflineSearchChanged(offline: Boolean) {
-        this._searchOffline = offline
-        val onlineSearchState = if (offline) InternetSearchState.OFFLINE else InternetSearchState.ONLINE
+        preferencesHelper.saveOfflineSearchMode(offline)
+        loadSearchModeConfig()
+        val onlineSearchState = if (uiState.offlineSearch) {
+            InternetSearchState.OFFLINE
+        } else {
+            InternetSearchState.ONLINE
+        }
         uiState = uiState.copy(internetSearchState = onlineSearchState)
     }
 
@@ -133,26 +134,26 @@ class SearchViewModel(
             viewModelScope.launch {
                 preferencesHelper.saveSearchWord(uiState.searchParams.searchWord)
                 try {
-                    searchResults = searchInteractor.queryWord(_searchOffline, uiState.searchParams)
+                    searchResults = searchInteractor.queryWord(uiState.searchParams)
                     uiState = uiState.copy(searchState = SearchState.SUCCESS)
                 } catch (e: Throwable) {
                     uiState = uiState.copy(searchState = SearchState.ERROR)
                 } finally {
                     preferencesHelper.saveSearchWord(uiState.searchParams.searchWord)
-                    preferencesHelper.saveOfflineSearchMode(_searchOffline)
-                    loadSearchModeConfig()
                 }
             }
         }
     }
 
-
     fun onSearchResultsItemSelected(pos: Int) {
         uiState = uiState.copy(searchResultSelectedPos = pos)
     }
 
-    fun resetFavoriteAddedState() {
-        uiState = uiState.copy(favoriteAdded = FavoriteAdded.NONE)
+    fun resetMessageStates() {
+        uiState = uiState.copy(
+            favoriteAdded = FavoriteAdded.NONE,
+            internetSearchState = InternetSearchState.NONE
+        )
     }
 
     fun fetchMoreResults() {

@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.ocram.qichwadic.core.domain.model.DefinitionModel
 
 @Entity(
         tableName = "definition",
@@ -37,58 +36,6 @@ data class DefinitionEntity(
 
         @ColumnInfo(name = "dictionary_id")
         var dictionaryId: Int = 0
+) { companion object }
 
-) {
-    fun toDefinitionModel(): DefinitionModel {
-        return DefinitionModel(
-                id,
-                word,
-                meaning,
-                summary,
-                dictionaryName,
-                dictionaryId
-        )
-    }
-
-    companion object {
-        fun fromDefinitionModel(definitionModel: DefinitionModel): DefinitionEntity {
-            return DefinitionEntity(
-                    definitionModel.id,
-                    definitionModel.word,
-                    definitionModel.meaning,
-                    definitionModel.summary,
-                    definitionModel.dictionaryName,
-                    definitionModel.dictionaryId
-            )
-        }
-    }
-}
-
-//    @PrimaryKey(autoGenerate = true)
-//    var id: Int = 0
-
-//    @Expose
-//    @SerializedName("word")
-//    @ColumnInfo(name = "word")
-//    var word: String? = null
-
-//    @Expose
-//    @SerializedName("meaning")
-//    @ColumnInfo(name = "meaning")
-//    var meaning: String? = null
-
-//    @Expose
-//    @SerializedName("summary")
-//    @ColumnInfo(name = "summary")
-//    var summary: String? = null
-//
-//    @Expose
-//    @SerializedName("dictionaryName")
-//    @ColumnInfo(name = "dictionary_name")
-//    var dictionaryName: String? = null
-
-//    @Expose
-//    @ColumnInfo(name = "dictionary_id")
-//    @SerializedName("dictionaryId")
-//    var dictionaryId: Int = 0
 

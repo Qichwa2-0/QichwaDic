@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 import androidx.room.ColumnInfo
-import com.ocram.qichwadic.core.domain.model.DictionaryModel
+import androidx.room.Embedded
 
 @Entity(tableName = "dictionary")
 data class DictionaryEntity(
@@ -31,32 +31,10 @@ data class DictionaryEntity(
 
         @ColumnInfo(name = "total_entries")
         var totalEntries: Int = 0
-) {
-        fun toDictionaryModel(): DictionaryModel {
-                return DictionaryModel(
-                        id,
-                        name,
-                        author,
-                        description,
-                        languageBegin,
-                        languageEnd,
-                        isQuechua,
-                        totalEntries
-                )
-        }
+) { companion object }
 
-        companion object {
-                fun fromDictionaryModel(dictionaryModel: DictionaryModel): DictionaryEntity {
-                        return DictionaryEntity(
-                                dictionaryModel.id,
-                                dictionaryModel.name,
-                                dictionaryModel.author,
-                                dictionaryModel.description,
-                                dictionaryModel.languageBegin,
-                                dictionaryModel.languageEnd,
-                                dictionaryModel.isQuechua,
-                                dictionaryModel.totalEntries
-                        )
-                }
-        }
-}
+data class DictionaryWithStatusEntity(
+        @Embedded
+        val dictionaryEntity: DictionaryEntity,
+        val hasDefinitionsSaved: Boolean
+)

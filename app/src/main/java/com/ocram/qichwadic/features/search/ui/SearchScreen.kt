@@ -34,9 +34,11 @@ fun SearchScreen(
     onSearchResultsItemSelected: (pos: Int) -> Unit,
     shareDefinition: (text: String) -> Unit,
     saveFavoriteDefinition: (definition: DefinitionModel) -> Unit,
-    resetFavoriteAdded: () -> Unit,
+    resetMessagesStates: () -> Unit,
     fetchMoreResults: () -> Unit
 ) {
+    val context = LocalContext.current
+
     if (searchUiState.favoriteAdded != FavoriteAdded.NONE) {
         val stringId = if (searchUiState.favoriteAdded == FavoriteAdded.SUCCESS)
             R.string.favorite_added_success
@@ -44,21 +46,27 @@ fun SearchScreen(
         val text  = stringResource(stringId)
         val actionLabel = stringResource(R.string.message_action_view)
         DisposableEffect(searchUiState.favoriteAdded) {
-            showSnackbar(text, actionLabel, goToFavorites, resetFavoriteAdded)
+            showSnackbar(text, actionLabel, goToFavorites, resetMessagesStates)
             onDispose {
-                resetFavoriteAdded()
+                resetMessagesStates()
             }
         }
     }
+
+
     if (searchUiState.internetSearchState != InternetSearchState.NONE) {
-        val stringId = if (searchUiState.internetSearchState == InternetSearchState.ONLINE)
-            R.string.online_search_active
-        else R.string.offline_search_active
-        val text = stringResource(id = stringId)
-        LaunchedEffect(searchUiState.internetSearchState) {
+        DisposableEffect(searchUiState.internetSearchState) {
+            val stringId = if (searchUiState.internetSearchState == InternetSearchState.ONLINE) {
+                R.string.offline_search_inactive
+            } else {
+                R.string.offline_search_active
+            }
+            val text = context.getString(stringId)
             showSnackbar(text, null, {}, {})
+            onDispose { resetMessagesStates() }
         }
     }
+
     Column(Modifier.fillMaxSize()) {
         SearchBars(
             openDrawer,

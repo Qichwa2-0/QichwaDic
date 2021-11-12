@@ -113,9 +113,6 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
     androidTestImplementation "androidx.test:runner:$testrunner"
 
-    // Resolve conflicts between main and test APK:
-    androidTestImplementation "androidx.annotation:annotation:$annotation"
-
     // Koin
     implementation "io.insert-koin:koin-android:$koin_version"
     // Koin AndroidX Jetpack Compose

@@ -22,13 +22,4 @@ data class SearchResultEntity (
         @Expose
         @Ignore
         var definitions: MutableList<DefinitionEntity> = mutableListOf()
-) {
-    fun toSearchResultModel(): SearchResultModel {
-        return SearchResultModel(
-                dictionaryId,
-                dictionaryName,
-                total,
-                definitions.map { it.toDefinitionModel() }.toMutableList()
-        )
-    }
-}
+)

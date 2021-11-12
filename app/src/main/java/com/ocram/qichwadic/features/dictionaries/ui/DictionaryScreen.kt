@@ -1,5 +1,6 @@
 package com.ocram.qichwadic.features.dictionaries.ui
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -45,33 +46,33 @@ fun DictionaryScreen(
             buttonIcon = Icons.Filled.ArrowBack,
             onButtonClicked = { onBackPressed() }
         )
-        if(uiState.loadingDictionaries) {
-            Box(Modifier.fillMaxSize()) {
-                CircularProgressIndicator(Modifier.align(Alignment.Center))
-            }
-        } else {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                DictionaryDropDown(
-                    items = stringArrayResource(id = R.array.dictLangs).map { DictLang(it) },
-                    selectedLanguage = uiState.selectedLanguage,
-                    onItemSelected = onDictionaryLanguageSelected
-                )
-                LazyColumn {
-                    items(
-                        items = dictionaries
-                            .filter { it.languageBegin == uiState.selectedLanguage }
-                            .sorted(),
-                        key = { dictionary -> dictionary.id }
-                    ) {
-                        DictionaryCard(dictionary = it) { onDownloadClicked(it) }
+        Crossfade(targetState = uiState.loadingDictionaries) { loading ->
+            if(loading) {
+                Box(Modifier.fillMaxSize()) {
+                    CircularProgressIndicator(Modifier.align(Alignment.Center))
+                }
+            } else {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    DictionaryDropDown(
+                        items = stringArrayResource(id = R.array.dictLangs).map { DictLang(it) },
+                        selectedLanguage = uiState.selectedLanguage,
+                        onItemSelected = onDictionaryLanguageSelected
+                    )
+                    LazyColumn {
+                        items(
+                            items = dictionaries
+                                .filter { it.languageBegin == uiState.selectedLanguage },
+                            key = { dictionary -> dictionary.id }
+                        ) {
+                            DictionaryCard(dictionary = it) { onDownloadClicked(it) }
+                        }
                     }
                 }
             }
         }
-
     }
 }
 

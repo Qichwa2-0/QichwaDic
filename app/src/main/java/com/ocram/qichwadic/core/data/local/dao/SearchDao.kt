@@ -11,7 +11,14 @@ import com.ocram.qichwadic.core.data.model.SearchResultEntity
 @Dao
 interface SearchDao {
 
-    @Query("SELECT de.* FROM definition de JOIN dictionary di ON de.dictionary_id = di.id " + "WHERE di.id = :dictionaryId AND de.word LIKE :searchText ORDER BY de.id LIMIT 20 OFFSET :offset")
+    @Query("SELECT de.* " +
+            "FROM definition de " +
+            "JOIN dictionary di ON de.dictionary_id = di.id " +
+            "WHERE di.id = :dictionaryId " +
+            "AND de.word LIKE :searchText " +
+            "ORDER BY de.id " +
+            "LIMIT 20 " +
+            "OFFSET :offset")
     suspend fun findDefinitionsLike(dictionaryId: Int, searchText: String, offset: Int): List<DefinitionEntity>
 
     @Query("SELECT di.id AS dictionary_id, di.name AS dictionary_name, COUNT(di.id) AS total " +

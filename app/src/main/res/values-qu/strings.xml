@@ -154,6 +154,6 @@
     <string name="search_help_writing_video_text">
         Astawan runasimimanta runasimi qillqaymantawan yachakuyta munaspaqa, kay videota qawariykuy:
     </string>
-    <string name="online_search_active">Internetwan maskana akllasqam</string>
     <string name="offline_search_active">Mana internetwan maskana akllasqam</string>
+    <string name="offline_search_inactive">Internetwan maskana akllasqam</string>
 </resources>

@@ -32,7 +32,7 @@ fun TextSearchBar(
     search: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
-    val execSearch = {
+    val runSearch = {
         focusManager.clearFocus()
         search()
     }
@@ -56,7 +56,7 @@ fun TextSearchBar(
                 onValueChange = { onTextChange(it) },
                 trailingIcon = {
                     if (searchText.isNotEmpty()) {
-                        IconButton(onClick = { execSearch() }) {
+                        IconButton(onClick = { runSearch() }) {
                             Icon(
                                 imageVector = Icons.Filled.Search,
                                 contentDescription = "",
@@ -68,12 +68,14 @@ fun TextSearchBar(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done
                 ),
-                keyboardActions = KeyboardActions(onDone = { execSearch() }),
+                keyboardActions = KeyboardActions(onDone = { runSearch() }),
             )
-            SearchOfflineIcon(
-                offlineSearch = offlineSearch,
-                onSearchOfflineChanged = onSearchOfflineChanged
-            )
+            Box(Modifier.padding(end = 8.dp)) {
+                SearchOfflineIcon(
+                    offlineSearch = offlineSearch,
+                    onSearchOfflineChanged = onSearchOfflineChanged
+                )
+            }
         }
     }
 }
