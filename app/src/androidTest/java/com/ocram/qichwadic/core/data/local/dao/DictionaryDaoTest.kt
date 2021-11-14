@@ -1,8 +1,5 @@
 package com.ocram.qichwadic.core.data.local.dao
 
-import android.content.Context
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.ocram.qichwadic.core.data.model.DefinitionEntity
 import com.ocram.qichwadic.core.data.model.DictionaryEntity
@@ -11,32 +8,13 @@ import com.ocram.qichwadic.core.data.model.toDictionaryModel
 import com.ocram.qichwadic.core.domain.model.DictionaryModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.junit.After
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.io.IOException
 
 @RunWith(AndroidJUnit4::class)
-class DictionaryDaoTest {
-    private lateinit var dictionaryDao: DictionaryDao
-    private lateinit var db: AppDatabase
-
-    @Before
-    fun createDb() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(
-                context, AppDatabase::class.java).build()
-        dictionaryDao = db.dictionaryDao()
-    }
-
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        db.close()
-    }
-
+class DictionaryDaoTest: BaseDbTest() {
+    
     @Test
     @Throws(Exception::class)
     fun testGetDictionariesNoDefinitions() {
@@ -46,8 +24,8 @@ class DictionaryDaoTest {
         }
         var collectedDictionaryEntities: List<DictionaryWithStatusEntity>
         runBlocking {
-            dictionaryDao.insertDictionaries(dictionaries)
-            collectedDictionaryEntities = dictionaryDao.getDictionariesWithStatus().first()
+            db.dictionaryDao().insertDictionaries(dictionaries)
+            collectedDictionaryEntities = db.dictionaryDao().getDictionariesWithStatus().first()
         }
         Assert.assertEquals(10, collectedDictionaryEntities.size)
     }
@@ -55,11 +33,11 @@ class DictionaryDaoTest {
     @Test
     @Throws(Exception::class)
     fun testGetDictionariesWithSomeDefinitions() {
-        generateData()
+        generateDictionariesAndDefinitions()
 
         var collectedDictionaryEntities: List<DictionaryWithStatusEntity>
         runBlocking {
-            collectedDictionaryEntities = dictionaryDao.getDictionariesWithStatus().first()
+            collectedDictionaryEntities = db.dictionaryDao().getDictionariesWithStatus().first()
         }
         Assert.assertTrue(
             collectedDictionaryEntities
@@ -71,18 +49,18 @@ class DictionaryDaoTest {
     @Test
     fun testRemoveDefinitionsForDictionary() {
 
-        generateData()
+        generateDictionariesAndDefinitions()
 
         var dictionaryWithStatus: List<DictionaryWithStatusEntity>
 
-        runBlocking { dictionaryWithStatus = dictionaryDao.getDictionariesWithStatus().first() }
+        runBlocking { dictionaryWithStatus = db.dictionaryDao().getDictionariesWithStatus().first() }
 
         Assert.assertTrue(dictionaryWithStatus.first().hasDefinitionsSaved)
 
         val dictionaryId = dictionaryWithStatus.first().dictionaryEntity.id
         runBlocking {
-            dictionaryDao.removeDefinitions(dictionaryId)
-            dictionaryWithStatus = dictionaryDao.getDictionariesWithStatus().first()
+            db.dictionaryDao().removeDefinitions(dictionaryId)
+            dictionaryWithStatus = db.dictionaryDao().getDictionariesWithStatus().first()
         }
 
         val previousDictionary = dictionaryWithStatus.find { it.dictionaryEntity.id == dictionaryId }
@@ -105,12 +83,12 @@ class DictionaryDaoTest {
         val totalDictionaries = 15
         val totalDictsWithDefinitions = 5
         // last 5 will have definitions saved
-        generateData(totalDictionaries = totalDictionaries) {
-            it >= (totalDictionaries - totalDictsWithDefinitions)
+        generateDictionariesAndDefinitions(totalDictionaries) {
+            it > 10
         }
         var dictionaries = emptyList<DictionaryModel>()
         runBlocking {
-           dictionaries = dictionaryDao.getDictionariesWithStatus() .first().map {
+           dictionaries = db.dictionaryDao().getDictionariesWithStatus() .first().map {
                it.toDictionaryModel()
            }
         }
@@ -124,13 +102,24 @@ class DictionaryDaoTest {
         )
     }
 
-    private fun generateData(
+    @Test
+    fun testInsertDictionaries() {
+        generateDictionariesAndDefinitions(totalDictionaries = 2) { it == 0 }
+
+        var dictionaries: List<DictionaryWithStatusEntity>
+        runBlocking {
+            dictionaries = db.dictionaryDao().getDictionariesWithStatus().first()
+        }
+        Assert.assertEquals(2, dictionaries.size)
+    }
+
+    private fun generateDictionariesAndDefinitions(
         totalDictionaries: Int = 10,
         condForHavingDefinitions: (index: Int) -> Boolean = { it % 2  == 0 }
     ) {
         val dictionaries = mutableListOf<DictionaryEntity>()
         val definitions = mutableListOf<DefinitionEntity>()
-        (0 until totalDictionaries).forEach { dictionaryCounter ->
+        (1 .. totalDictionaries).forEach { dictionaryCounter ->
             dictionaries += DictionaryEntity(dictionaryCounter, "Dictionary $dictionaryCounter")
             if (condForHavingDefinitions(dictionaryCounter)) {
                 repeat(50) { definitionCounter ->
@@ -142,8 +131,28 @@ class DictionaryDaoTest {
             }
         }
         runBlocking {
-            dictionaryDao.insertDictionaries(dictionaries)
-            dictionaryDao.insertDefinitions(definitions)
+            db.dictionaryDao().insertDictionaries(dictionaries)
+            db.dictionaryDao().insertDefinitions(definitions)
         }
+    }
+
+    @Test
+    fun testInsertDefinitions() {
+        val dictionaries = listOf(
+            DictionaryEntity(id = 1, name = "Dictionary"),
+            DictionaryEntity(id = 2, name = "Dictionary 2")
+        )
+        val definitions = listOf(
+            DefinitionEntity(id = 1, word = "word", meaning = "meaning", dictionaryId = 1),
+            DefinitionEntity(id = 2, word = "word 2", meaning = "meaning 2", dictionaryId = 1)
+        )
+        var savedDefinitions: List<DefinitionEntity>
+        runBlocking {
+            db.dictionaryDao().insertDictionaries(dictionaries)
+            db.dictionaryDao().insertDefinitions(definitions)
+            savedDefinitions = db.dictionaryDao().getDefinitions(1).first()
+        }
+        Assert.assertEquals("2 definitions were saved", 2, savedDefinitions.size)
+        Assert.assertEquals(definitions, savedDefinitions)
     }
 }

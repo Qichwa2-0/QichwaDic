@@ -1,5 +1,6 @@
 package com.ocram.qichwadic.features.dictionaries.ui
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -26,25 +27,25 @@ fun DictionaryScreen(
     onDictionaryLanguageSelected: (lang: String) -> Unit,
     onDownloadClicked: (DictionaryModel) -> Unit
 ) {
-    if(uiState.cloudLoadingError) {
-        val onErrorText = stringResource(id = R.string.error_no_cloud_dictionaries)
-        LaunchedEffect(uiState.cloudLoadingError) {
-            showSnackbar(onErrorText)
-        }
-    }
-    uiState.dictionaryDownloadState?.let {
-        val message = stringResource(it.strResourceId, it.dictionaryName)
-        LaunchedEffect(it) {
-            showSnackbar(message)
-        }
-    }
-
+//    if(uiState.cloudLoadingError) {
+//        val onErrorText = stringResource(id = R.string.error_no_cloud_dictionaries)
+//        LaunchedEffect(uiState.cloudLoadingError) {
+//            showSnackbar(onErrorText)
+//        }
+//    }
+//    uiState.dictionaryDownloadState?.let {
+//        val message = stringResource(it.strResourceId, it.dictionaryName)
+//        LaunchedEffect(it) {
+//            showSnackbar(message)
+//        }
+//    }
     Column(modifier = Modifier.fillMaxSize()) {
         TopBar(
             title = stringResource(id = R.string.nav_dictionaries),
             buttonIcon = Icons.Filled.ArrowBack,
             onButtonClicked = { onBackPressed() }
         )
+
         if(uiState.loadingDictionaries) {
             LinearLoadingIndicator(loadingMessageId = R.string.loading_dictionaries)
         } else {
@@ -59,8 +60,8 @@ fun DictionaryScreen(
                 )
                 LazyColumn {
                     items(
-                        items = dictionaries
-                            .filter { it.languageBegin == uiState.selectedLanguage },
+                        items = dictionaries,
+                        //.filter { it.languageBegin == uiState.selectedLanguage },
                         key = { dictionary -> dictionary.id }
                     ) {
                         DictionaryCard(dictionary = it) { onDownloadClicked(it) }

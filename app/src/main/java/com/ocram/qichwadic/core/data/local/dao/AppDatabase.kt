@@ -16,7 +16,7 @@ import com.ocram.qichwadic.core.data.model.FavoriteEntity
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun dictionaryDao(): DictionaryDao
-    abstract fun definitionDao(): SearchDao
+    abstract fun searchDao(): SearchDao
     abstract fun favoriteDao(): FavoriteDao
 
     companion object {

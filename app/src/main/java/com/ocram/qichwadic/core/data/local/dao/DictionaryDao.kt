@@ -25,4 +25,6 @@ interface DictionaryDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertDefinitions(definitions: List<DefinitionEntity>)
 
+    @Query("SELECT de.* FROM definition de WHERE de.dictionary_id = :dictionaryId")
+    fun getDefinitions(dictionaryId: Int): Flow<List<DefinitionEntity>>
 }

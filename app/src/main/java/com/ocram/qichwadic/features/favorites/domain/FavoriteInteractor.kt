@@ -20,7 +20,7 @@ class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository)
     }
 
     override suspend fun addFavorite(definition: DefinitionModel): Boolean {
-        return favoriteRepository.addFavorite(definition) > 0
+        return favoriteRepository.addFavorites(definition).isNotEmpty()
     }
 
     override suspend fun removeFavorite(favorite: DefinitionModel): Boolean {

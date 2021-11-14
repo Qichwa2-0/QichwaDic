@@ -4,10 +4,12 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.*
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DictionaryModel
 import com.ocram.qichwadic.features.dictionaries.domain.DictionaryInteractor
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -30,6 +32,12 @@ data class DictionaryUiState(
     var dictionaryDownloadState: DictionaryDownloadState? = null,
 )
 
+sealed class DictionariesState {
+    object Loading: DictionariesState()
+    class Result(state: SnapshotStateList<DictionaryModel>)
+    object Error: DictionariesState()
+}
+
 class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewModel() {
 
     var dictionaryUiState by mutableStateOf(DictionaryUiState())
@@ -49,11 +57,11 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
                 .getDictionaries()
                 .catch { dictionaryUiState = dictionaryUiState.copy(cloudLoadingError = true) }
                 .collect {
-                    dictionaryUiState = dictionaryUiState.copy(loadingDictionaries  = false)
                     allDictionaries.apply {
                         clear()
                         addAll(it)
                     }
+                    dictionaryUiState = dictionaryUiState.copy(loadingDictionaries = false)
                 }
         }
     }

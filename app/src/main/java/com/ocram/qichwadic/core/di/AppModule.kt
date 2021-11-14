@@ -85,7 +85,7 @@ val appModule = module {
     }
 
     single { get<AppDatabase>().dictionaryDao() }
-    single { get<AppDatabase>().definitionDao() }
+    single { get<AppDatabase>().searchDao() }
     single { get<AppDatabase>().favoriteDao() }
 
     single<DictionaryLocalDataStore> { DictionaryLocalDataStoreImpl(get()) }

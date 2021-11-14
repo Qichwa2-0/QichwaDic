@@ -14,8 +14,8 @@ constructor(private val favoriteDao: FavoriteDao) : FavoriteRepository {
         return favoriteDao.getFavorites().map { it.toDefinitionModel()  }
     }
 
-    override suspend fun addFavorite(favorite: DefinitionModel): Long {
-        return favoriteDao.addFavorite(FavoriteEntity.fromDefinitionModel(favorite))
+    override suspend fun addFavorites(favorite: DefinitionModel): List<Long> {
+        return favoriteDao.addFavorites(FavoriteEntity.fromDefinitionModel(favorite))
     }
 
     override suspend fun removeFavorite(favorite: DefinitionModel): Int {

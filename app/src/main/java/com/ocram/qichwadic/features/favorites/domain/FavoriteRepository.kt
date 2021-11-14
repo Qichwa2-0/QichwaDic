@@ -6,7 +6,7 @@ interface FavoriteRepository {
 
     suspend fun getFavorites(): List<DefinitionModel>
 
-    suspend fun addFavorite(favorite: DefinitionModel): Long
+    suspend fun addFavorites(favorite: DefinitionModel): List<Long>
 
     suspend fun removeFavorite(favorite: DefinitionModel): Int
 

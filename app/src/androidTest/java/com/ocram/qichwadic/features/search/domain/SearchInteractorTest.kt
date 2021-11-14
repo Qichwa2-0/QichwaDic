@@ -58,7 +58,7 @@ class SearchInteractorTest {
         preferencesHelper.saveOfflineSearchMode(true)
 
         val searchRepository = SearchRepositoryImpl(
-            SearchLocalDataStoreImpl(appDatabase!!.definitionDao()),
+            SearchLocalDataStoreImpl(appDatabase!!.searchDao()),
             DummyCloudDataStore,
             preferencesHelper
         )
