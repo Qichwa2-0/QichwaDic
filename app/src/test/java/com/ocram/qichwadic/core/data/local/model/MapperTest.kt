@@ -42,15 +42,6 @@ class MapperTest {
 
         val entity = DictionaryEntity.fromDictionaryModel(model)
 
-        Assert.assertEquals(model.id, entity.id)
-        Assert.assertEquals(model.name, entity.name)
-        Assert.assertEquals(model.author, entity.author)
-        Assert.assertEquals(model.description, entity.description)
-        Assert.assertEquals(model.languageBegin, entity.languageBegin)
-        Assert.assertEquals(model.languageEnd, entity.languageEnd)
-        Assert.assertEquals(model.isQuechua, entity.isQuechua)
-        Assert.assertEquals(model.totalEntries, entity.totalEntries)
-
         testEqualsDictionary(entity, model)
     }
 
