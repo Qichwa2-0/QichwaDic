@@ -7,14 +7,12 @@ data class SearchResultModel(
         var definitions: MutableList<DefinitionModel> = mutableListOf(),
 ) : Comparable<SearchResultModel> {
 
+    val titleWithTotal get() = "(${total}) $dictionaryName"
+
     override fun compareTo(other: SearchResultModel): Int {
         return this.dictionaryId - other.dictionaryId
     }
 
-    companion object {
-        fun empty(): SearchResultModel {
-            return SearchResultModel()
-        }
-    }
+    fun hasMoreDefinitions() = definitions.size < total
 }
 

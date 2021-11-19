@@ -120,8 +120,8 @@ dependencies {
 
     // appcompat
     implementation "androidx.appcompat:appcompat:$appcompat"
-    // for compose
 
+    // compose
     // Integration with activities
     implementation "androidx.activity:activity-compose:$activity_compose"
     // Compose Material Design
@@ -135,7 +135,7 @@ dependencies {
     // Integration with navigation
     implementation "androidx.navigation:navigation-compose:$navigation_compose"
     // Integration with livedata
-    implementation "androidx.compose.runtime:runtime:$jetpack_compose"
+//    implementation "androidx.compose.runtime:runtime:$jetpack_compose"
     implementation "androidx.compose.runtime:runtime-livedata:$jetpack_compose"
 
     // When using a AppCompat theme

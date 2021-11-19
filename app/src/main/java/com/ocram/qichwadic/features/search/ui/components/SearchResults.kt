@@ -2,7 +2,6 @@ package com.ocram.qichwadic.features.search.ui.components
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -26,12 +25,10 @@ import com.ocram.qichwadic.core.ui.common.*
 @Composable
 fun SearchResultsDropdown(
     searchResults: List<SearchResultModel>,
-    selectedItemPos: Int,
+    currentResult: SearchResultModel?,
     onItemSelected: (pos: Int) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val selectedItem = searchResults[selectedItemPos]
-    val buildItemText = { item: SearchResultModel -> "(${item.total}) ${item.dictionaryName}" }
     if(searchResults.isNotEmpty()) {
         val canChangeSelection = searchResults.size > 1
         Box(
@@ -40,7 +37,7 @@ fun SearchResultsDropdown(
                 .border(1.dp, MaterialTheme.colors.primaryVariant, RoundedCornerShape(5.dp))) {
             SelectionDialogText(
                 onClick = { expanded = !expanded },
-                text = buildItemText(selectedItem),
+                text = currentResult?.titleWithTotal ?: "",
                 enableSelection = canChangeSelection
             )
         }
@@ -191,8 +188,7 @@ fun ResultDefinitionCard(
     saveFavorite: () -> Unit
 ) {
     Surface(
-        modifier = modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 8.dp),
         shape = RoundedCornerShape(5.dp),
         elevation = 2.dp,
         border = BorderStroke(1.dp, Color.LightGray)

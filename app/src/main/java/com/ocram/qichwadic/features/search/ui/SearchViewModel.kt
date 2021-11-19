@@ -1,10 +1,9 @@
 package com.ocram.qichwadic.features.search.ui
 
 import android.util.Log
+import androidx.compose.runtime.*
 import androidx.lifecycle.*
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 
 import com.ocram.qichwadic.core.domain.model.SearchResultModel
 import com.ocram.qichwadic.features.favorites.domain.FavoriteInteractor
@@ -16,7 +15,7 @@ import kotlinx.coroutines.launch
 
 enum class SearchState { LOADING, ERROR, SUCCESS }
 enum class FavoriteAdded { NONE, SUCCESS, ERROR }
-enum class InternetSearchState { NONE, ONLINE, OFFLINE }
+enum class SearchModeMessage { NONE, ONLINE, OFFLINE }
 
 private val placeholders = mapOf(
     "qu" to "Yawar",
@@ -29,14 +28,15 @@ private val placeholders = mapOf(
 )
 
 data class SearchUiState(
-    var placeholder: String = placeholders.values.first(),
-    var searchParams: SearchParams = SearchParams(),
-    var offlineSearch: Boolean = false,
-    var internetSearchState: InternetSearchState = InternetSearchState.NONE,
-    var searchState: SearchState = SearchState.LOADING,
-    var searchResultSelectedPos: Int = 0,
-    var fetchMoreLoading: Boolean = false,
-    var favoriteAdded: FavoriteAdded = FavoriteAdded.NONE
+    val placeholder: String = placeholders.values.first(),
+    val searchParams: SearchParams = SearchParams(),
+    val offlineSearch: Boolean = false,
+    val searchModeMessage: SearchModeMessage = SearchModeMessage.NONE,
+    val searchState: SearchState = SearchState.LOADING,
+    val searchResults: SnapshotStateList<SearchResultModel> = mutableStateListOf(),
+    val searchResultSelectedPos: Int = -1,
+    val fetchMoreLoading: Boolean = false,
+    val favoriteAdded: FavoriteAdded = FavoriteAdded.NONE
 )
 
 class SearchViewModel(
@@ -49,52 +49,51 @@ class SearchViewModel(
 
     var uiState by mutableStateOf(SearchUiState())
 
-    var searchResults by mutableStateOf(listOf<SearchResultModel>())
-        private set
-
     private val enableSearch get(): Boolean = uiState.searchParams.searchWord.isNotBlank()
 
     init {
         loadSearchModeConfig()
         loadSearchParams()
-        searchWord()
+        search()
     }
 
     private fun loadSearchModeConfig() {
         viewModelScope.launch {
             val isOffline = preferencesHelper.isOfflineSearchMode()
-            uiState = uiState.copy(offlineSearch = isOffline)
+            setState { copy(offlineSearch = isOffline) }
         }
     }
 
     private fun loadSearchParams() {
         viewModelScope.launch {
             val lastSearchParams = preferencesHelper.lastSearchParams()
-            uiState = uiState.copy(searchParams = lastSearchParams)
+            setState { copy(searchParams = lastSearchParams) }
             updatePlaceholder()
             if(uiState.searchParams.searchWord.isEmpty()) {
-                uiState = uiState.copy(
-                    searchParams = uiState.searchParams.copy(searchWord = uiState.placeholder)
-                )
+                setState {
+                    copy(searchParams = uiState.searchParams.copy(searchWord = uiState.placeholder))
+                }
             }
         }
     }
 
     fun onQueryChanged(queryText: String) {
-        uiState = uiState.copy(searchParams = uiState.searchParams.copy(searchWord = queryText))
+        setState { copy(searchParams = uiState.searchParams.copy(searchWord = queryText)) }
     }
 
     fun onSearchTypeChanged(searchTypePos: Int) {
         viewModelScope.launch {
             preferencesHelper.saveSearchType(searchTypePos)
-            uiState = uiState.copy(searchParams = uiState.searchParams.copy(searchTypePos = searchTypePos))
+            setState {
+                copy(searchParams = uiState.searchParams.copy(searchTypePos = searchTypePos))
+            }
         }
     }
 
     fun onNonQuechuaLangSelected(lang: String) {
         viewModelScope.launch {
             preferencesHelper.saveNonQuechuaLangPos(lang)
-            uiState = uiState.copy(searchParams = uiState.searchParams.copy(nonQuechuaLangCode = lang))
+            setState { copy(searchParams = uiState.searchParams.copy(nonQuechuaLangCode = lang)) }
             updatePlaceholder()
         }
     }
@@ -103,7 +102,7 @@ class SearchViewModel(
         viewModelScope.launch {
             val newVal = !uiState.searchParams.isFromQuechua
             preferencesHelper.saveSearchFromQuechua(newVal)
-            uiState = uiState.copy(searchParams = uiState.searchParams.copy(isFromQuechua = newVal))
+            setState { copy(searchParams = uiState.searchParams.copy(isFromQuechua = newVal)) }
             updatePlaceholder()
         }
     }
@@ -114,30 +113,38 @@ class SearchViewModel(
         } else {
             placeholders[uiState.searchParams.nonQuechuaLangCode] ?: defaultPlaceholder
         }
-        uiState = uiState.copy(placeholder = placeholder)
+        setState { copy(placeholder = placeholder) }
     }
 
     fun onOfflineSearchChanged(offline: Boolean) {
         preferencesHelper.saveOfflineSearchMode(offline)
         loadSearchModeConfig()
         val onlineSearchState = if (uiState.offlineSearch) {
-            InternetSearchState.OFFLINE
+            SearchModeMessage.OFFLINE
         } else {
-            InternetSearchState.ONLINE
+            SearchModeMessage.ONLINE
         }
-        uiState = uiState.copy(internetSearchState = onlineSearchState)
+        setState { copy(searchModeMessage = onlineSearchState) }
     }
 
-    fun searchWord() {
+    fun search() {
         if(enableSearch) {
-            uiState = uiState.copy(searchState = SearchState.LOADING, searchResultSelectedPos = 0)
+            setState {
+                copy(searchState = SearchState.LOADING)
+            }
             viewModelScope.launch {
                 preferencesHelper.saveSearchWord(uiState.searchParams.searchWord)
                 try {
-                    searchResults = searchInteractor.queryWord(uiState.searchParams)
-                    uiState = uiState.copy(searchState = SearchState.SUCCESS)
+                    val newResults = searchInteractor.queryWord(uiState.searchParams)
+                    setState {
+                        copy(
+                            searchState = SearchState.SUCCESS,
+                            searchResultSelectedPos = 0,
+                            searchResults = newResults.toMutableStateList()
+                        )
+                    }
                 } catch (e: Throwable) {
-                    uiState = uiState.copy(searchState = SearchState.ERROR)
+                    setState { copy(searchState = SearchState.ERROR) }
                 } finally {
                     preferencesHelper.saveSearchWord(uiState.searchParams.searchWord)
                 }
@@ -145,40 +152,32 @@ class SearchViewModel(
         }
     }
 
-    fun onSearchResultsItemSelected(pos: Int) {
-        uiState = uiState.copy(searchResultSelectedPos = pos)
-    }
+    fun onSearchResultsItemSelected(pos: Int) = setState { copy(searchResultSelectedPos = pos) }
 
-    fun resetMessageStates() {
-        uiState = uiState.copy(
-            favoriteAdded = FavoriteAdded.NONE,
-            internetSearchState = InternetSearchState.NONE
-        )
+    fun resetMessageStates() = setState {
+        copy(favoriteAdded = FavoriteAdded.NONE, searchModeMessage = SearchModeMessage.NONE)
     }
 
     fun fetchMoreResults() {
-        if (searchResults[uiState.searchResultSelectedPos].total
-            <= searchResults[uiState.searchResultSelectedPos].definitions.size ) {
-            return
-        }
-        if(uiState.fetchMoreLoading) {
-            return
-        }
-        uiState = uiState.copy(fetchMoreLoading = true)
-        viewModelScope.launch {
-            try {
-                val results = searchInteractor.fetchMoreResults(
-                    uiState.offlineSearch,
-                    searchResults[uiState.searchResultSelectedPos].dictionaryId,
-                    uiState.searchParams.searchTypePos,
-                    uiState.searchParams.searchWord,
-                    (searchResults[uiState.searchResultSelectedPos].definitions.size / 20) + 1
-                )
-                searchResults[uiState.searchResultSelectedPos].definitions.addAll(results)
-            } catch (e: Throwable) {
-                Log.d("QichwaDic", e.message ?: "Error fetching more results")
-            } finally {
-                uiState = uiState.copy(fetchMoreLoading = false)
+        uiState.searchResults.getOrNull(uiState.searchResultSelectedPos)?.let {
+            if (it.total > it.definitions.size && !uiState.fetchMoreLoading) {
+                setState { copy(fetchMoreLoading = true) }
+                viewModelScope.launch {
+                    try {
+                        val results = searchInteractor.fetchMoreResults(
+                            uiState.offlineSearch,
+                            it.dictionaryId,
+                            uiState.searchParams.searchTypePos,
+                            uiState.searchParams.searchWord,
+                            (it.definitions.size / 20) + 1
+                        )
+                        it.definitions.addAll(results)
+                    } catch (e: Throwable) {
+                        Log.d("QichwaDic", e.message ?: "Error fetching more results")
+                    } finally {
+                        setState { copy(fetchMoreLoading = false) }
+                    }
+                }
             }
         }
     }
@@ -186,9 +185,13 @@ class SearchViewModel(
     fun saveFavorite(definition: DefinitionModel) {
         viewModelScope.launch {
             val added = favoriteInteractor.addFavorite(definition)
-            uiState = uiState.copy(
-                favoriteAdded = if (added) FavoriteAdded.SUCCESS else FavoriteAdded.ERROR
-            )
+            setState {
+                copy(favoriteAdded = if (added) FavoriteAdded.SUCCESS else FavoriteAdded.ERROR)
+            }
         }
+    }
+
+    private fun setState(applyState: SearchUiState.() -> SearchUiState) {
+        uiState = uiState.applyState()
     }
 }

@@ -3,20 +3,28 @@ package com.ocram.qichwadic.features.dictionaries.domain
 import android.util.Log
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.domain.model.DictionaryModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 import kotlin.Exception
 
 interface DictionaryInteractor {
-    fun getDictionaries(): Flow<List<DictionaryModel>>
+    suspend fun getDictionaries(): Flow<List<DictionaryModel>>
     suspend fun saveDefinitions(dictionaryModel: DictionaryModel)
     suspend fun removeDictionary(id: Int): Boolean
     suspend fun refreshCloudDictionaries()
 }
-class DictionaryInteractorImpl(private val dictionaryRepository: DictionaryRepository)
+class DictionaryInteractorImpl(
+    private val dictionaryRepository: DictionaryRepository,
+    private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO
+    )
     : DictionaryInteractor {
-    override fun getDictionaries(): Flow<List<DictionaryModel>> {
-        return dictionaryRepository.getSavedDictionaries()
+    override suspend fun getDictionaries(): Flow<List<DictionaryModel>> {
+        return withContext(defaultDispatcher) {
+            dictionaryRepository.getSavedDictionaries()
+        }
     }
 
     override suspend fun saveDefinitions(dictionaryModel: DictionaryModel) {
@@ -26,9 +34,11 @@ class DictionaryInteractorImpl(private val dictionaryRepository: DictionaryRepos
 
     override suspend fun refreshCloudDictionaries() {
         try {
-            val dictionaries = dictionaryRepository.getCloudDictionaries()
-            if (dictionaries.isNotEmpty()) {
-                dictionaryRepository.saveNewDictionaries(dictionaries)
+            withContext(defaultDispatcher) {
+                val dictionaries = dictionaryRepository.getCloudDictionaries()
+                if (dictionaries.isNotEmpty()) {
+                    dictionaryRepository.saveNewDictionaries(dictionaries)
+                }
             }
         } catch (e: Exception) {
             val errorMsg = when(e) {

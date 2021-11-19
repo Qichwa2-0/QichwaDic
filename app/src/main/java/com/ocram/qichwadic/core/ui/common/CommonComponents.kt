@@ -4,10 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -29,6 +26,7 @@ import com.ocram.qichwadic.core.ui.theme.defaultDropdownItemTextStyle
 import com.ocram.qichwadic.core.ui.theme.defaultDropdownTextStyle
 import com.ocram.qichwadic.core.ui.theme.textStyleNormal
 import com.ocram.qichwadic.core.ui.theme.textStyleSmall
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable
 fun AppLogo(modifier: Modifier = Modifier, width: Float = 320F) {
@@ -62,15 +60,6 @@ fun TopBar(
 }
 
 @Composable
-fun CircularLoadingIndicator() {
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .padding(top = 64.dp)) {
-        CircularProgressIndicator(Modifier.align(Alignment.TopCenter))
-    }
-}
-
-@Composable
 fun LinearLoadingIndicator(
     modifier: Modifier = Modifier,
     @StringRes loadingMessageId: Int = R.string.loading
@@ -87,36 +76,6 @@ fun LinearLoadingIndicator(
         LinearProgressIndicator()
     }
 
-}
-
-@Composable
-fun <T>SimpleGridView(
-    cols: Int,
-    items: List<T>,
-    listState: LazyListState = rememberLazyListState(),
-    itemView: @Composable (index: Int, item: T, modifier: Modifier) -> Unit
-) {
-    LazyColumn(state = listState) {
-        itemsIndexed(
-            items = items.chunked(cols),
-            key = { index, _ -> index }
-        ) { index, rowItems ->
-            Row(
-                Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max)) {
-                rowItems.forEach {
-                    itemView(index, it,
-                        Modifier
-                            .weight(1f)
-                            .fillMaxHeight())
-                    if(cols - rowItems.size > 0) {
-                        Box(Modifier.weight(1f))
-                    }
-                }
-            }
-        }
-    }
 }
 
 @Composable
@@ -189,6 +148,29 @@ fun BasicDropdownItemView(text: String) {
 fun ReversibleList(reversed: Boolean = false, composables: List<@Composable () -> Unit>) {
     val components = if (reversed) composables.reversed() else composables
     components.forEach{ it() }
+}
+
+@Composable
+fun InfiniteListHandler(
+    listState: LazyListState,
+    buffer: Int = 2,
+    onLoadMore: () -> Unit
+) {
+    val loadMore by remember {
+        derivedStateOf {
+            val layoutInfo = listState.layoutInfo
+            val totalItemsNumber = layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = (layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0) + 1
+
+            lastVisibleItemIndex > (totalItemsNumber - buffer)
+        }
+    }
+    LaunchedEffect(loadMore) {
+        println("loadMore $loadMore")
+        if (loadMore) {
+            onLoadMore()
+        }
+    }
 }
 
 @Composable

@@ -1,8 +1,5 @@
 package com.ocram.qichwadic.core.ui.theme
 
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 // basic light theme colors
@@ -27,12 +24,3 @@ val appIntroBackgroundColor = Color(0xFF00BDE9)
 val textLinkColor = Color(0xFF3F51B5)
 
 val placeholderColor = Color.White.copy(0.6f)
-
-@Composable
-fun searchTextFieldColors(): TextFieldColors {
-    return TextFieldDefaults.textFieldColors(
-        backgroundColor = Color.Unspecified,
-        focusedIndicatorColor = Color.LightGray,
-        unfocusedIndicatorColor = Color.White
-    )
-}

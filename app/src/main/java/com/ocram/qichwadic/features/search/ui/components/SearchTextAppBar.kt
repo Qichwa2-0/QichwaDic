@@ -4,6 +4,8 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.LocalTextSelectionColors
+import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -11,6 +13,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -18,7 +21,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ocram.qichwadic.R
-import com.ocram.qichwadic.core.ui.theme.searchTextFieldColors
 import com.ocram.qichwadic.core.ui.theme.placeholderColor
 
 @Composable
@@ -36,6 +38,10 @@ fun TextSearchBar(
         focusManager.clearFocus()
         search()
     }
+    val customTextSelectionColors = TextSelectionColors(
+        handleColor = Color.White,
+        backgroundColor = Color.White
+    )
     Surface(color = MaterialTheme.colors.primary, elevation = 8.dp){
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -45,31 +51,33 @@ fun TextSearchBar(
             IconButton(onClick = openDrawer) {
                 Icon(Icons.Filled.Menu, contentDescription = "")
             }
-            TextField(
-                modifier = Modifier
-                    .padding(horizontal = 0.dp)
-                    .weight(1f),
-                colors = searchTextFieldColors(),
-                singleLine = true,
-                value = searchText,
-                placeholder = { Text(placeholder, color = placeholderColor) },
-                onValueChange = { onTextChange(it) },
-                trailingIcon = {
-                    if (searchText.isNotEmpty()) {
-                        IconButton(onClick = { runSearch() }) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "",
-                                tint = MaterialTheme.colors.onPrimary
-                            )
-                        }
-                    } },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done
-                ),
-                keyboardActions = KeyboardActions(onDone = { runSearch() }),
-            )
+            CompositionLocalProvider(LocalTextSelectionColors provides customTextSelectionColors) {
+                TextField(
+                    modifier = Modifier
+                        .padding(horizontal = 0.dp)
+                        .weight(1f),
+                    colors = searchTextFieldColors(),
+                    singleLine = true,
+                    value = searchText,
+                    placeholder = { Text(placeholder, color = placeholderColor) },
+                    onValueChange = { onTextChange(it) },
+                    trailingIcon = {
+                        if (searchText.isNotEmpty()) {
+                            IconButton(onClick = { runSearch() }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Search,
+                                    contentDescription = "",
+                                    tint = MaterialTheme.colors.onPrimary
+                                )
+                            }
+                        } },
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(onDone = { runSearch() }),
+                )
+            }
             Box(Modifier.padding(end = 8.dp)) {
                 SearchOfflineIcon(
                     offlineSearch = offlineSearch,
@@ -78,6 +86,16 @@ fun TextSearchBar(
             }
         }
     }
+}
+
+@Composable
+fun searchTextFieldColors(): TextFieldColors {
+    return TextFieldDefaults.textFieldColors(
+        backgroundColor = Color.Unspecified,
+        focusedIndicatorColor = Color.LightGray,
+        unfocusedIndicatorColor = Color.White,
+        cursorColor = Color.White
+    )
 }
 
 @Composable
@@ -115,8 +133,8 @@ fun SearchOfflineIcon(
 fun PreviewTextSearchBar() {
     TextSearchBar(
         openDrawer = {},
-        placeholder = "Hola",
-        searchText = "abc",
+        placeholder = "Search text",
+        searchText = "Search Text",
         offlineSearch = false,
         {},
         onTextChange = {}

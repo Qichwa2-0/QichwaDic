@@ -1,6 +1,5 @@
 package com.ocram.qichwadic.core.domain.model
 
-
 data class DictionaryModel(
         val id: Int = 0,
         var name: String? = null,
@@ -11,5 +10,4 @@ data class DictionaryModel(
         val isQuechua: Boolean = false,
         val totalEntries: Int = 0,
         var existsInLocal: Boolean = false,
-        var downloading: Boolean = false
 )

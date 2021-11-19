@@ -1,10 +1,16 @@
 package com.ocram.qichwadic.features.favorites.ui
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -12,21 +18,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
-import com.ocram.qichwadic.core.ui.common.*
+import com.ocram.qichwadic.core.ui.common.ConfirmDialog
+import com.ocram.qichwadic.core.ui.common.InfiniteListHandler
+import com.ocram.qichwadic.core.ui.common.LinearLoadingIndicator
+import com.ocram.qichwadic.core.ui.common.TopBar
+import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun FavoriteScreen(
-    deletedFavoriteState: DeletedFavoriteState,
-    loading: Boolean,
-    favorites: List<DefinitionModel>,
+    viewModel: FavoriteViewModel = getViewModel(),
     onBackPressed: () -> Unit,
     showSnackbar: (message: String, onDismiss: () -> Unit) -> Unit,
-    deleteAll: () -> Unit,
     share: (text: String) ->Unit,
-    deleteOne: (favorite: DefinitionModel) -> Unit,
-    resetDeleteStates: () -> Unit
 ) {
-    val context = LocalContext.current
     var showDeleteAllDialog by remember { mutableStateOf(false) }
 
     ConfirmDialog(
@@ -36,57 +40,96 @@ fun FavoriteScreen(
         content = stringResource(R.string.favorite_dialog_content),
         dismissBtnText = stringResource(R.string.favorite_dialog_clear_cancel),
         confirmBtnText = stringResource(R.string.favorite_dialog_clear_confirm),
-        onConfirm = deleteAll
+        onConfirm = viewModel::clearFavorites
     )
-
-    if (deletedFavoriteState != DeletedFavoriteState.NONE) {
-        deletedFavoriteState.msgId?.let {
+    val uiState = viewModel.state
+    if (uiState.deletedFavoriteState != DeletedFavoriteState.NONE) {
+        uiState.deletedFavoriteState.msgId?.let {
             val text  = stringResource(it)
-            DisposableEffect(deletedFavoriteState) {
-                showSnackbar(text, resetDeleteStates)
+            DisposableEffect(uiState.deletedFavoriteState) {
+                showSnackbar(text, viewModel::resetDeleteStates)
                 onDispose {
-                    resetDeleteStates()
+                    viewModel.resetDeleteStates()
                 }
             }
         }
     }
 
     Column(Modifier.fillMaxSize()) {
-        TopBar(
-            title = stringResource(R.string.nav_favorites),
-            onButtonClicked = onBackPressed,
-            actions = {
-                IconButton(
-                    onClick = {
-                        if (favorites.isNotEmpty()) {
-                            showDeleteAllDialog = true
-                        }
-                    },
-                    enabled = favorites.isNotEmpty()
-                ) {
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = ""
-                    )
+        val state by uiState.favorites.observeAsState(ItemsState.Loading)
+        when (state) {
+            is ItemsState.Result -> {
+                FavoriteTopBar(true, onBackPressed = onBackPressed) {
+                    showDeleteAllDialog = true
                 }
+                FavoriteView(
+                    favorites = (state as ItemsState.Result).items,
+                    share = share,
+                    removeOne = viewModel::removeFavorite,
+                    canLoadMoreData = uiState.canLoadMoreData,
+                    fetchMoreItems = viewModel::fetchMoreFavorites
+                )
             }
-        )
-        if (loading) {
-            LinearLoadingIndicator()
+            else -> {
+                FavoriteTopBar(false, onBackPressed = onBackPressed)
+                LinearLoadingIndicator()
+            }
+        }
+    }
+}
+
+@Composable
+fun FavoriteTopBar(
+    enableClearAll: Boolean,
+    onBackPressed: () -> Unit,
+    onClearPressed: () -> Unit = {}
+) {
+    TopBar(
+        title = stringResource(R.string.nav_favorites),
+        onButtonClicked = onBackPressed,
+        actions = {
+            IconButton(
+                onClick = {
+                    if (enableClearAll) {
+                        onClearPressed()
+                    }
+                },
+                enabled = enableClearAll
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = ""
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun FavoriteView(
+    favorites: List<DefinitionModel>,
+    share: (text: String) -> Unit,
+    removeOne: (favorite: DefinitionModel) -> Unit,
+    canLoadMoreData: Boolean,
+    fetchMoreItems: () -> Unit
+) {
+    val context = LocalContext.current
+    val listState = rememberLazyListState()
+    Surface(Modifier.fillMaxSize()) {
+        if(favorites.isEmpty()) {
+            EmptyFavoritesView()
         } else {
-            Surface(Modifier.fillMaxSize()) {
-                if(favorites.isEmpty()) {
-                    EmptyFavoritesView()
-                } else {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(8.dp)) {
-                        SimpleGridView(
-                            cols = 2,
-                            items = favorites
-                        ) { _, favorite, modifier -> FavoriteCard(
-                            modifier = modifier,
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    state = listState
+                ) {
+                    items(items = favorites, key = { item -> item.id }) { favorite ->
+                        FavoriteCard(
+                            modifier = Modifier.fillMaxWidth(),
                             definition = favorite,
                             share = {
                                 share(
@@ -98,47 +141,39 @@ fun FavoriteScreen(
                                     )
                                 )
                             },
-                            delete = { deleteOne(favorite) })
-                        }
+                            delete = { removeOne(favorite) }
+                        )
                     }
-
+                }
+                if (canLoadMoreData) {
+                    InfiniteListHandler(listState = listState) {
+                        fetchMoreItems()
+                    }
                 }
             }
         }
-
     }
 }
 
 @Preview
 @Composable
-fun PreviewEmptyFavoriteScreen() {
-    FavoriteScreen(
-        deletedFavoriteState = DeletedFavoriteState.NONE,
-        loading = false,
-        favorites = emptyList(),
-        onBackPressed = { },
-        showSnackbar = {_, _ -> },
-        deleteAll = { },
-        share = {},
-        deleteOne = {}
-    ) {}
+fun PreviewFavoriteTopBar() {
+    FavoriteTopBar(enableClearAll = true, onBackPressed = {})
 }
 
 @Preview
 @Composable
-fun PreviewFavoriteScreen() {
-    FavoriteScreen(
-        deletedFavoriteState = DeletedFavoriteState.NONE,
-        loading = false,
-        favorites = listOf(
-            DefinitionModel(id = 1, word = "Word 1", meaning = "Meaning for 1"),
-            DefinitionModel(id = 2, word = "Word 2", meaning = "Meaning for 2"),
-            DefinitionModel(id = 3, word = "Word 3", meaning = "Meaning for 3")
-        ),
-        onBackPressed = { },
-        showSnackbar = {_, _ -> },
-        deleteAll = { },
-        share = {},
-        deleteOne = {}
-    ) {}
+fun PreviewEmptyFavoriteView() {
+    FavoriteView(favorites = emptyList(), share = {}, removeOne = {}, canLoadMoreData = false) {}
+}
+
+@Preview
+@Composable
+fun PreviewFavoriteView() {
+    val items = listOf(
+        DefinitionModel(id = 1, word = "Word 1", meaning = "Meaning for 1"),
+        DefinitionModel(id = 2, word = "Word 2", meaning = "Meaning for 2"),
+        DefinitionModel(id = 3, word = "Word 3", meaning = "Meaning for 3")
+    )
+    FavoriteView(favorites = items, share = {}, removeOne = {}, canLoadMoreData = false) {}
 }

@@ -69,6 +69,7 @@ fun DictionaryDropDown(
 fun DictionaryCard(
     modifier: Modifier = Modifier,
     dictionary: DictionaryModel,
+    downloading: Boolean,
     onDownloadClicked: () -> Unit
 ) {
     Surface(
@@ -114,7 +115,7 @@ fun DictionaryCard(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                DictionaryIndicator(dictionary) { onDownloadClicked() }
+                DictionaryIndicator(dictionary, downloading) { onDownloadClicked() }
             }
         }
     }
@@ -123,9 +124,10 @@ fun DictionaryCard(
 @Composable
 fun DictionaryIndicator(
     dictionary: DictionaryModel,
+    downloading: Boolean,
     onDownloadClicked: () -> Unit
 ) {
-    if(dictionary.downloading) {
+    if(downloading) {
         CircularProgressIndicator()
     } else {
         IconButton(
@@ -152,6 +154,7 @@ fun DictionaryCardPreview() {
             description = "some description",
             author = "the author",
             totalEntries = 199
-        )
+        ),
+        downloading = false
     ) {}
 }

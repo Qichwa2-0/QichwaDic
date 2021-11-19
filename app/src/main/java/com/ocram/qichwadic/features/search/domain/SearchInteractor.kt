@@ -23,7 +23,13 @@ class SearchInteractorImpl(private val searchRepository: SearchRepository) : Sea
         return searchRepository.search(searchParams).sortedByDescending { it.total }
     }
 
-    override suspend fun fetchMoreResults(offline: Boolean, dictionaryId: Int, searchType: Int, word: String, page: Int): List<DefinitionModel> {
+    override suspend fun fetchMoreResults(
+        offline: Boolean,
+        dictionaryId: Int,
+        searchType: Int,
+        word: String,
+        page: Int
+    ): List<DefinitionModel> {
         return searchRepository.fetchMoreResults(dictionaryId, searchType, word, page)
     }
 }

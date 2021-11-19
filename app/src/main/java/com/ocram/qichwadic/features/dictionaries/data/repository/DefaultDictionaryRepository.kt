@@ -7,8 +7,10 @@ import com.ocram.qichwadic.core.domain.model.DictionaryModel
 import com.ocram.qichwadic.features.dictionaries.data.datastore.DictionaryCloudDataStore
 import com.ocram.qichwadic.features.dictionaries.data.datastore.DictionaryLocalDataStore
 import com.ocram.qichwadic.features.dictionaries.domain.DictionaryRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class DefaultDictionaryRepository(
     private val localDataStore: DictionaryLocalDataStore,
@@ -19,7 +21,7 @@ class DefaultDictionaryRepository(
             is ApiResponse.Success -> {
                 response.data.map { it.toDictionaryModel() }
             }
-            else ->emptyList()
+            else -> emptyList()
         }
     }
 
@@ -27,8 +29,10 @@ class DefaultDictionaryRepository(
         localDataStore.saveDictionaries(dictionaries.map(DictionaryEntity::fromDictionaryModel))
     }
 
-    override fun getSavedDictionaries(): Flow<List<DictionaryModel>> {
-        return localDataStore.getDictionaries().map { list -> list.map { it.toDictionaryModel() } }
+    override suspend fun getSavedDictionaries(): Flow<List<DictionaryModel>> {
+        return withContext(Dispatchers.IO) {
+            localDataStore.getDictionaries().map { list -> list.map { it.toDictionaryModel() } }
+        }
     }
 
     override suspend fun getDefinitionsByDictionary(dictionaryId: Int): List<DefinitionModel> {

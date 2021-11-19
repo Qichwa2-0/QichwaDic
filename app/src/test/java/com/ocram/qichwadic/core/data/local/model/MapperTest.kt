@@ -37,7 +37,6 @@ class MapperTest {
             isQuechua = true,
             totalEntries = 1000,
             existsInLocal = false,
-            downloading = false
         )
 
         val entity = DictionaryEntity.fromDictionaryModel(model)

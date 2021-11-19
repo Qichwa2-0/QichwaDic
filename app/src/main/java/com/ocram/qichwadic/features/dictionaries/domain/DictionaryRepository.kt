@@ -10,7 +10,7 @@ interface DictionaryRepository {
 
     suspend fun saveNewDictionaries(dictionaries: List<DictionaryModel>)
 
-    fun getSavedDictionaries(): Flow<List<DictionaryModel>>
+    suspend fun getSavedDictionaries(): Flow<List<DictionaryModel>>
 
     suspend fun getDefinitionsByDictionary(dictionaryId: Int): List<DefinitionModel>
 

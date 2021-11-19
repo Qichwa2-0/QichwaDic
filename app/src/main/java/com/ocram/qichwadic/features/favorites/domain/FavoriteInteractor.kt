@@ -1,10 +1,11 @@
 package com.ocram.qichwadic.features.favorites.domain
 
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
+import kotlinx.coroutines.flow.Flow
 
 interface FavoriteInteractor {
 
-    suspend fun getFavorites(): List<DefinitionModel>
+    suspend fun getFavorites(page: Int): Flow<List<DefinitionModel>>
 
     suspend fun addFavorite(definition: DefinitionModel): Boolean
 
@@ -15,8 +16,8 @@ interface FavoriteInteractor {
 
 class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository) : FavoriteInteractor {
 
-    override suspend fun getFavorites(): List<DefinitionModel> {
-        return favoriteRepository.getFavorites()
+    override suspend fun getFavorites(page: Int): Flow<List<DefinitionModel>> {
+        return favoriteRepository.getFavorites(page)
     }
 
     override suspend fun addFavorite(definition: DefinitionModel): Boolean {

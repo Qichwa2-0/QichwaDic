@@ -1,6 +1,5 @@
 package com.ocram.qichwadic.features.favorites.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,7 +43,7 @@ fun EmptyFavoritesView() {
 
 @Composable
 fun FavoriteCard(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     definition: DefinitionModel,
     share: () -> Unit,
     delete: () -> Unit

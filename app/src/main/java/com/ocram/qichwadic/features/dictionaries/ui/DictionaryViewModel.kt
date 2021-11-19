@@ -2,14 +2,12 @@ package com.ocram.qichwadic.features.dictionaries.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.runtime.*
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.lifecycle.*
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DictionaryModel
 import com.ocram.qichwadic.features.dictionaries.domain.DictionaryInteractor
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -26,24 +24,17 @@ class DeleteSuccess(dictionaryName: String)
 const val DEFAULT_LANG_CODE = "qu"
 
 data class DictionaryUiState(
-    var loadingDictionaries: Boolean = true,
-    var cloudLoadingError: Boolean = false,
-    var selectedLanguage: String = DEFAULT_LANG_CODE,
-    var dictionaryDownloadState: DictionaryDownloadState? = null,
+    val allDictionaries: LiveData<List<DictionaryModel>> = MutableLiveData(),
+    val downloadProgress: SnapshotStateMap<Int, Boolean> = mutableStateMapOf(),
+    val loadingDictionaries: Boolean = true,
+    val cloudLoadingError: Boolean = false,
+    val selectedLanguage: String = DEFAULT_LANG_CODE,
+    val dictionaryDownloadState: DictionaryDownloadState? = null
 )
-
-sealed class DictionariesState {
-    object Loading: DictionariesState()
-    class Result(state: SnapshotStateList<DictionaryModel>)
-    object Error: DictionariesState()
-}
 
 class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewModel() {
 
-    var dictionaryUiState by mutableStateOf(DictionaryUiState())
-        private set
-
-    var allDictionaries = mutableStateListOf<DictionaryModel>()
+    var state by mutableStateOf(DictionaryUiState())
         private set
 
     init {
@@ -51,28 +42,32 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
     }
 
     private fun loadDictionaries() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             interactor.refreshCloudDictionaries()
-            interactor
+        }
+        viewModelScope.launch {
+            val liveData = interactor
                 .getDictionaries()
-                .catch { dictionaryUiState = dictionaryUiState.copy(cloudLoadingError = true) }
-                .collect {
-                    allDictionaries.apply {
-                        clear()
-                        addAll(it)
+                .catch { setState { copy(cloudLoadingError = true) } }
+                .asLiveData()
+                .map { dictionaries ->
+                    val downloadProgress = dictionaries.map { it.id to false }
+                    setState {
+                        copy(
+                            loadingDictionaries = false,
+                            downloadProgress = downloadProgress.toMutableStateMap()
+                        )
                     }
-                    dictionaryUiState = dictionaryUiState.copy(loadingDictionaries = false)
+                    dictionaries
                 }
+            setState { copy(allDictionaries = liveData) }
         }
     }
 
-    fun onLanguageSelected(lang: String) {
-        dictionaryUiState = dictionaryUiState.copy(selectedLanguage = lang)
-    }
+    fun onLanguageSelected(lang: String) = setState { copy(selectedLanguage = lang) }
 
     fun onDownloadClicked(dictionary: DictionaryModel) {
-        val index = allDictionaries.indexOf(dictionary)
-        allDictionaries[index] = dictionary.copy(downloading = true)
+        state.downloadProgress[dictionary.id] = true
         viewModelScope.launch {
             try {
                 val actionStatus = if(dictionary.existsInLocal) {
@@ -80,15 +75,15 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
                 } else {
                     downloadDictionary(dictionary)
                 }
-                dictionaryUiState = dictionaryUiState.copy(dictionaryDownloadState = actionStatus)
+                setState { copy(dictionaryDownloadState = actionStatus) }
             } finally {
-                allDictionaries[index] = dictionary.copy(downloading = false)
+                state.downloadProgress[dictionary.id] = false
             }
         }
     }
 
     private suspend fun downloadDictionary(dictionary: DictionaryModel): DictionaryDownloadState {
-        val name = dictionary.name ?: ""// _allDictionaries[pos].name ?: ""
+        val name = dictionary.name ?: ""
         return try {
             interactor.saveDefinitions(dictionary)
             SaveSuccess(name)
@@ -97,10 +92,13 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
         }
     }
 
-    private suspend fun removeDictionary(dictionary: DictionaryModel)
-            : DictionaryDownloadState {
+    private suspend fun removeDictionary(dictionary: DictionaryModel): DictionaryDownloadState {
         val removedTotal = interactor.removeDictionary(dictionary.id)
         val name = dictionary.name ?: ""
         return if (removedTotal) DeleteSuccess(name) else DeleteError(name)
+    }
+
+    private fun setState(applyState: DictionaryUiState.() -> DictionaryUiState) {
+        state = state.applyState()
     }
 }
