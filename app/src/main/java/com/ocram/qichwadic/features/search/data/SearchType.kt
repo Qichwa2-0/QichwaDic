@@ -11,7 +11,7 @@ enum class SearchType constructor(val type: Int, private val wordFormat: String)
     companion object {
 
         fun buildSearchCriteria(type: Int, entry: String): String {
-            for (searchType in SearchType.values()) {
+            for (searchType in values()) {
                 if (type == EXACT.type) return entry
 
                 if (type == searchType.type) {

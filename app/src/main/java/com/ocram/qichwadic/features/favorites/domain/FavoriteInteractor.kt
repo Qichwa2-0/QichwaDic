@@ -19,10 +19,10 @@ interface FavoriteInteractor {
 class FavoriteInteractorImpl(private val favoriteRepository: FavoriteRepository) : FavoriteInteractor {
 
     override fun getFavorites(): LiveData<List<DefinitionModel>> {
-        try {
-            return favoriteRepository.getFavorites()
+        return try {
+            favoriteRepository.getFavorites()
         } catch (_: Exception) {
-            return liveData {
+            liveData {
                 emit(emptyList())
             }
         }

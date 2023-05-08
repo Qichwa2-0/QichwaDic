@@ -1,30 +1,38 @@
 package com.ocram.qichwadic.features.dictionaries.ui
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DictionaryModel
+import com.ocram.qichwadic.databinding.ItemDictionaryBinding
 
-import kotlinx.android.synthetic.main.item_dictionary.view.*
-
-class DictionaryAdapter(var dictionaries: List<DictionaryModel>?, private val listener: DefinitionDownloadListener) : RecyclerView.Adapter<DictionaryAdapter.DictionaryViewHolder>() {
+class DictionaryAdapter(private var dictionaries: List<DictionaryModel>, private val listener: DefinitionDownloadListener)
+    : ListAdapter<DictionaryModel, DictionaryAdapter.DictionaryViewHolder>(DictionaryDiffCallback) {
 
     internal companion object {
         var totalEntries: String = ""
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateDictionaries(dictionaries: List<DictionaryModel>) {
+        this.dictionaries = dictionaries
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DictionaryViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
+        val binding = ItemDictionaryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         totalEntries = parent.context.getString(R.string.dictionary_totalEntries)
-        val v = inflater.inflate(R.layout.item_dictionary, parent, false)
-        val viewHolder = DictionaryViewHolder(v)
-        v.ivDicAction.setOnClickListener {
+        val viewHolder = DictionaryViewHolder(binding)
+        binding.ivDicAction.setOnClickListener {
             val pos = viewHolder.adapterPosition
-            val dictionary = dictionaries!![pos]
+            val dictionary = dictionaries[pos]
             dictionary.downloading = true
             notifyItemChanged(pos)
             if (dictionary.existsInLocal) {
@@ -37,27 +45,27 @@ class DictionaryAdapter(var dictionaries: List<DictionaryModel>?, private val li
     }
 
     override fun onBindViewHolder(holder: DictionaryViewHolder, position: Int) {
-        holder.bindDictionary(dictionaries!![position])
+        holder.bindDictionary(dictionaries[position])
     }
 
     override fun getItemCount(): Int {
-        return if (dictionaries != null) dictionaries!!.size else 0
+        return dictionaries.size
     }
 
-    class DictionaryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class DictionaryViewHolder(val binding: ItemDictionaryBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bindDictionary(dictionary: DictionaryModel) {
-            itemView.tvDictionaryName.text = dictionary.name
-            itemView.tvDictionaryAuthor.text = dictionary.author
-            itemView.tvDictionaryDescription.text = dictionary.description
-            itemView.tvDictionaryTotalEntries.text = String.format(totalEntries, dictionary.totalEntries)
-            itemView.ivDicAction.setImageResource(if (dictionary.existsInLocal) R.drawable.ic_delete else R.drawable.ic_action_download)
+            binding.tvDictionaryName.text = dictionary.name
+            binding.tvDictionaryAuthor.text = dictionary.author
+            binding.tvDictionaryDescription.text = dictionary.description
+            binding.tvDictionaryTotalEntries.text = String.format(totalEntries, dictionary.totalEntries)
+            binding.ivDicAction.setImageResource(if (dictionary.existsInLocal) R.drawable.ic_delete else R.drawable.ic_action_download)
             if (dictionary.downloading) {
-                itemView.ivDicAction.visibility = View.GONE
-                itemView.progress_bar.visibility = View.VISIBLE
+                binding.ivDicAction.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
             } else {
-                itemView.ivDicAction.visibility = View.VISIBLE
-                itemView.progress_bar.visibility = View.GONE
+                binding.ivDicAction.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
             }
         }
     }
@@ -67,4 +75,11 @@ class DictionaryAdapter(var dictionaries: List<DictionaryModel>?, private val li
         fun removeDictionary(pos: Int, dictionary: DictionaryModel)
     }
 
+}
+
+private object DictionaryDiffCallback : DiffUtil.ItemCallback<DictionaryModel>() {
+
+    override fun areItemsTheSame(oldItem: DictionaryModel, newItem: DictionaryModel) = oldItem.id == newItem.id
+
+    override fun areContentsTheSame(oldItem: DictionaryModel, newItem: DictionaryModel) = oldItem == newItem
 }

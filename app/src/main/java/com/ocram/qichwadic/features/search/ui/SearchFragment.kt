@@ -1,6 +1,5 @@
 package com.ocram.qichwadic.features.search.ui
 
-
 import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
@@ -9,11 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -23,26 +22,27 @@ import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.ui.DictLang
 import com.ocram.qichwadic.core.ui.Event
 import com.ocram.qichwadic.core.ui.SearchParams
-import kotlinx.android.synthetic.main.fragment_search.*
-import kotlinx.android.synthetic.main.toolbar.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import com.ocram.qichwadic.databinding.FragmentSearchBinding
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import kotlin.math.max
 
 class SearchFragment : Fragment() {
 
     private lateinit var placeholders: Map<String, String>
     private lateinit var quechuaPlaceholder: String
-//    private var isFromQuechua: Boolean = false
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
-    private val searchViewModel: SearchViewModel by sharedViewModel()
+    private val searchViewModel: SearchViewModel by activityViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         if (BuildConfig.DEBUGGABLE) {
             this.activateStrictMode()
         }
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         loadPlaceholders()
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        return binding.root
     }
 
     private fun activateStrictMode() {
@@ -88,20 +88,20 @@ class SearchFragment : Fragment() {
         setAdapters()
         initSearchView()
 
-        ivSwapLanguages.setOnClickListener { swapLanguages() }
-        fabSearch.setOnClickListener { runSearch() }
+        binding.ivSwapLanguages.setOnClickListener { swapLanguages() }
+        binding.fabSearch.setOnClickListener { runSearch() }
 
-        spDictLangs.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        binding.spDictLangs.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, pos: Int, p3: Long) {
-                spDictLangs.selectedItem.let {
+                binding.spDictLangs.selectedItem.let {
                     searchViewModel.saveNonQuechuaLangPos((it as DictLang).code)
                 }
             }
         }
 
-        spSearchTypes.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+        binding.spSearchTypes.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) {}
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -109,45 +109,51 @@ class SearchFragment : Fragment() {
             }
         }
 
-        swOfflineSearch.setOnCheckedChangeListener { _, checked -> toggleOfflineSearch(checked) }
-        ivSubmitSearch.setOnClickListener { runSearch() }
+        binding.swOfflineSearch.setOnCheckedChangeListener { _, checked -> toggleOfflineSearch(checked) }
 
-        searchViewModel.searchParams.observe(viewLifecycleOwner, Observer { this.setSearchParams(it) })
-        searchViewModel.saveFavoriteResult.observe(viewLifecycleOwner, Observer { this.onSaveWordResult(it) })
-        searchViewModel.offlineSearch.observe(viewLifecycleOwner, Observer<Boolean> { this.onSearchModeChanged(it) })
-        searchViewModel.searchFromQuechua.observe(viewLifecycleOwner, Observer<Boolean> {
+        view.findViewById<ImageView>(R.id.ivSubmitSearch).setOnClickListener { runSearch() }
+
+        searchViewModel.searchParams.observe(viewLifecycleOwner) { this.setSearchParams(it) }
+        searchViewModel.saveFavoriteResult.observe(viewLifecycleOwner
+        ) { this.onSaveWordResult(it) }
+        searchViewModel.offlineSearch.observe(viewLifecycleOwner) { this.onSearchModeChanged(it) }
+        searchViewModel.searchFromQuechua.observe(viewLifecycleOwner) {
             this.updateViewsOnLangChange(it)
-        })
+        }
     }
 
     private fun setAdapters() {
         val searchTypesAdapter = ArrayAdapter.createFromResource(requireContext(), R.array.searchTypes, R.layout.item_spinner_search_type)
         searchTypesAdapter.setDropDownViewResource(R.layout.item_spinner_dropdown_search_type)
-        spSearchTypes.adapter = searchTypesAdapter
-        spSearchTypes.setSelection(2)
+        binding.spSearchTypes.adapter = searchTypesAdapter
+        binding.spSearchTypes.setSelection(2)
 
-        spDictLangs.adapter = SearchDictLangAdapter(requireContext())
+        binding.spDictLangs.adapter = SearchDictLangAdapter(requireContext())
     }
 
     private fun initSearchView() {
-        svSearch.setQuery(svSearch.queryHint, false)
-        svSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                Log.d(javaClass.name, "onquerysubmit $query")
-                searchViewModel.searchWord(query)
-                svSearch.clearFocus()
-                return true
-            }
+        binding.mToolbar.svSearch.apply {
+            setQuery(this.queryHint, false)
+            setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    Log.d(javaClass.name, "onquerysubmit $query")
+                    searchViewModel.searchWord(query)
+                    this@apply.clearFocus()
+                    return true
+                }
 
-            override fun onQueryTextChange(newText: String): Boolean {
-                return true
-            }
-        })
+                override fun onQueryTextChange(newText: String): Boolean {
+                    return true
+                }
+            })
+        }
     }
 
     private fun runSearch() {
-        if (svSearch.query.isNotEmpty()) {
-            svSearch.setQuery(svSearch.query, true)
+        binding.root.findViewById<SearchView>(R.id.svSearch).apply {
+            if (query.isNotEmpty()) {
+                setQuery(query, true)
+            }
         }
     }
 
@@ -162,7 +168,7 @@ class SearchFragment : Fragment() {
     private fun onSaveWordResult(isSuccess: Event<Boolean>) {
         isSuccess.getContentIfNotHandled()?.let {
             val stringId = if (it) R.string.favorite_added_success else R.string.favorite_added_error
-            Snackbar.make(clSearch, getString(stringId), Snackbar.LENGTH_SHORT)
+            Snackbar.make(binding.clSearch, getString(stringId), Snackbar.LENGTH_SHORT)
                     .setAction(getString(R.string.see_favorites)) {
                         findNavController().navigate(R.id.search_fragment_to_favorites_fragment)
                     }.show()
@@ -170,46 +176,51 @@ class SearchFragment : Fragment() {
     }
 
     private fun onSearchModeChanged(isOffline: Boolean?) {
-        swOfflineSearch.isChecked = isOffline ?: false
+        binding.swOfflineSearch.isChecked = isOffline ?: false
     }
 
     private fun setSearchParams(searchParams: Event<SearchParams>) {
+        val spDictLangs = binding.spDictLangs
         searchParams.getContentIfNotHandled()?.let {
             if (!it.isFromQuechua) {
                 this.updateViewsOnLangChange(it.isFromQuechua)
             }
-            spSearchTypes.setSelection(it.searchTypePos)
+            binding.spSearchTypes.setSelection(it.searchTypePos)
             val dictLangPos = (spDictLangs.adapter as SearchDictLangAdapter).getPosByValue(it.nonQuechuaLangCode)
             spDictLangs.setSelection(max(0, dictLangPos))
 
             updateQueryHint(it.isFromQuechua)
             val textToSearch =
-                    if(it.searchWord.isNotEmpty())
-                        it.searchWord
-                    else svSearch.queryHint
-            svSearch.setQuery(textToSearch, true)
+                it.searchWord.ifEmpty { binding.mToolbar.svSearch.queryHint }
+            binding.mToolbar.svSearch.setQuery(textToSearch, true)
         }
     }
 
     private fun updateViewsOnLangChange(fromQuechua: Boolean) {
-        val innerViews = mutableListOf(spSearchTypes, vSeparator, tvQichwaLang, ivSwapLanguages, spDictLangs)
+        val innerViews = mutableListOf(
+            binding.spSearchTypes,
+            binding.vSeparator,
+            binding.tvQichwaLang,
+            binding.ivSwapLanguages,
+            binding.spDictLangs
+        )
         if(!fromQuechua) {
             innerViews.removeAt(4)
             innerViews.removeAt(2)
-            innerViews.add(2, spDictLangs)
-            innerViews.add(4, tvQichwaLang)
+            innerViews.add(2, binding.spDictLangs)
+            innerViews.add(4, binding.tvQichwaLang)
         }
-        llSearchOptions.removeAllViews()
-        innerViews.forEach { llSearchOptions.addView(it) }
+        binding.llSearchOptions.removeAllViews()
+        innerViews.forEach { binding.llSearchOptions.addView(it) }
         updateQueryHint(fromQuechua)
     }
 
     private fun updateQueryHint(fromQuechua: Boolean) {
         if (fromQuechua) {
-            svSearch.queryHint = quechuaPlaceholder
+            binding.mToolbar.svSearch.queryHint = quechuaPlaceholder
         } else {
-            val currentLang = (spDictLangs.selectedItem as DictLang).code
-            svSearch.queryHint = placeholders[currentLang]
+            val currentLang = (binding.spDictLangs.selectedItem as DictLang).code
+            binding.mToolbar.svSearch.queryHint = placeholders[currentLang]
         }
     }
 

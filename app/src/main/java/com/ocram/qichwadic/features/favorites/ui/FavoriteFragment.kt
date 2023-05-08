@@ -1,14 +1,14 @@
 package com.ocram.qichwadic.features.favorites.ui
 
-
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.core.text.HtmlCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
@@ -17,25 +17,21 @@ import com.google.android.material.snackbar.Snackbar
 import com.ocram.qichwadic.R
 import com.ocram.qichwadic.core.domain.model.DefinitionModel
 import com.ocram.qichwadic.core.ui.activity.MainActivity
-import kotlinx.android.synthetic.main.fragment_favorite.*
+import com.ocram.qichwadic.databinding.FragmentFavoriteBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.util.*
 
 class FavoriteFragment : Fragment(), FavoriteAdapter.FavoriteClickListener {
 
     private val favoriteViewModel by viewModel<FavoriteViewModel>()
+    private var _binding: FragmentFavoriteBinding? = null
+    private val binding get() = _binding!!
     private lateinit var favoriteAdapter: FavoriteAdapter
     private var alertDialog: AlertDialog? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_favorite, container, false)
+                              savedInstanceState: Bundle?): View {
+        _binding = FragmentFavoriteBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,31 +40,33 @@ class FavoriteFragment : Fragment(), FavoriteAdapter.FavoriteClickListener {
         val drawer = requireActivity().findViewById<DrawerLayout>(R.id.drawer_layout)
         val appBarConfiguration = AppBarConfiguration(navController.graph, drawer)
 
-        view.findViewById<Toolbar>(R.id.mToolbar).setupWithNavController(navController, appBarConfiguration)
-        (mToolbar as Toolbar).apply {
-            inflateMenu(R.menu.menu_favorite)
+        view.findViewById<Toolbar>(R.id.mToolbar).apply {
             setupWithNavController(navController, appBarConfiguration)
-            setOnMenuItemClickListener { item ->
-                val clearFavorites = item.itemId == R.id.nav_clear_favorites
+            inflateMenu(R.menu.menu_favorite)
+            setOnMenuItemClickListener { menuItem ->
+                val clearFavorites = menuItem.itemId == R.id.nav_clear_favorites
                 if (clearFavorites) {
                     if (favoriteAdapter.itemCount > 0) {
                         alertDialog?.show()
                     }
                 }
-                clearFavorites
+                return@setOnMenuItemClickListener clearFavorites
             }
         }
 
-        createDialog()
-        rvFavorites.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        createClearFavoritesDialog()
         setAdapters()
-        favoriteViewModel.favorites.observe(this, Observer<List<DefinitionModel>> { this.onFavoritesLoaded(it) })
-        favoriteViewModel.deleteFavoriteResult.observe(this, Observer<Boolean> { this.onFavoriteRemoved(it) })
-        favoriteViewModel.clearFavoriteResult.observe(this, Observer<Boolean> { this.onFavoritesCleared(it) })
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_favorite, menu)
+        favoriteViewModel.favorites.observe(viewLifecycleOwner) { this.onFavoritesLoaded(it) }
+        favoriteViewModel.deleteFavoriteResult.observe(viewLifecycleOwner) {
+            this.onFavoriteRemoved(
+                it
+            )
+        }
+        favoriteViewModel.clearFavoriteResult.observe(viewLifecycleOwner) {
+            this.onFavoritesCleared(
+                it
+            )
+        }
     }
 
     override fun onDestroy() {
@@ -77,17 +75,6 @@ class FavoriteFragment : Fragment(), FavoriteAdapter.FavoriteClickListener {
             if(it.isShowing) it.dismiss()
         }
         alertDialog = null
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.nav_clear_favorites) {
-            if (favoriteAdapter.itemCount > 0) {
-                alertDialog?.show()
-            }
-            return true
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onItemShare(definition: DefinitionModel) {
@@ -106,11 +93,12 @@ class FavoriteFragment : Fragment(), FavoriteAdapter.FavoriteClickListener {
     }
 
     private fun setAdapters() {
-        favoriteAdapter = FavoriteAdapter(ArrayList(), this)
-        rvFavorites.adapter = favoriteAdapter
+        binding.rvFavorites.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        favoriteAdapter = FavoriteAdapter(emptyList(), this)
+        binding.rvFavorites.adapter = favoriteAdapter
     }
 
-    private fun createDialog() {
+    private fun createClearFavoritesDialog() {
         val alert = AlertDialog.Builder(requireContext())
         alert.setTitle(R.string.favorite_dialog_title)
         alert.setMessage(R.string.favorite_dialog_content)
@@ -125,24 +113,23 @@ class FavoriteFragment : Fragment(), FavoriteAdapter.FavoriteClickListener {
 
     private fun onFavoritesLoaded(favorites: List<DefinitionModel>) {
         favoriteAdapter.setFavorites(favorites)
-        favoriteAdapter.notifyDataSetChanged()
-        pbFavoriteLoading.visibility = View.GONE
+        binding.pbFavoriteLoading.visibility = View.GONE
         if (favorites.isNotEmpty()) {
-            rvFavorites.visibility = View.VISIBLE
-            tvNoFavorites.visibility = View.GONE
+            binding.rvFavorites.visibility = View.VISIBLE
+            binding.tvNoFavorites.visibility = View.GONE
         } else {
-            rvFavorites.visibility = View.GONE
-            tvNoFavorites.visibility = View.VISIBLE
+            binding.rvFavorites.visibility = View.GONE
+            binding.tvNoFavorites.visibility = View.VISIBLE
         }
     }
 
     private fun onFavoriteRemoved(result: Boolean?) {
         val stringId = if (java.lang.Boolean.TRUE == result) R.string.favorite_deleted_success else R.string.favorite_deleted_error
-        Snackbar.make(clFavorites, getString(stringId), Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.clFavorites, getString(stringId), Snackbar.LENGTH_SHORT).show()
     }
 
     private fun onFavoritesCleared(result: Boolean?) {
         val stringId = if (java.lang.Boolean.TRUE == result) R.string.favorite_cleared_success else R.string.favorite_cleared_error
-        Snackbar.make(clFavorites, getString(stringId), Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(binding.clFavorites, getString(stringId), Snackbar.LENGTH_SHORT).show()
     }
 }

@@ -43,13 +43,6 @@ class PreferencesHelper(private val sharedPreferences: SharedPreferences)  {
         this.putBoolean(FIRST_START_KEY, false)
     }
 
-    fun saveSearchParams(searchParams: SearchParams) {
-        this.saveNonQuechuaLangPos(searchParams.nonQuechuaLangCode)
-        this.saveSearchFromQuechua(searchParams.isFromQuechua)
-        this.saveSearchType(searchParams.searchTypePos)
-        this.saveSearchWord(searchParams.searchWord)
-    }
-
     fun saveNonQuechuaLangPos(targetLangCode: String) {
         this.putString(SEARCH_PARAM_NON_QUECHUA_CODE_KEY, targetLangCode)
     }

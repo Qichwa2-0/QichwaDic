@@ -10,8 +10,8 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
 
     var dictionariesByLang: MutableLiveData<out MutableMap<String, MutableList<DictionaryModel>>> = MutableLiveData()
     var dictionaryActionStatus = MutableLiveData<DictionaryActionState>()
-    var localLoading = MutableLiveData<Boolean>(true)
-    var cloudError = MutableLiveData<Boolean>(false)
+    var localLoading = MutableLiveData(true)
+    var cloudError = MutableLiveData(false)
 
     init {
         loadDictionaries()
@@ -58,7 +58,6 @@ class DictionaryViewModel(private val interactor: DictionaryInteractor) : ViewMo
             } else {
                 dictionaryActionStatus.postValue(DictionaryActionState(pos, dictionary, true))
             }
-
         }
     }
 

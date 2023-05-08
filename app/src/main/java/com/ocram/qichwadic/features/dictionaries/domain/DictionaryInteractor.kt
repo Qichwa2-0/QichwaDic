@@ -18,7 +18,6 @@ interface DictionaryInteractor {
     suspend fun getAllDictionaries(): DictionaryFetchResult
 }
 
-
 class DictionaryInteractorImpl(private val dictionaryRepository: DictionaryRepository) : DictionaryInteractor {
 
     override suspend fun getAllDictionaries(): DictionaryFetchResult {
@@ -52,7 +51,6 @@ class DictionaryInteractorImpl(private val dictionaryRepository: DictionaryRepos
             dictionaryRepository.saveDictionaryAndDefinitions(dictionaryModel, definitions)
         }
     }
-
 
     private suspend fun getAllDefinitionsByDictionary(dictionaryId: Int): List<DefinitionModel> {
         return dictionaryRepository.getDefinitionsByDictionary(dictionaryId)

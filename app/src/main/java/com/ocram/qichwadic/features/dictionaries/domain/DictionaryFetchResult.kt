@@ -15,17 +15,14 @@ class DictionaryFetchResult {
     }
 
     internal fun mapDictionaries() {
-
         mergeDictionaries()
             .sorted()
             .forEach { dictionary ->
                 dictionary.languageBegin?.let {
                     val dictionaryModels = dictionariesByLang[it] ?: mutableListOf()
                     dictionaryModels.add(dictionary)
-                    dictionariesByLang.put(it, dictionaryModels)
+                    dictionariesByLang[it] = dictionaryModels
                 }
-
-
             }
     }
 

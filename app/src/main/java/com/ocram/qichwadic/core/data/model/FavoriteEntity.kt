@@ -26,14 +26,6 @@ data class FavoriteEntity(
         var dictionaryId: Int = 0
 ){
 
-//    constructor(definition: DefinitionEntity) : this(
-//            word = definition.word,
-//            meaning = definition.meaning,
-//            summary = definition.summary,
-//            dictionaryName = definition.dictionaryName,
-//            dictionaryId = definition.dictionaryId
-//    )
-
     fun toDefinitionModel(): DefinitionModel {
         return DefinitionModel(
                 id,

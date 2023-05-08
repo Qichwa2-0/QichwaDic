@@ -15,6 +15,7 @@
     app:contentInsetStartWithNavigation="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clToolbarSearch"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
